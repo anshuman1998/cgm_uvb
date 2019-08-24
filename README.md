@@ -1,8 +1,11 @@
 # CGM_UVB
-# The file colden_Z1.005_Q14.txt has the column densities of 20 ions at Z=1.005 for Q14 of KS18, for log(hydrogen densities) ranging from -2 to -5. 
-# The horizontal lines obtained as a result of the code z1.005_Q14.py when run on plotly, are the column densities obtained when Z=0.1, and log(hydrogen density) is -4, for Q14. This is the "observed" value.
-# The curves are for log(column density) of a particular ion versus log(hydrogen density).
-# The dark grey region is the +- sigma region of the mean hydrogen density for the 20 ions where it matches with the observed value.
-# The light grey region is the +- 2 * sigma region.
-# It is observed that CIII, NIII, and OIII do not have a log(hydrogen density) value lying even inside the 2 * sigma region.(Referred to as missing ions) The rest 17 ions have log(nH) values inside the 2 * sigma region. 
-# On taking the best possible combination of less standard deviation of log(nH), and least number of missing ions, Z = 1.005 was decided upon.
+
+# prog18.py creates a set of test observations using Q18
+# and has Z = 0.1 (log scale), hydrogen density = -4 (log scale)
+# stopping column density = 10^14 and a redshift of 0.2
+
+# n_H_and_Z_solfinder.py runs an iterative program over a specified range
+# of metallicity and hydrogen density for a particular quasar source.
+# It lists all possible solution pairs (n_H,Z) for each metal
+# In 20 files for 20 metals.
+# It also plots these solutions on n_H vs Z space.
