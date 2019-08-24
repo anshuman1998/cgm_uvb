@@ -1,6 +1,6 @@
 # CGM_UVB
 
-# prog18.py creates a set of test observations using Q18
+# q18.py creates a set of test observations using Q18
 # and has Z = 0.1 (log scale), hydrogen density = -4 (log scale)
 # stopping column density = 10^14 and a redshift of 0.2
 
