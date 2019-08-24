@@ -1,4 +1,0 @@
-To run a grid over metallicity for a quasar model, and plot linear column density/(10^12) versus linear metallicity,
-find slopes and intercepts of the linear relation of the above quantities and plot the same.
-
-File for code: q14_colden_vs_Z.py
