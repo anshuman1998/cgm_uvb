@@ -19,31 +19,32 @@ os.chdir(dirname)
 filena = dirname + '/prog'+'{:.0f}'.format(UVB_Q)+'.in'
 f=open(filena,"w+")
 f.write("TABLE KS18 redshift = 0.2 [scale= 1][Q="+"{:.0f}".format(UVB_Q)+"] 
-\nhden" + "{:.0f}".format(hden)+ "\nmetals" + "{:.2f}".format(z)+ " log 
-\nelement helium abundance 0.081632653 linear \nstop column density"+
-"{:.1f}".format(stcolden)+" neutral H 
-\nsave species column density \".spC\" no hash 
-\n\"C+\" 
-\n\"C+2\" 
-\n\"C+3\" 
-\n\"C+4\" 
-\n\"Mg+\" 
-\n\"Ne+7\" 
-\n\"N+\" 
-\n\"N+2\" 
-\n\"N+3\" 
-\n\"O+\" 
-\n\"O+2\" 
-\n\"O+3\" 
-\n\"O+4\" 
-\n\"O+5\" 
-\n\"Si+\" 
-\n\"Si+2\" 
-\n\"Si+3\" 
-\n\"S+3\" 
-\n\"S+4\" 
-\n\"S+5\" 
-\nend")
+        \nhden" + "{:.0f}".format(hden)+ 
+        "\nmetals" + "{:.2f}".format(z)+ " log 
+        \nelement helium abundance 0.081632653 linear 
+        \nstop column density"+"{:.1f}".format(stcolden)+" neutral H 
+        \nsave species column density \".spC\" no hash 
+        \n\"C+\" 
+        \n\"C+2\" 
+        \n\"C+3\" 
+        \n\"C+4\" 
+        \n\"Mg+\" 
+        \n\"Ne+7\" 
+        \n\"N+\" 
+        \n\"N+2\" 
+        \n\"N+3\" 
+        \n\"O+\" 
+        \n\"O+2\" 
+        \n\"O+3\" 
+        \n\"O+4\" 
+        \n\"O+5\" 
+        \n\"Si+\" 
+        \n\"Si+2\" 
+        \n\"Si+3\" 
+        \n\"S+3\" 
+        \n\"S+4\" 
+        \n\"S+5\" 
+        \nend")
 
 #Saving column density values for 20 metals
 
