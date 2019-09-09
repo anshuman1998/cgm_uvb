@@ -49,7 +49,8 @@ f.write("TABLE KS18 redshift = 0.2 [scale= 1][Q="+"{:.0f}".format(UVB_Q)+"]
 #Saving column density values for 20 metals
 
 f.close()
-process = subprocess.Popen([run, "prog"+"{:.0f}".format(UVB_Q)+".in"], stdout =subprocess.PIPE)
+process = subprocess.Popen([run, "prog"+"{:.0f}".format(UVB_Q)+".in"], 
+                           stdout =subprocess.PIPE)
 process.stdout.read()
 
 data=np.genfromtxt('/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+
@@ -62,7 +63,8 @@ t=Table(data,names=['CII','CIII','CIV','CV','MgII','NeVIII',
 'SiIII','SiIV','SIV','SV','SVI'],
 meta={'UVB_Q':UVB_Q, 'metallicity': z,'n_H':hden,'log(stop.colden)':stcolden})
 
-t.write('/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+'{:.0f}'.format(UVB_Q)+'/colden.fits')
+t.write('/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+'{:.0f}'.format(UVB_Q)+
+        '/colden.fits')
 read_obs=Table.read('/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+
 '{:.0f}'.format(UVB_Q)+'/colden.fits')
 read_obs.meta
