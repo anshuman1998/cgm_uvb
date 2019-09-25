@@ -5,6 +5,10 @@ import numpy as np
 from scipy import interpolate
 import subprocess
 
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
+
 from astropy.table import Table
 
 #Iterative program for Q20
