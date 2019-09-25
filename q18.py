@@ -7,7 +7,8 @@ from astropy.table import Table
 #Run Cloudy to generate test observations
 
 UVB_Q = 18 #Q18 Quasar Source
-dirname='/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+'{:.0f}'.format(UVB_Q)
+dirname='/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+
+        '{:.0f}'.format(UVB_Q)
 
 run='/Users/anshumanacharya/Downloads/c17.01/source/cloudy.exe'
 hden= -4
@@ -63,8 +64,8 @@ t=Table(data,names=['CII','CIII','CIV','CV','MgII','NeVIII',
 'SiIII','SiIV','SIV','SV','SVI'],
 meta={'UVB_Q':UVB_Q, 'metallicity': z,'n_H':hden,'log(stop.colden)':stcolden})
 
-t.write('/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+'{:.0f}'.format(UVB_Q)+
-        '/colden.fits')
+t.write('/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+
+        '{:.0f}'.format(UVB_Q)+'/colden.fits')
 read_obs=Table.read('/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+
 '{:.0f}'.format(UVB_Q)+'/colden.fits')
 read_obs.meta
