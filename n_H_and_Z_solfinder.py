@@ -42,7 +42,8 @@ print("Begin Iterative Program over n_H and Z")
 
 for h in hden:
     print(h)
-    filena = dirname + '/prog_metal'+'{:.0f}'.format(UVB_Q)+'_nH_'+'{:.2f}'.format(h)+'.in'     
+    filena = dirname + '/prog_metal'+'{:.0f}'.format(UVB_Q)+'_nH_'+
+                       '{:.2f}'.format(h)+'.in'     
     f=open(filena,"w+")     
     f.write("TABLE KS18 redshift = 0.2 [scale= 1][Q="+"{:.0f}".format(UVB_Q)+"] 
             \nhden "+"{:.2f}".format(h)+" 
