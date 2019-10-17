@@ -16,7 +16,33 @@ os.chdir(dirname)
 filena = dirname + '/prog'+'{:.0f}'.format(UVB_Q)+'_Oct12.in'
 f=open(filena,"w+")
 
-f.write("TABLE KS18 redshift = 0.2 [scale= 1][Q="+"{:.0f}".format(UVB_Q)+"] \nhden -4 vary \ngrid range from -5 to -3 with 0.05 dex steps \nmetals " + "{:.4f}".format(z)+ " log \nelement helium abundance 0.081632653 linear \nstop column density "+"{:.1f}".format(stcolden)+" neutral H \nconstant temperature, t=1e4 K [linear] \nsave species column density \".spC\"no hash \n\"C+\" \n\"C+2\" \n\"C+3\" \n\"N+\" \n\"N+2\" \n\"N+3\" \n\"N+4\" \n\"O\" \n\"O+\"  \n\"O+2\" \n\"O+3\" \n\"O+4\" \n\"O+5\" \n\"S+3\" \n\"S+4\" \n\"S+5\" \n\"Si+\" \n\"Si+2\" \n\"Si+3\" \nend")
+f.write("TABLE KS18 redshift = 0.2 [scale= 1][Q="+"{:.0f}".format(UVB_Q)+"] 
+        \nhden -4 vary \ngrid range from -5 to -3 with 0.05 dex steps 
+        \nmetals " + "{:.4f}".format(z)+ 
+        " log \nelement helium abundance 0.081632653 linear 
+        \nstop column density "+"{:.1f}".format(stcolden)+
+        " neutral H \nconstant temperature, t=1e4 K [linear] 
+        \nsave species column density \".spC\"no hash 
+        \n\"C+\" 
+        \n\"C+2\" 
+        \n\"C+3\" 
+        \n\"N+\" 
+        \n\"N+2\" 
+        \n\"N+3\" 
+        \n\"N+4\" 
+        \n\"O\" 
+        \n\"O+\"  
+        \n\"O+2\" 
+        \n\"O+3\" 
+        \n\"O+4\" 
+        \n\"O+5\" 
+        \n\"S+3\" 
+        \n\"S+4\" 
+        \n\"S+5\" 
+        \n\"Si+\" 
+        \n\"Si+2\" 
+        \n\"Si+3\" 
+        \nend")
 f.close()
 
 process = subprocess.Popen([run, "prog"+"{:.0f}".format(UVB_Q)+"_Oct12.in"], 
@@ -24,15 +50,15 @@ stdout =subprocess.PIPE)
 process.stdout.read()
 
 from astropy.table import Table
-data_20=np.genfromtxt('/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+'{:.0f}'.format(UVB_Q) +'/Final/prog'+'{:.0f}'.format(UVB_Q)+'_Oct12.spC')
+data_20=np.genfromtxt('/pyprog'+'{:.0f}'.format(UVB_Q) +'/Final/prog'+'{:.0f}'.format(UVB_Q)+'_Oct12.spC')
 t_20=Table(data,names=['CII', 'CIII', 'CIV', 'NII', 'NIII', 
                     'NIV', 'NV', 'OI', 'OII', 'OIII', 'OIV', 
                     'OV', 'OVI', 'SIV', 'SV', 'SVI', 'SiII', 
                     'SiIII', 'SiIV'],
 meta={'UVB_Q':UVB_Q,'metallicity': z,
 'log(stop.colden)':stcolden})
-t_20.write('/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final/colden_Oct12.fits')
-read=Table.read('/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final/colden_Oct12.fits')
+t_20.write('/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final/colden_Oct12.fits')
+read=Table.read('/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final/colden_Oct12.fits')
 read.meta
 
 #Form list of column density ratios
@@ -71,7 +97,7 @@ q20_ratios14=Table([ratio_arrays[0],ratio_arrays[1],ratio_arrays[2],ratio_arrays
                            'NIV/NV','OI/OII','OII/OIII','OIII/OIV',
                            'OIV/OV','OV/OVI','SIV/SV','SV/SVI',
                            'SiII/SiIII','SiIII/SiIV'])
-q20_ratios14.write('/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final/Q20_ratios14.txt', format='ascii.tab',overwrite='True')
+q20_ratios14.write('/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final/Q20_ratios14.txt', format='ascii.tab',overwrite='True')
 
 
 #Fit the log(col_ratio) vs log(nH) and find solution log(nH)
@@ -89,8 +115,6 @@ for i in range(len(ratio_arrays)):
 from astropy.table import Table
 nHsol_ratios14=Table([colratios,nHsol_allratios])
 nHsol_ratios14.write('/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final/nHsol_ratios14.txt', format='ascii.tab',overwrite='True')
-
-
 
 
 print("Done")
