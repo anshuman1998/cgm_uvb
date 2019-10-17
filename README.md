@@ -1,5 +1,13 @@
 # CGM_UVB
 
+# UPDATE 17 OCT 2019:
+
+# 2nd file from 13 OCT has been updated to q20_find_nHsol.py which finds the nH at which the column density ratio calculated
+# for Q20 at Z=0.1 matches with the observed column density ratio.
+# Results are a bit bizarre and need to be looked into.
+
+# ---------------------------------------------------------
+
 # UPDATE 13 OCT 2019:
 
 # 2 new files added:
