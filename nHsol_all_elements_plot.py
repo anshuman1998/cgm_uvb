@@ -25,7 +25,8 @@ plt.scatter(elements,mean_nH_Q14,color='mediumorchid', label='UVB=Q14')
 plt.errorbar(elements,mean_nH_Q14,yerr=stdev_nH_Q14,fmt='o',color='mediumorchid')
 
 plt.axhline(y=-4,color='black')
-plt.legend(title='log(Hydrogen Density) Solutions for various Elements',loc='upper center',bbox_to_anchor=(0.5,1.1), ncol = 4,fancybox=True, shadow=True)
+plt.legend(title='log(Hydrogen Density) Solutions for various Elements',loc='upper center',bbox_to_anchor=(0.5,1.1), 
+           ncol = 4,fancybox=True, shadow=True)
 plt.ylabel('log(nH Solution)')
 plt.xlabel('Elements')
 plt.show(block=False)
