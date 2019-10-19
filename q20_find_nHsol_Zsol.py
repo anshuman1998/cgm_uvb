@@ -119,7 +119,7 @@ for i in range(len(ratio_arrays)):
 
 from astropy.table import Table
 nHsol_ratios14=Table([colratios,nHsol_allratios])
-nHsol_ratios14.write('/pyprog20/Final/nHsol_ratios14.txt', format='ascii.tab',overwrite='True')
+nHsol_ratios14.write('/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final/nHsol_ratios14.txt', format='ascii.tab',overwrite='True')
 
 #Store for each element the mean and std dev of nH
 
@@ -206,7 +206,7 @@ all_ions=['CII', 'CIII', 'CIV', 'NII', 'NIII',
            'SiIII', 'SiIV']
 from astropy.table import Table
 Zsol_allions=Table([all_ions,Zsol_20])
-Zsol_allions.write('/pyprog20/Final/Zsol_allions.txt', format='ascii.tab',overwrite='True')
+Zsol_allions.write('/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final/Zsol_allions.txt', format='ascii.tab',overwrite='True')
 
 #Group metallicity solutions according to element
 
