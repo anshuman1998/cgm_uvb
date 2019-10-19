@@ -2,11 +2,8 @@
 import matplotlib
 import matplotlib.pyplot as plt
 
-ions_list=['CII', 'CIII', 'CIV', 'NII', 'NIII', 
-           'NIV', 'NV', 'OI', 'OII', 'OIII', 'OIV', 
-           'OV', 'OVI', 'SIV', 'SV', 'SVI', 'SiII', 
-           'SiIII', 'SiIV']
 elements=['Carbon','Nitrogen','Oxygen','Sulphur','Silicon']
+
 plt.plot(elements,mean_Z_Q20,color='crimson', label='UVB=Q20',marker='o')
 plt.errorbar(elements,mean_Z_Q20,yerr=stdev_Z_Q20,fmt='o',color='crimson', alpha=0.5,capsize=10)
 
@@ -29,8 +26,9 @@ plt.plot(elements,mean_Z_Q14,color='mediumorchid', label='UVB=Q14',marker='o')
 plt.errorbar(elements,mean_Z_Q14,yerr=stdev_Z_Q14,fmt='o',color='mediumorchid',alpha=0.5,capsize=10)
 
 plt.axhline(y=(10**0.1),color='black')
-plt.legend(title='Metallicity Solutions for various Elements',loc='upper center',bbox_to_anchor=(0.5,1.1), ncol = 4,fancybox=True, shadow=True)
-plt.ylabel('Metallicity')
+plt.legend(title='Metallicity Solutions for various Elements',loc='upper center',bbox_to_anchor=(0.5,1.1), 
+           ncol = 4,fancybox=True, shadow=True)
 
+plt.ylabel('Metallicity')
 plt.xlabel('Elements')
 plt.show(block=False)
