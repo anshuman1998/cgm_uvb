@@ -1,5 +1,13 @@
 # CGM_UVB
 
+# UPDATE 19 OCT 2019:
+
+# 1. File q20_find_nHsol_Zsol.py finds the hydrogen density and metallicity value required by Q20 to match with the observed values, i.e., Q18 data. Changing UVB_Q will lead to values for Q14,Q15, Q16, Q17, Q18, and Q19 too.
+# 2. File nHsol_all_elements_plot.py plots out the log(hydrogen density) values by grouping them by the element (C,N,O,S,Si).
+# 3. File Zsol_all_elements.py plots out the metallicity values by grouping them by the element (C,N,O,S,Si).
+
+# ---------------------------------------------------------
+
 # UPDATE 17 OCT 2019:
 
 # 2nd file from 13 OCT has been updated to q20_find_nHsol.py which finds the nH at which the column density ratio calculated for Q20 at Z=0.1 matches with the observed column density ratio.
