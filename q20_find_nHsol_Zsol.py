@@ -195,7 +195,7 @@ for i in range(len(nH)):
 
 Zsol_20=[]
 for i,j in zip(colden_nHsol,data):
-    z_scaled = (j*(z))/i
+    z_scaled = (j*(10**z))/i
     Zsol_20.append(z_scaled)
 
 all_ions=['CII', 'CIII', 'CIV', 'NII', 'NIII', 
