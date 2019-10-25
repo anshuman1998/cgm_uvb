@@ -1,5 +1,12 @@
 # CGM_UVB
 
+# UPDATE 26 OCT 2019:
+
+# 1. Grid step size reduced to 0.01.
+# 2. Used metallicity = -1 in log scale, i.e, 0.1 in linear scale, instead of 0.1 in log scale.
+
+# ---------------------------------------------------------
+
 # UPDATE 19 OCT 2019:
 
 # 1. File q20_find_nHsol_Zsol.py finds the hydrogen density and metallicity value required by Q20 to match with the observed values, i.e., Q18 data. Changing UVB_Q will lead to values for Q14,Q15, Q16, Q17, Q18, and Q19 too.
