@@ -5,8 +5,8 @@ import subprocess
 UVB_Q = 20
 dirname='/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final'
 run='/cloudy.exe'
-hden= np.arange(-5,-2.99,0.05)
-z = 0.1
+hden= np.arange(-5,-2.999,0.01)
+z = -1 #Log Scale
 stcolden= 14
 
 if not os.path.exists(dirname):
@@ -17,8 +17,8 @@ filena = dirname + '/prog'+'{:.0f}'.format(UVB_Q)+'_Oct12.in'
 f=open(filena,"w+")
 
 f.write("TABLE KS18 redshift = 0.2 [scale= 1][Q="+"{:.0f}".format(UVB_Q)+"] 
-        \nhden -4 vary \ngrid range from -5 to -3 with 0.05 dex steps 
-        \nmetals " + "{:.4f}".format(z)+ " log 
+        \nhden -4 vary \ngrid range from -5 to -3 with 0.01 dex steps 
+        \nmetals " + "{:.2f}".format(z)+ " log 
         \nelement helium abundance 0.081632653 linear 
         \nstop column density "+"{:.1f}".format(stcolden)+" neutral H 
         \nconstant temperature, t=1e4 K [linear] 
@@ -151,9 +151,7 @@ print(stdev_nH_Q20)
 nH=[]
 for i in hden:
     nH.append(round(i,2))
-
 colden_nHsol=[]
-        
 c_nH=mean_nH_Q20[0]
 n_nH=mean_nH_Q20[1]
 o_nH=mean_nH_Q20[2]
@@ -161,20 +159,20 @@ s_nH=mean_nH_Q20[3]
 si_nH=mean_nH_Q20[4]
 
 for i in range(len(nH)):
-    if abs(nH[i]-c_nH)<0.025:
+    if nH[i]==c_nH:
         print("C")
         colden_nHsol.append(data_20[:,0][i])
         colden_nHsol.append(data_20[:,1][i])
         colden_nHsol.append(data_20[:,2][i])
 for i in range(len(nH)):
-    if abs(nH[i]-n_nH)<0.025:
+    if nH[i]==n_nH:
         print("N")
         colden_nHsol.append(data_20[:,3][i])
         colden_nHsol.append(data_20[:,4][i])
         colden_nHsol.append(data_20[:,5][i])
         colden_nHsol.append(data_20[:,6][i])
 for i in range(len(nH)):  
-    if abs(nH[i]-o_nH)<0.025:
+    if nH[i]==o_nH:
         print("O")
         colden_nHsol.append(data_20[:,7][i])
         colden_nHsol.append(data_20[:,8][i])
@@ -183,13 +181,13 @@ for i in range(len(nH)):
         colden_nHsol.append(data_20[:,11][i])
         colden_nHsol.append(data_20[:,12][i])
 for i in range(len(nH)):        
-    if abs(nH[i]-s_nH)<0.025:
+    if nH[i]==s_nH:
         print("S")
         colden_nHsol.append(data_20[:,13][i])
         colden_nHsol.append(data_20[:,14][i])
         colden_nHsol.append(data_20[:,15][i])
 for i in range(len(nH)):        
-    if abs(nH[i]-si_nH)<0.025:
+    if nH[i]==si_nH:
         print("Si")
         colden_nHsol.append(data_20[:,16][i])
         colden_nHsol.append(data_20[:,17][i])
@@ -197,13 +195,14 @@ for i in range(len(nH)):
 
 Zsol_20=[]
 for i,j in zip(colden_nHsol,data):
-    z_scaled = (j*(10**0.1))/i
+    z_scaled = (j*(z))/i
     Zsol_20.append(z_scaled)
 
 all_ions=['CII', 'CIII', 'CIV', 'NII', 'NIII', 
            'NIV', 'NV', 'OI', 'OII', 'OIII', 'OIV', 
            'OV', 'OVI', 'SIV', 'SV', 'SVI', 'SiII', 
            'SiIII', 'SiIV']
+        
 from astropy.table import Table
 Zsol_allions=Table([all_ions,Zsol_20])
 Zsol_allions.write('/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final/Zsol_allions.txt', format='ascii.tab',overwrite='True')
