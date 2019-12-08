@@ -1,5 +1,11 @@
 # CGM_UVB
 
+# UPDATE 08 DEC 2019:
+
+# 1. File form_obs_col_ratios.py uses Q18 as UVB to form test observations.
+# 2, File q20_find_nHsol_Zsol.py finds solutions for hydrogen density and metallicity for Q20. Changing the variable for UVB will allow us to repeat the process for different alpha values.
+# 3. Zsol_all_elements_plot.py and nHsol_all_elements_plot.py are suggested code for graphical interpretations of the results obtained.
+
 # UPDATE 26 OCT 2019:
 
 # 1. Grid step size reduced to 0.01.
