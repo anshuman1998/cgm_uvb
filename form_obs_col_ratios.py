@@ -2,11 +2,11 @@
 import os
 import numpy as np
 import subprocess
-UVB_Q = 18
+UVB_Q = 18 #SED of alpha = -1.8
 dirname='/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final'
 run='/cloudy.exe'
-hden= -4
-z = 0.1
+hden= -4 #Log scale
+z = -1 #Log scale
 stcolden= 14
 
 if not os.path.exists(dirname):
@@ -15,10 +15,13 @@ os.chdir(dirname)
 filena = dirname + 'prog'+'{:.0f}'.format(UVB_Q)+'_Oct12.in'
 f=open(filena,"w+")
 
-f.write("TABLE KS18 redshift = 0.2 [scale= 1][Q= "+"{:.0f}".format(UVB_Q)+"] \nhden " + 
- "{:.0f}".format(hden)+ "\nmetals " + "{:.2f}".format(z)+ " log \nelement helium abundance 0.081632653 linear 
-        \nstop column density "+"{:.1f}".format(stcolden)
- +" neutral H \nconstant temperature, t=1e4 K [linear] \nsave species column density \".spC\" no hash 
+f.write("TABLE KS18 redshift = 0.2 [scale= 1][Q= "+"{:.0f}".format(UVB_Q)+"] 
+        \nhden " + "{:.0f}".format(hden)+ "
+        \nmetals " + "{:.2f}".format(z)+ " log 
+        \nelement helium abundance 0.081632653 linear 
+        \nstop column density "+"{:.1f}".format(stcolden)+" neutral H 
+        \nconstant temperature, t=1e4 K [linear] 
+        \nsave species column density \".spC\" no hash 
         \n\"C+\" 
         \n\"C+2\" 
         \n\"C+3\" 
