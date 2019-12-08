@@ -32,8 +32,6 @@
 # Next thing to do: Transpose the 41 x 14 array from the second program, and then implement a simple linear interpolation to 
 # find nH for each ratio. 
 
-# EXPECTED DATE OF COMPLETION: 19 OCT 2019.
-
 # ---------------------------------------------------------
 
 #
