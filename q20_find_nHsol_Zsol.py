@@ -2,10 +2,10 @@
 import os
 import numpy as np
 import subprocess
-UVB_Q = 20
+UVB_Q = 20 #Sets alpha = -2.0. Change this for other SED values
 dirname='/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final'
 run='/cloudy.exe'
-hden= np.arange(-5,-2.999,0.01)
+hden= np.arange(-5,-2.999,0.01) #Log scale range with step size 0.01
 z = -1 #Log Scale
 stcolden= 14
 
@@ -108,7 +108,7 @@ nHsol_allratios=[]
 spline_x = np.arange(-5,-2.999999,0.00001)
 for i in range(len(ratio_arrays)):
     cubic_spline = scipy.interpolate.interp1d(hden,np.log10(ratio_arrays[i]),kind='cubic')
-    spline_y=cubic_spline(spline_x)
+    spline_y=cubic_spline(spline_x) #Using cubic spline interpolation
     cn=0
     for j in range(len(spline_y)):
         if cn==0:
