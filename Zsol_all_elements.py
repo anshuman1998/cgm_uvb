@@ -25,7 +25,7 @@ plt.errorbar(elements,mean_Z_Q15,yerr=stdev_Z_Q15,fmt='o',color='darkorange', al
 plt.plot(elements,mean_Z_Q14,color='mediumorchid', label='UVB=Q14',marker='o')
 plt.errorbar(elements,mean_Z_Q14,yerr=stdev_Z_Q14,fmt='o',color='mediumorchid',alpha=0.5,capsize=10)
 
-plt.axhline(y=(10**0.1),color='black')
+plt.axhline(y=0.1,color='black')
 plt.legend(title='Metallicity Solutions for various Elements',loc='upper center',bbox_to_anchor=(0.5,1.1), 
            ncol = 4,fancybox=True, shadow=True)
 
