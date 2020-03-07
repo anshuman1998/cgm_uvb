@@ -1,9 +1,14 @@
 # CGM_UVB
 
+# UPDATE 07 MARCH 2020:
+
+# 1.File colden_vs_hden.py is used to generate and store column density ratios CIII/CIV and OIII/OIV versus hydrogen density for all UVBs.
+# 2. File coldenratio_vs_hden.py is used to plot these ratios versus hydrogen density for all UVBs.
+
 # UPDATE 08 DEC 2019:
 
 # 1. File form_obs_col_ratios.py uses Q18 as UVB to form test observations.
-# 2, File q20_find_nHsol_Zsol.py finds solutions for hydrogen density and metallicity for Q20. Changing the variable for UVB will allow us to repeat the process for different alpha values.
+# 2. File q20_find_nHsol_Zsol.py finds solutions for hydrogen density and metallicity for Q20. Changing the variable for UVB will allow us to repeat the process for different alpha values.
 # 3. Zsol_all_elements_plot.py and nHsol_all_elements_plot.py are suggested code for graphical interpretations of the results obtained.
 
 # ---------------------------------------------------------
