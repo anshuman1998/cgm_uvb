@@ -23,17 +23,6 @@ process.stdout.read()
 
 from astropy.table import Table
 data_20=np.genfromtxt('/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+'{:.0f}'.format(UVB_Q) +'/Final/prog'+'{:.0f}'.format(UVB_Q)+'_Oct12.spC')
-#t_20=Table(data_20,names=['CII', 'CIII', 'CIV', 'NII', 'NIII', 
-#                    'NIV', 'NV', 'OI', 'OII', 'OIII', 'OIV', 
-#                    'OV', 'OVI', 'SIV', 'SV', 'SVI', 'SiII', 
-#                    'SiIII', 'SiIV'],
-#meta={'UVB_Q':UVB_Q,'metallicity': z,'log(stop.colden)':stcolden})
-#t_20.write('/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final/colden_Oct12.fits')
-#read=Table.read('/Users/anshumanacharya/Downloads/c17.01/source/pyprog'+'{:.0f}'.format(UVB_Q)+'/Final/colden_Oct12.fits')
-#read.meta
-
-
-#Calculate the ratios of ions from simulation run
 
 colratios=['CII/CIII', 'CIII/CIV', 'NII/NIII', 'NIII/NIV',
            'NIV/NV','OI/OII','OII/OIII','OIII/OIV',
