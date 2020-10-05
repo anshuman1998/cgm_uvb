@@ -1,5 +1,9 @@
 # CGM_UVB
 
+# UPDATE 05 OCT 2020:
+# 1. File q20_valsgen.py generates column density values for 19 ions which are CII, CIII, CIV, NII, NIII, NIV, NV, OI, OII, OIII, OIV, OV, OVI, SIV, SV, SVI, SiII, SiIII, SiIV, for an nH grid of 0.01 step.
+# 2. File q18_obs.spC lists the test observation column density values for these 19 ions.
+
 # UPDATE 07 MARCH 2020:
 
 # 1.File colden_vs_hden.py is used to generate and store column density ratios CIII/CIV and OIII/OIV versus hydrogen density for all UVBs.
