@@ -5,18 +5,27 @@ import numpy as np
 import subprocess
 
 
-
 def run(cloudy_path, input_file):
     """
     :param cloudy_path: the path where your cloudy files are stored
-    :param input_file: the input file to run
+    :param input_file: the input file (with full path) to run
     :return:
     """
+    # find the original path
+    basepath = os.getcwd()
+
+    # go to the directory of input file
+    os.chdir(os.path.dirname(input_file))
+
+    # input file name
+    file_name = os.path.basename(input_file)
 
     run_command =  cloudy_path + '/source/cloudy.exe'
-    print(run_command, input_file)
-    process = subprocess.Popen([run_command, input_file], stdout=subprocess.PIPE)
+    process = subprocess.Popen([run_command, file_name], stdout=subprocess.PIPE)
     process.stdout.read()
+
+    # come back to the original path
+    os.chdir(basepath)
 
     return
 
