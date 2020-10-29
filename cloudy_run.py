@@ -30,10 +30,65 @@ def run(cloudy_path, input_file):
     return
 
 
-def write_input():
-    xy =3
+def write_input(file_name, *args, **kwargs):
+
+    f = open(file_name, "w+")
+
+    if kwargs['uvb'] == 'KS18':
+        uvb_statement =  'TABLE {} redshift = {} [scale = {}] [Q = {}] \n'.format(
+            kwargs['z'], kwargs['uvb'], kwargs['uvb_scale'], kwargs['uvb_Q'])
+        f.write(uvb_statement)
+
+    density_statement= 'hden {} \n'.format(kwargs['log_hden'])
+    if kwargs['hden_vary'] == True:
+        density_statement= 'hden {} vary \n'.format(kwargs['log_hden'])
+        variation_statement = 'grid range from {} to {} with {} dex step \n'.format(
+            kwargs['log_hden1'], kwargs['log_hden2'], kwargs['log_hden_step'])
+        f.write(density_statement)
+        f.write(variation_statement)
+    else:
+        f.write(density_statement)
+
+    metal_statement =  'metals {:.2f} log \n'.format(kwargs['log_metal'])
+    f.write(metal_statement)
+
+    if 'scale_He' in kwargs.keys():
+        scale_He_statement ='element helium abundance {} linear \n'.format(kwargs['scale_He'])
+        f.write(scale_He_statement)
+
+    stop_statement = 'stop column density {}  neutral H \n'.format(kwargs['stop_logNHI'])
+    f.write(stop_statement)
+
+    if 'constant_T' in kwargs.keys():
+        temp_statement =  'constant temperature, t={} K [linear] \n'.format(kwargs['constant_T'])
+        f.write(temp_statement)
+
+    if 'out_file_ext' in kwargs.keys():
+        out_file_extension = kwargs['out_file_ext']
+    else:
+        out_file_extension = '.spC'
+
+    save_statement = 'save species column density {} no hash \n'.format(out_file_extension)
+    f.write(save_statement)
+
+    for ion in args:
+        write_ion = "\"{}\" \n".format(ion)
+        f.write(write_ion)
+
+    f.write('end')
+
+    f.close()
 
     return
+
+
+# this is the part one needs to change if one wants to change the cloudy program
+def cloudy_params_defaults(z=0.2, T = 10000, metal = -1, stop_NHI = 14):
+    default_things ={}
+    
+
+
+    return ions, default_things
 
 """
 UVB_Q = 20
