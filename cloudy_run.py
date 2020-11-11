@@ -21,6 +21,7 @@ def run(cloudy_path, input_file):
     file_name = os.path.basename(input_file)
 
     run_command =  cloudy_path + '/source/cloudy.exe'
+    print(run_command)
     process = subprocess.Popen([run_command, file_name], stdout=subprocess.PIPE)
     process.stdout.read()
 
@@ -55,7 +56,7 @@ def write_input(file_name, *args, **kwargs):
         f.write(uvb_statement)
 
     if kwargs['hden_vary'] == True:
-        density_statement= 'hden {} vary \n'.format(kwargs['log_hden'])
+        density_statement = 'hden {} vary \n'.format(kwargs['log_hden'])
         variation_statement = 'grid range from {} to {} with {} dex step \n'.format(
             kwargs['log_hden1'], kwargs['log_hden2'], kwargs['log_hden_step'])
         f.write(density_statement)
@@ -79,7 +80,7 @@ def write_input(file_name, *args, **kwargs):
         f.write(temp_statement)
 
     # new line
-    save_hydrogen = 'save hydrogen conditions \"{.hydro}\" no clobber \n'
+    save_hydrogen = 'save hydrogen conditions \".hydro\" last no clobber \n'
     f.write(save_hydrogen)
 
     if 'out_file_ext' in kwargs.keys():
@@ -112,6 +113,7 @@ def cloudy_params_defaults(uvb_Q, log_hden, hden_vary=True, uvb = 'KS18', z=0.2,
                      'scale_He': 0.081632653}
 
     if hden_vary :
+        cloudy_params['log_hden'] = log_hden[0]
         cloudy_params['log_hden1'] = log_hden[0]
         cloudy_params['log_hden2'] = log_hden[1]
         cloudy_params['log_hden_step'] = log_hden[2]
@@ -119,19 +121,19 @@ def cloudy_params_defaults(uvb_Q, log_hden, hden_vary=True, uvb = 'KS18', z=0.2,
         cloudy_params['log_hden'] = log_hden[0]
 
 
-    ions = {"H", "H+",
-            "He", "He+", "He++",
+    ions = ["H", "H+",
+            "He", "He+", "He+2",
             "C", "C+", "C+2", "C+3", "C+4", "C+5",
             "N", "N+", "N+2", "N+3", "N+4",
             "O", "O+", "O+2", "O+3", "O+4", "O+5", "O+6", "O+7",
             "S", "S+", "S+2", "S+3", "S+4", "S+5",
-            "Si", "Si+", "Si+2", "Si+3", "Si+4"}
+            "Si", "Si+", "Si+2", "Si+3", "Si+4"]
 
     return ions, cloudy_params
 
 
-cloudy_path = '/home/vikram/c17.02
-input_File = '/home/vikram/cloudy_run/try.txt'
+cloudy_path = '/home/vikram/c17.02'
+input_File = '/home/vikram/cloudy_run/try.in'
 ions, params = cloudy_params_defaults(uvb_Q=20, log_hden= [-5, -3, 1])
 write_input(input_File, *ions, **params)
 run(cloudy_path= cloudy_path, input_file= input_File)
