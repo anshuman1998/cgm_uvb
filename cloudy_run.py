@@ -22,7 +22,7 @@ def run(cloudy_path, input_file):
     file_name = os.path.basename(input_file)
 
     run_command =  cloudy_path + '/source/cloudy.exe'
-    print(run_command)
+    print('now running:', run_command, file_name)
     process = subprocess.Popen([run_command, file_name], stdout=subprocess.PIPE)
     process.stdout.read()
 
