@@ -154,6 +154,9 @@ def store_table(ions, output_file, fits_filename = None):
 
     return
 
+
+"""
+Example run : 
 #----give this
 uvb_Q=20
 cloudy_path = '/home/vikram/c17.02'
@@ -168,3 +171,6 @@ run(cloudy_path= cloudy_path, input_file= input_File)
 output_filename =  input_File.split('.in')[0] + '.spC'
 fits_filename = input_File.split('.in')[0] + '_Q{}'.format(uvb_Q) + '.fits'
 store_table(ions= ions, output_file= output_filename, fits_filename= fits_filename)
+
+"""
+
