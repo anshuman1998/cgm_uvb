@@ -2,6 +2,7 @@
 
 import os
 import numpy as np
+import astropy.table as tab
 import subprocess
 
 
@@ -132,8 +133,38 @@ def cloudy_params_defaults(uvb_Q, log_hden, hden_vary=True, uvb = 'KS18', z=0.2,
     return ions, cloudy_params
 
 
+def store_table(ions, output_file, fits_filename = None):
+    # get hydrogen density array
+    hydro_file = output_file.split('.')[0] + '.hydro'
+    hydro =  tab.Table.read(hydro_file, format = 'ascii')
+    hden_array = np.unique(hydro['HDEN'])
+
+    # read the cloudy output files
+    cloudy_output = tab.Table.read(output_file, format = 'ascii')
+
+    for old_name, new_name in zip(cloudy_output.colnames, ions):
+        cloudy_output.rename_column (old_name, new_name)
+
+    cloudy_output.add_column(hden_array, name = 'hden' )
+
+    if fits_filename == None:
+        fits_filename = output_filename.split('.')[0] + 'fits'
+
+    cloudy_output.write (fits_filename, overwrite = True)
+
+    return
+
+#----give this
+uvb_Q=20
 cloudy_path = '/home/vikram/c17.02'
 input_File = '/home/vikram/cloudy_run/try.in'
-ions, params = cloudy_params_defaults(uvb_Q=20, log_hden= [-5, -3, 1])
+
+# write input file and run cloudy
+ions, params = cloudy_params_defaults(uvb_Q=uvb_Q, log_hden= [-5, -3, 1])
 write_input(input_File, *ions, **params)
 run(cloudy_path= cloudy_path, input_file= input_File)
+
+# write output tables
+output_filename =  input_File.split('.in')[0] + '.spC'
+fits_filename = input_File.split('.in')[0] + '_Q{}'.format(uvb_Q) + '.fits'
+store_table(ions= ions, output_file= output_filename, fits_filename= fits_filename)
