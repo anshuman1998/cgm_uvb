@@ -39,6 +39,7 @@ def find_nH_and_Z_LSF(model_Q,  *ions_to_use, reference_log_metal = -1.0):
     metal_array = 10**(np.arange(-2, 1.01, 0.02))
     len_metal = len(metal_array)
 
+    number_of_ions = len(ions_to_use)
     # filter to use specific ions
     least_square_2D = np.zeros((len(model), len_metal))
     for i in range(len_metal):
@@ -47,7 +48,7 @@ def find_nH_and_Z_LSF(model_Q,  *ions_to_use, reference_log_metal = -1.0):
         for ion in ions_to_use:
             least_square_array += (model[ion] * metal_scaling_linear - obs_ion_col[ion]) ** 2
 
-        least_square_2D[:, i] = least_square_array
+        least_square_2D[:, i] = least_square_array/number_of_ions
 
     ind = np.unravel_index(np.argmin(least_square_2D, axis=None), least_square_2D.shape)
     print('nH =', hden_array[ind[0]], 'Z = ', metal_array[ind[1]])
@@ -60,7 +61,7 @@ def find_nH_and_Z_LSF(model_Q,  *ions_to_use, reference_log_metal = -1.0):
 model ='/home/vikram/cloudy_run/anshuman/try_Q14.fits'
 ions= ['C+3', 'C+2', 'Si+3', 'Si+2', 'O+5']
 
-find_nH_and_Z_LSF(model, *ions)
+nH, Z, array= find_nH_and_Z_LSF(model, *ions)
 
 
 
