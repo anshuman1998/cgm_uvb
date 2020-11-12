@@ -109,7 +109,7 @@ def cloudy_params_defaults(uvb_Q, log_hden, hden_vary=True, uvb = 'KS18', z=0.2,
     cloudy_params = {'uvb': uvb, 'z' : z, 'uvb_scale': 1, 'uvb_Q' : uvb_Q,
                      'hden_vary' : hden_vary,
                      'log_metal': metal,
-                     'const_T': T,
+                     'constant_T': T,
                      'stop_logNHI': stop_NHI,
                      'scale_He': 0.081632653}
 
