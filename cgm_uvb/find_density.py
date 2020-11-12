@@ -27,10 +27,40 @@ def find_density_LSF(model_Q, *ions_to_use):
 
     return  hden_array, least_square_array
 
+
+def find_nH_and_Z_LSF(model_Q,  *ions_to_use, reference_log_metal = -1.0):
+    print(model_Q)
+    model = tab.Table.read(model_Q)
+    obs_ion_col = get_true_model()
+    #print(reference_log_metal)
+
+    hden_array = np.array(model['hden'])
+
+    metal_array = 10**(np.arange(-2, 1.01, 0.02))
+    len_metal = len(metal_array)
+
+    # filter to use specific ions
+    least_square_2D = np.zeros((len(model), len_metal))
+    for i in range(len_metal):
+        metal_scaling_linear = metal_array[i] / 10**reference_log_metal
+        least_square_array = np.zeros(len(model))
+        for ion in ions_to_use:
+            least_square_array += (model[ion] * metal_scaling_linear - obs_ion_col[ion]) ** 2
+
+        least_square_2D[:, i] = least_square_array
+
+    ind = np.unravel_index(np.argmin(least_square_2D, axis=None), least_square_2D.shape)
+    print('nH =', hden_array[ind[0]], 'Z = ', metal_array[ind[1]])
+
+    print('LS value= ', np.min(least_square_2D))
+
+
+    return  hden_array, metal_array, least_square_2D
+
 model ='/home/vikram/cloudy_run/anshuman/try_Q14.fits'
 ions= ['C+3', 'C+2', 'Si+3', 'Si+2', 'O+5']
 
-find_density_LSF(model, *ions)
+find_nH_and_Z_LSF(model, *ions)
 
 
 
