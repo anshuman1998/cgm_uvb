@@ -77,7 +77,24 @@ starting_guesses = 1e-4 * np.random.randn(nwalkers, ndim) # initialise at a tiny
 
 # Here's the function call where all the work happens:
 sampler = emcee.EnsembleSampler(nwalkers, ndim, log_posterior, args=(x, y, yerr))
-
 sampler.run_mcmc(starting_guesses, nsteps, progress=True)
+
+# find out number of steps
+tau = sampler.get_autocorr_time() # number of steps needed to forget the starting position
+thin = int(np.mean(tau)/2) # use this number for flattning the sample as done below
+flat_samples = sampler.get_chain(discard=thin*10, thin=thin, flat=True)
+# we are discarding some initial steps roughly 5 times the autocorr_time steps
+# then we thin by about half the autocorrelation time steps for plotting => one does not have to do this step
+
+labels = ['b', 'm']
+fig = corner.corner(flat_samples, labels = labels, truths = truths, quantiles=[0.16, 0.5, 0.84],
+    show_titles=True, title_kwargs={"fontsize": 12})
+
+fig.show()
+
+for i in range(ndim):
+    mcmc = np.percentile(flat_samples[:, i], [16, 50, 84])
+    q = np.diff(mcmc)
+    print(labels[i], '=', mcmc[1], q[0], q[1])
 
 
