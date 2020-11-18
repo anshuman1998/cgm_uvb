@@ -104,7 +104,7 @@ def write_input(file_name, *args, **kwargs):
 
 
 # this is the part one needs to change if one wants to change the cloudy program
-def cloudy_params_defaults(uvb_Q, log_hden, hden_vary=True, uvb = 'KS18', z=0.2, T = 10000, metal = -1, stop_NHI = 14):
+def cloudy_params_defaults(uvb_Q, log_hden, hden_vary=True, uvb = 'KS18', z=0.2, T = 10000, metal = -1, stop_NHI = 15):
 
     cloudy_params = {'uvb': uvb, 'z' : z, 'uvb_scale': 1, 'uvb_Q' : uvb_Q,
                      'hden_vary' : hden_vary,
