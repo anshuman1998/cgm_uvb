@@ -73,7 +73,7 @@ def log_posterior(theta, interp_func, data_col, sigma_col):
     return log_p
 
 
-def run_mcmc(model_Q, ions_to_use, true_Q =18, figname = 'test.pdf'):
+def run_mcmc(model_Q, ions_to_use, true_Q =18, figname = 'test.pdf', same_error = False):
     # run_mcmc(model_Q= model, ions_to_use= ions)
     # ------------------ here is a way to run code
     truths = [-4, -1]  # (lognH, logZ) true values
@@ -86,8 +86,11 @@ def run_mcmc(model_Q, ions_to_use, true_Q =18, figname = 'test.pdf'):
         data_col.append(data_col_all[name][0])
 
     np.random.seed(0)
-    # sigma_col = np.random.uniform(0.1, 0.2, number_of_ions)
-    sigma_col = 0.2 * np.ones(number_of_ions)
+    if same_error:
+        sigma_col = 0.2 * np.ones(number_of_ions)
+    else:
+        sigma_col = np.random.uniform(0.1, 0.3, number_of_ions)
+
     print(np.log10(data_col), sigma_col)
 
     interp_logf = get_interp_func(model_Q, ions_to_use)
