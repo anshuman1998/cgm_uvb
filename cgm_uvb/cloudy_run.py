@@ -51,6 +51,8 @@ def write_input(file_name, *args, **kwargs):
 
     f = open(file_name, "w+")
 
+
+
     if kwargs['uvb'] == 'KS18':
         uvb_statement =  'TABLE {} redshift = {} [scale = {}] [Q = {}] \n'.format(
             kwargs['z'], kwargs['uvb'], kwargs['uvb_scale'], kwargs['uvb_Q'])
@@ -58,10 +60,17 @@ def write_input(file_name, *args, **kwargs):
 
     if kwargs['hden_vary'] == True:
         density_statement = 'hden {} vary \n'.format(kwargs['log_hden'])
-        variation_statement = 'grid range from {} to {} with {} dex step \n'.format(
-            kwargs['log_hden1'], kwargs['log_hden2'], kwargs['log_hden_step'])
         f.write(density_statement)
-        f.write(variation_statement)
+        if kwargs['sequential'] == True:
+            variation_statement = 'grid sequential range from {} to {} with {} dex step \n'.format(
+                kwargs['log_hden1'], kwargs['log_hden2'], kwargs['log_hden_step'])
+            f.write(variation_statement)
+        else:
+            variation_statement = 'grid range from {} to {} with {} dex step \n'.format(
+                kwargs['log_hden1'], kwargs['log_hden2'], kwargs['log_hden_step'])
+            f.write(variation_statement)
+
+
     else:
         density_statement = 'hden {} \n'.format(kwargs['log_hden'])
         f.write(density_statement)
@@ -79,6 +88,7 @@ def write_input(file_name, *args, **kwargs):
     if 'constant_T' in kwargs.keys():
         temp_statement =  'constant temperature, t={} K [linear] \n'.format(kwargs['constant_T'])
         f.write(temp_statement)
+
 
     # new line
     save_hydrogen = 'save hydrogen conditions \".hydro\" last no clobber \n'
@@ -104,14 +114,17 @@ def write_input(file_name, *args, **kwargs):
 
 
 # this is the part one needs to change if one wants to change the cloudy program
-def cloudy_params_defaults(uvb_Q, log_hden, hden_vary=True, uvb = 'KS18', z=0.2, T = 10000, metal = -1, stop_NHI = 15):
+def cloudy_params_defaults(uvb_Q, log_hden, hden_vary=True, uvb = 'KS18', z=0.2, T = 10000,
+                           metal = -1, stop_NHI = 15, sequential = False):
 
     cloudy_params = {'uvb': uvb, 'z' : z, 'uvb_scale': 1, 'uvb_Q' : uvb_Q,
                      'hden_vary' : hden_vary,
                      'log_metal': metal,
                      'constant_T': T,
                      'stop_logNHI': stop_NHI,
-                     'scale_He': 0.081632653}
+                     'scale_He': 0.081632653,
+                     'sequential': sequential}
+    print(cloudy_params)
 
     if hden_vary :
         cloudy_params['log_hden'] = log_hden[0]
