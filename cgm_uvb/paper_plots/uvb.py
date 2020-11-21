@@ -43,7 +43,7 @@ ax.set_xscale('log')
 ax.set_yscale('log')
 
 #deco
-ax.tick_params(direction='in', length=5, width=1.5)
+ax.tick_params(direction='in', length=6, width=1.5)
 ax.tick_params(direction='in', which='minor', length=3.5, width=1.5)
 #ax.ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
 ax.yaxis.set_ticks_position('both')
