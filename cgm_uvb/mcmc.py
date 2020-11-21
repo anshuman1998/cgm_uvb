@@ -156,6 +156,10 @@ for uvb_q in uvb_array:
     figname = outpath + '/' + name + '.pdf'
 
     flat_samples, ndim = run_mcmc(model_Q=model_Q, ions_to_use=ions_to_use, true_Q=true_Q, figname=figname)
+    # to efficiently save numpy array
+    save_file_name = outpath + '/' + name
+    np.save(save_file_name, flat_samples)
+
     out =[[uvb_q]]
     for i in range(ndim):
         mcmc = np.percentile(flat_samples[:, i], [16, 50, 84])
