@@ -148,24 +148,33 @@ for q_num in q:
 ions_to_use=['C+3', 'N+2', 'Si+3', 'S+2', 'O+5']
 ions_to_use=['C+3', 'N+2', 'Si+3',  'O+5']
 ions_to_use=['C+3', 'C+2']
-print(ions_to_use)
 np.random.seed(123)
 
-true_nH = 1e-5
-for Q in q:
-    print(Q)
-    narray = []
-    zarray = []
-    for q_num in q:
-        model = '/home/vikram/cloudy_run/anshuman_NH15/try_Q{}.fits'.format(q_num)
-        nH, Z, min_LS = find_nH_and_Z_LSF_log(model, ions_to_use, true_Q=Q, true_nH= true_nH)
-        narray.append(nH)
-        zarray.append(Z)
-        #print(q_num, np.log10(nH), np.log10(Z), min_LS, np.log10(np.sqrt(min_LS)))
-        #t = tab.Table([[q_num], [nH], [Z], [min_LS]], names=('Q', 'nH', 'Z', 'min_LS'))
-    print('diff nH', np.log10(max(narray)) - np.log10(min(narray)))
-    print('diff Z', np.log10(max(zarray)) - np.log10(min(zarray)))
+ions_to_use=['C+3', 'N+2']
+print(ions_to_use)
 
+true_nH = [1e-5, 1e-4, 1e-3]
+for n in true_nH:
+    for Q in q:
+        #print(Q, n)
+        narray = []
+        zarray = []
+        for q_num in q:
+            model = '/home/vikram/cloudy_run/anshuman_NH15/try_Q{}.fits'.format(q_num)
+            nH, Z, min_LS = find_nH_and_Z_LSF_log(model, ions_to_use, true_Q=Q, true_nH=n)
+            narray.append(nH)
+            zarray.append(Z)
+            # print(q_num, np.log10(nH), np.log10(Z), min_LS, np.log10(np.sqrt(min_LS)))
+            # t = tab.Table([[q_num], [nH], [Z], [min_LS]], names=('Q', 'nH', 'Z', 'min_LS'))i
+        logdiffn =np.log10(max(narray)) - np.log10(min(narray))
+        diffn =(max(narray)) - (min(narray))
+
+        logdiffz= np.log10(max(zarray)) - np.log10(min(zarray))
+        diffz= (max(zarray)) - (min(zarray))
+        print('diff n', logdiffn , logdiffz, Q, n)
+        #print('diff n', logdiffn / (-np.log10(narray)), logdiffz / (-np.log10(zarray)), Q, n)
+        #print('diff nH', logdiffn, diffn,  logdiffn /(-np.log10(n)), diffn/ n)
+        #print('diff Z', logdiffz, diffz, logdiffz/ 1, diffz/0.1)
 
 
 

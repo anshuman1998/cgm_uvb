@@ -146,7 +146,7 @@ def cloudy_params_defaults(uvb_Q, log_hden, hden_vary=True, uvb = 'KS18', z=0.2,
             "Ne", "Ne+", "Ne+2", "Ne+3", "Ne+4", "Ne+5", "Ne+6", "Ne+7", "Ne+8",
             "Fe", "Fe+", "Fe+2",
             "Na", "Na+", "Na+2"]
-    
+
 
     return ions, cloudy_params
 

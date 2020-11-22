@@ -38,7 +38,7 @@ def get_interp_func(model_Q, ions_to_use):
 
     return logf
 
-def sample_plot(npy_file, interp_logf, true_ions, true_col, true_sigma, figname ='test.png', samples = 900,
+def sample_plot(npy_file, interp_logf, true_ions, true_col, true_sigma, figname ='test.png', samples = 100,
                 reference_log_metal = -1):
 
     # setting the figure
@@ -58,7 +58,7 @@ def sample_plot(npy_file, interp_logf, true_ions, true_col, true_sigma, figname 
         # scale the column densities by the metallicity Z
         metal_scaling_linear = 10 ** logZ / 10 ** reference_log_metal
         model_col = col * metal_scaling_linear
-        ax.plot(true_ions, model_col,  "C1", alpha=0.1)
+        ax.plot(true_ions, model_col,  "C1", alpha=0.2)
 
     ax.errorbar(true_ions, true_col, yerr = (true_col*true_sigma)*2.303, color = 'k', elinewidth =2, marker = '.',  markersize = 15,
                 linestyle = '', zorder =1000)
