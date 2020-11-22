@@ -2,7 +2,7 @@ import numpy as np
 import astropy.table as tab
 
 
-def get_true_model(model_q, Q= 18, nH = 1-4):
+def get_true_model(model_q, Q= 18, nH = 1e-4):
     """
     :param model: The data where Q18 model is stored
     :return: a row of ion column densities at n_H = 1e-4 cm^-2
