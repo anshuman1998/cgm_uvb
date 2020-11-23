@@ -4,7 +4,7 @@ import os
 import numpy as np
 import astropy.table as tab
 import subprocess
-
+from cgm_uvb.write_uvb_in_cloudy_format import write_uvb_in_cloudy_format
 
 def run(cloudy_path, input_file):
     """
@@ -51,12 +51,20 @@ def write_input(file_name, *args, **kwargs):
 
     f = open(file_name, "w+")
 
-
-
     if kwargs['uvb'] == 'KS18':
         uvb_statement =  'TABLE {} redshift = {} [scale = {}] [Q = {}] \n'.format(
             kwargs['z'], kwargs['uvb'], kwargs['uvb_scale'], kwargs['uvb_Q'])
         f.write(uvb_statement)
+
+    if kwargs['uvb'] == 'FG20':
+        path_to_store = os.path.dirname(file_name)
+        ebl_file_name =  'ebl_fg20_z{:.2f}.txt'.format(kwargs['z'])
+        ebl_file_name_with_path = path_to_store + '/' + ebl_file_name
+        fg20_file_path_and_name = os.getcwd() + '/paper_plots/fg20_fits_files' + '/FG20_EBL_z_{:.2f}.fits'.format(kwargs['z'])
+        uvb_statement = 'TABLE SED \"{}\" \n'.format(ebl_file_name)
+        norm_statement = write_uvb_in_cloudy_format(fg20_file_path_and_name, FG20 = True, outfilename = ebl_file_name_with_path)
+        f.write(uvb_statement)
+        f.write(norm_statement)
 
     if kwargs['hden_vary'] == True:
         density_statement = 'hden {} vary \n'.format(kwargs['log_hden'])
@@ -69,8 +77,6 @@ def write_input(file_name, *args, **kwargs):
             variation_statement = 'grid range from {} to {} with {} dex step \n'.format(
                 kwargs['log_hden1'], kwargs['log_hden2'], kwargs['log_hden_step'])
             f.write(variation_statement)
-
-
     else:
         density_statement = 'hden {} \n'.format(kwargs['log_hden'])
         f.write(density_statement)
@@ -114,7 +120,7 @@ def write_input(file_name, *args, **kwargs):
 
 
 # this is the part one needs to change if one wants to change the cloudy program
-def cloudy_params_defaults(uvb_Q, log_hden, hden_vary=True, uvb = 'KS18', z=0.2, T = 10000,
+def cloudy_params_defaults(uvb_Q = 18, log_hden = [-4, -4], hden_vary=True, uvb = 'KS18', z=0.2, T = 10000,
                            metal = -1, stop_NHI = 15, sequential = False):
 
     cloudy_params = {'uvb': uvb, 'z' : z, 'uvb_scale': 1, 'uvb_Q' : uvb_Q,
