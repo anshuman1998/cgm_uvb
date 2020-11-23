@@ -29,7 +29,12 @@ for Q in uvb_array:
     ax.plot(12398/uvb['Wave'], uvb[q_name]*4*np.pi*c/(uvb['Wave']*1e-10), label = label, linewidth = 2)
     # 1 angstrom = 12398 eV
 
-
+fg20_path = os.getcwd() + '/fg20_fits_files'
+file_name  =  fg20_path + '/FG20_EBL_z_{:.2f}.fits'.format(z)
+uvb =  tab.Table.read(file_name)
+label= 'FG20'
+ax.plot(12398/uvb['Wave'], uvb['Jnu'] * 4 * np.pi * c / (uvb['Wave'] * 1e-10), label=label, linewidth=2, linestyle  = '--')
+# 1 ryd = 13.6057 eV
 
 ax.legend( loc = 'best', fontsize = 11)
 n_level1 = 'z = {:0.1f}'.format(z)
