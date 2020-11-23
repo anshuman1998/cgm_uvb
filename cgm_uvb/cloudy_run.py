@@ -56,6 +56,11 @@ def write_input(file_name, *args, **kwargs):
             kwargs['z'], kwargs['uvb'], kwargs['uvb_scale'], kwargs['uvb_Q'])
         f.write(uvb_statement)
 
+    if kwargs['uvb'] == 'HM12':
+        uvb_statement =  'TABLE {} redshift = {} [scale = {}] [Q = {}] \n'.format(
+            kwargs['z'], kwargs['uvb'], kwargs['uvb_scale'], kwargs['uvb_Q'])
+        f.write(uvb_statement)
+
     if kwargs['uvb'] == 'FG20':
         path_to_store = os.path.dirname(file_name)
         ebl_file_name =  'ebl_fg20_z{:.2f}.txt'.format(kwargs['z'])
