@@ -66,6 +66,19 @@ def write_input(file_name, *args, **kwargs):
         f.write(uvb_statement)
         f.write(norm_statement)
 
+    if kwargs['uvb'] == 'P19':
+        path_to_store = os.path.dirname(file_name)
+        ebl_file_name =  'ebl_p19_z{:.2f}.txt'.format(kwargs['z'])
+        ebl_file_name_with_path = path_to_store + '/' + ebl_file_name
+        p19_file_path_and_name = os.getcwd() + '/paper_plots/p19_ebl' + '/P19_EBL_z_{:.2f}.fits'.format(kwargs['z'])
+        if not os.path.exists(p19_file_path_and_name):
+            print('file {} does not exist, generate one'.format(p19_file_path_and_name))
+        #    generate file ===> add this part later for now see if all files are there
+        uvb_statement = 'TABLE SED \"{}\" \n'.format(ebl_file_name)
+        norm_statement = write_uvb_in_cloudy_format(p19_file_path_and_name, P19 = True, outfilename = ebl_file_name_with_path)
+        f.write(uvb_statement)
+        f.write(norm_statement)
+
     if kwargs['hden_vary'] == True:
         density_statement = 'hden {} vary \n'.format(kwargs['log_hden'])
         f.write(density_statement)
