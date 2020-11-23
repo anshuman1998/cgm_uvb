@@ -17,14 +17,22 @@ plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0.1)
 file_name  =  '/home/vikram/cloudy_run/figures/NH14_out.fits'
 d =  tab.Table.read(file_name)
 
+lsf_file_name = '/home/vikram/cloudy_run/figures/NH14_log_lsf_out.fits'
+dlsf = tab.Table.read(lsf_file_name)
+
 uvb_array= [14, 15, 16, 17, 18, 19, 20]
 Q_names = []
 for Q in uvb_array:
     q_name = 'Q{}'.format(Q)
     Q_names.append(q_name)
-
-ax1.errorbar( d['nH'], Q_names, xerr = [d['n16'], d['n84']], ls = '', marker ='.', markersize = 14, color = 'b', elinewidth =2, alpha =0.9)
-ax2.errorbar( d['Z'], Q_names, xerr = [d['Z16'], d['Z84']], ls = '', marker ='.', markersize = 14, color = 'b', elinewidth=2, alpha = 0.9 )
+lab = 'MCMC'
+ax1.errorbar( d['nH'], Q_names, xerr = [d['n16'], d['n84']], ls = '', marker ='.', markersize = 16, color = 'b', elinewidth =2, alpha =0.7, label = lab)
+lab = 'Least Squares'
+ax1.scatter(dlsf['nH'], Q_names, marker = 'x', color ='r', linewidth = 2, s = 350,  alpha =0.7, label = lab)
+lab = 'MCMC'
+ax2.errorbar( d['Z'], Q_names, xerr = [d['Z16'], d['Z84']], ls = '', marker ='.', markersize = 16, color = 'b', elinewidth=2, alpha = 0.7,label = lab )
+lab = 'Least Squares'
+ax2.scatter(dlsf['Z'], Q_names, marker = 'x', color ='r', linewidth = 2, s = 350,  alpha =0.7, label = lab)
 ax1.axvline(x = -4, linestyle = '--', color = 'k', alpha = 0.7)
 ax2.axvline(x = -1, linestyle = '--', color = 'k', alpha = 0.7)
 
@@ -41,11 +49,15 @@ ax2.set_xlim(-1.25, -0.55)
 #ax.set_xscale('log')
 #ax.set_yscale('log')
 
-#ax.legend( loc = 'best', fontsize = 11)
+
+#change the marker size manually for both lines
+#lgnd.legendHandles[0]._legmarker.set_markersize(6)
+#lgnd.legendHandles[1]._legmarker.set_markersize(100)
 #n_level1 = 'z = {:0.1f}'.format(z)
 #ax.annotate (n_level1, xy=(1e4, 2e-7), fontsize=12)
 for ax in (ax1, ax2):
 
+    ax.legend(loc='best', fontsize=14)
 
     # deco
     ax.tick_params(direction='in', length=6, width=1.5)
