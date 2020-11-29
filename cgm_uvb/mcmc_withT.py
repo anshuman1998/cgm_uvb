@@ -21,37 +21,24 @@ def get_true_model(model_Q, Q= 18, logT = 4):
     return true_ion_col
 
 #----model interpolation
-def get_interp_func(model_Q, ions_to_use):
-    number_of_ions = len(ions_to_use)
+def get_interp_func(model_path, ions_to_use, Q_uvb):
     logT = np.arange(3.64, 6.02, 0.04)
     #get nH array
+    model_try = model_path + '/try_Q{}_T{:.0f}.fits'.format(Q_uvb, 4 * 100)
+    model = tab.Table.read(model_try)
+    lognH = np.log10(np.array(model['hden']))
 
     interpolation_function_list = []
     for ion in ions_to_use:
+        z = np.zeros((len(lognH), len(logT)))
+        for i in range(len(logT)):
+            model = model_path + '/try_Q{}_T{:.0f}.fits'.format(Q_uvb, logT[i] * 100)
+            d = tab.Table.read(model)
+            z [:, i] = d[ion]
+        f = interpolate.interp2d(lognH, logT, z.T, fill_value='extrapolate')
+        interpolation_function_list.append(f)
 
-
-
-    model = tab.Table.read(model_Q)
-    sorted_model = model[ions_to_use]
-    hden_array = np.array(model['hden'])
-
-    model_touple = ()
-    for j in range(number_of_ions):
-        model_touple += (sorted_model[ions_to_use[j]],)
-
-    # interpolating in log log scale
-    logf = interp1d(np.log10(hden_array), np.log10(model_touple), fill_value='extrapolate')
-
-    hden_array = np.array(model['hden'])
-
-    model_touple = ()
-    for j in range(number_of_ions):
-        model_touple += (sorted_model[ions_to_use[j]],)
-
-    # interpolating in log log scale
-    logf = interp1d(np.log10(hden_array), np.log10(model_touple), fill_value='extrapolate')
-
-    return logf
+    return interpolation_function_list
 
 
 #----for mcmc
