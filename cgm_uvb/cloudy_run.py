@@ -6,6 +6,11 @@ import astropy.table as tab
 import subprocess
 from cgm_uvb.write_uvb_in_cloudy_format import write_uvb_in_cloudy_format
 
+def find_nearest_index(array, value):
+    array = np.asarray(array)
+    idx = (np.abs(array - value)).argmin()
+    return idx
+
 def run(cloudy_path, input_file):
     """
     :param cloudy_path: the path where your cloudy files are stored
@@ -67,7 +72,16 @@ def write_input(file_name, *args, **kwargs):
         ebl_file_name_with_path = path_to_store + '/' + ebl_file_name
         fg20_file_path_and_name = os.getcwd() + '/paper_plots/fg20_fits_files' + '/FG20_EBL_z_{:.2f}.fits'.format(kwargs['z'])
         uvb_statement = 'TABLE SED \"{}\" \n'.format(ebl_file_name)
-        norm_statement = write_uvb_in_cloudy_format(fg20_file_path_and_name, FG20 = True, outfilename = ebl_file_name_with_path)
+
+        if not os.path.exists(ebl_file_name_with_path):
+            norm_statement = write_uvb_in_cloudy_format(fg20_file_path_and_name, FG20 = True, outfilename = ebl_file_name_with_path)
+        else:
+            x = tab.Table.read(fg20_file_path_and_name)
+            data = tab.Table([12398.0 / x['Wave'] / 13.6057, x['Jnu'] * 2.99792e18 * np.pi * 4 / x['Wave']],
+                names=('Ryd', 'nufnu'))
+            ind = find_nearest_index(data['Ryd'], 1.000)
+            norm_statement = 'nuf(nu) = {} [at {} Ryd]\n'.format(np.log10(data['nufnu'][ind]), data['Ryd'][ind])
+
         f.write(uvb_statement)
         f.write(norm_statement)
 
@@ -80,7 +94,16 @@ def write_input(file_name, *args, **kwargs):
             print('file {} does not exist, generate one'.format(p19_file_path_and_name))
         #    generate file ===> add this part later for now see if all files are there
         uvb_statement = 'TABLE SED \"{}\" \n'.format(ebl_file_name)
-        norm_statement = write_uvb_in_cloudy_format(p19_file_path_and_name, P19 = True, outfilename = ebl_file_name_with_path)
+
+        if not os.path.exists(ebl_file_name_with_path):
+            norm_statement = write_uvb_in_cloudy_format(p19_file_path_and_name, P19 = True, outfilename = ebl_file_name_with_path)
+        else:
+            x = tab.Table.read(p19_file_path_and_name)
+            data = tab.Table([12398.0 / x['Wave'] / 13.6057, x['Jnu'] * 2.99792e18 * np.pi * 4 / x['Wave']],
+                names=('Ryd', 'nufnu'))
+            ind = find_nearest_index(data['Ryd'], 1.000)
+            norm_statement = 'nuf(nu) = {} [at {} Ryd]\n'.format(np.log10(data['nufnu'][ind]), data['Ryd'][ind])
+
         f.write(uvb_statement)
         f.write(norm_statement)
 
