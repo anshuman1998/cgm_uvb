@@ -2,18 +2,19 @@
 import numpy as np
 import astropy.table as tab
 from scipy.interpolate import interp1d
+from scipy.interpolate import interp2d
 import matplotlib.pyplot as plt
 import emcee
 import corner
 
 
 #----data
-def get_true_model(model_Q, Q= 18, logT = 4):
+def get_true_model(model_path, Q= 18, logT = 4):
     """
     :param model: The data where Q18 model is stored
     :return: a row of ion column densities at n_H = 1e-4 cm^-2
     """
-    model = model_Q.split('_Q')[0] + '_Q{}_T{:.0f}.in'.format(Q, logT*100)
+    model = model_path + '/try_Q{}_T{:.0f}.fits'.format(Q, logT*100)
     data = tab.Table.read(model)
     true_ion_col = data [data['hden'] == 1e-4]
    # print(true_ion_col)
@@ -35,7 +36,7 @@ def get_interp_func(model_path, ions_to_use, Q_uvb):
             model = model_path + '/try_Q{}_T{:.0f}.fits'.format(Q_uvb, logT[i] * 100)
             d = tab.Table.read(model)
             z [:, i] = d[ion]
-        f = interpolate.interp2d(lognH, logT, z.T, fill_value='extrapolate')
+        f = interp2d(lognH, logT, z.T)
         interpolation_function_list.append(f)
 
     return interpolation_function_list
@@ -55,6 +56,8 @@ def log_likelihood(theta, interp_logf, obs_ion_col, col_err, reference_log_metal
     # get metal ion column density for n_H and Z = 0.1
     col = []
     for i in range(len(obs_ion_col)):
+        #print('==>', i, lognH, logT)
+        #print(interp_logf[i](lognH, logT), i, lognH, logT)
         col_mod = interp_logf[i](lognH, logT)[0]
         col.append(col_mod)
 
@@ -86,7 +89,7 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, figname = 'testT.pdf', 
     truths = [-4, -1, 4]  # (lognH, logZ, logT) true values
     number_of_ions = len(ions_to_use)
 
-    data_col_all = get_true_model(model_Q, Q=true_Q)
+    data_col_all = get_true_model(model_path, Q=true_Q)
     # converting astropy table row to a list
     data_col = []
     for name in ions_to_use:
