@@ -133,7 +133,7 @@ def write_input(file_name, *args, **kwargs):
         scale_He_statement ='element helium abundance {} linear \n'.format(kwargs['scale_He'])
         f.write(scale_He_statement)
 
-    stop_statement = 'stop column density {}  neutral H \n'.format(kwargs['stop_logNHI'])
+    stop_statement = 'stop column density {} neutral H \n'.format(kwargs['stop_logNHI'])
     f.write(stop_statement)
 
     if kwargs['constant_T'] is not None:
