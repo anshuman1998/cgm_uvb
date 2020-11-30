@@ -53,12 +53,12 @@ def write_input(file_name, *args, **kwargs):
 
     if kwargs['uvb'] == 'KS18':
         uvb_statement =  'TABLE {} redshift = {} [scale = {}] [Q = {}] \n'.format(
-            kwargs['z'], kwargs['uvb'], kwargs['uvb_scale'], kwargs['uvb_Q'])
+            kwargs['uvb'], kwargs['z'], kwargs['uvb_scale'], kwargs['uvb_Q'])
         f.write(uvb_statement)
 
     if kwargs['uvb'] == 'HM12':
-        uvb_statement =  'TABLE {} redshift = {} [scale = {}] [Q = {}] \n'.format(
-            kwargs['z'], kwargs['uvb'], kwargs['uvb_scale'], kwargs['uvb_Q'])
+        uvb_statement =  'TABLE {} redshift = {} [scale = {}] \n'.format(
+            kwargs['uvb'], kwargs['z'], kwargs['uvb_scale'])
         f.write(uvb_statement)
 
     if kwargs['uvb'] == 'FG20':
@@ -109,10 +109,9 @@ def write_input(file_name, *args, **kwargs):
     stop_statement = 'stop column density {}  neutral H \n'.format(kwargs['stop_logNHI'])
     f.write(stop_statement)
 
-    if 'constant_T' in kwargs.keys():
+    if kwargs['constant_T'] is not None:
         temp_statement =  'constant temperature, t={} K [linear] \n'.format(kwargs['constant_T'])
         f.write(temp_statement)
-
 
     # new line
     save_hydrogen = 'save hydrogen conditions \".hydro\" last no clobber \n'
@@ -138,7 +137,7 @@ def write_input(file_name, *args, **kwargs):
 
 
 # this is the part one needs to change if one wants to change the cloudy program
-def cloudy_params_defaults(uvb_Q = 18, log_hden = [-4, -4], hden_vary=True, uvb = 'KS18', z=0.2, T = 10000,
+def cloudy_params_defaults(uvb_Q = 18, log_hden = [-4, -4], hden_vary=True, uvb = 'KS18', z=0.2, T = None,
                            metal = -1, stop_NHI = 15, sequential = False):
 
     cloudy_params = {'uvb': uvb, 'z' : z, 'uvb_scale': 1, 'uvb_Q' : uvb_Q,
