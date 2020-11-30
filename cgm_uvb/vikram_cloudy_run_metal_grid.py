@@ -16,9 +16,9 @@ import numpy as np
 from cgm_uvb.write_uvb_in_cloudy_format import write_uvb_in_cloudy_format
 import astropy.table as tab
 
-def uvb_files(file_name, **kwargs):
+def uvb_files(file_path, **kwargs):
     if kwargs['uvb'] == 'FG20':
-        path_to_store = os.path.dirname(file_name)
+        path_to_store = file_path
         ebl_file_name =  'ebl_fg20_z{:.2f}.txt'.format(kwargs['z'])
         ebl_file_name_with_path = path_to_store + '/' + ebl_file_name
         fg20_file_path_and_name = os.getcwd() + '/paper_plots/fg20_fits_files' + '/FG20_EBL_z_{:.2f}.fits'.format(kwargs['z'])
@@ -32,7 +32,7 @@ def uvb_files(file_name, **kwargs):
         print(uvb_statement)
 
     if kwargs['uvb'] == 'P19':
-        path_to_store = os.path.dirname(file_name)
+        path_to_store = file_path
         ebl_file_name =  'ebl_p19_z{:.2f}.txt'.format(kwargs['z'])
         ebl_file_name_with_path = path_to_store + '/' + ebl_file_name
         p19_file_path_and_name = os.getcwd() + '/paper_plots/p19_ebl' + '/P19_EBL_z_{:.2f}.fits'.format(kwargs['z'])
@@ -107,18 +107,3 @@ pool = mp.Pool(processes=50)
 results = [pool.apply_async(run_parallel, args=(Z, Q, mod,)) for  Z, Q, mod in zip(logZ, the_Q_values, uvb_models)]
 output = [p.get() for p in results]
 
-"""
-uvb_Q=19
-cloudy_path = '/home/vikram/c17.02'
-input_File = '/home/vikram/cloudy_run/try.in'
-
-# write input file and run cloudy
-ions, params = cloudy_params_defaults(uvb_Q=uvb_Q, log_hden= [-5, -3, 1])
-write_input(input_File, *ions, **params)
-run(cloudy_path= cloudy_path, input_file= input_File)
-
-# write output tables
-output_filename =  input_File.split('.in')[0] + '.spC'
-fits_filename = input_File.split('.in')[0] + '_Q{}'.format(uvb_Q) + '.fits'
-store_table(ions= ions, output_file= output_filename, fits_filename= fits_filename)
-"""
