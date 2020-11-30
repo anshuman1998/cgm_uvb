@@ -72,7 +72,7 @@ def log_likelihood(theta, interp_logf, obs_ion_col, col_err, reference_log_metal
 def log_prior(theta):
     lognH, logZ, logT =  theta
     # flat prior
-    if -6 < lognH < -2 and -2 < logZ < 1 and 3.5 < logT < 6:
+    if -6 < lognH < -2 and -2 < logZ < 1 and 3.6 < logT < 6:
         return 0.0
     return -np.inf
 
