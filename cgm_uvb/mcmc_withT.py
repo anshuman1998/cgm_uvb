@@ -51,21 +51,25 @@ def log_likelihood(theta, interp_logf, obs_ion_col, col_err, reference_log_metal
     :param yerr: data err
     :return:
     """
-    lognH, logZ =  theta
+    lognH, logZ, logT =  theta
     # get metal ion column density for n_H and Z = 0.1
-    col = 10 ** interp_logf(lognH)
+    col = []
+    for i in range(len(obs_ion_col)):
+        col_mod = interp_logf[i](lognH, logT)[0]
+        col.append(col_mod)
+
     # scale the column densities by the metallicity Z
     metal_scaling_linear = 10 ** logZ / 10 ** reference_log_metal
-    model_col = np.log10(col * metal_scaling_linear)
+    model_col = np.log10(np.array(col) * metal_scaling_linear)
 
     lnL = -0.5 * np.sum(np.log(2 * np.pi * col_err ** 2) + (obs_ion_col - model_col) ** 2 / col_err ** 2)
 
     return lnL
 
 def log_prior(theta):
-    lognH, logZ =  theta
+    lognH, logZ, logT =  theta
     # flat prior
-    if -6 < lognH < -2 and -2 < logZ < 1 :
+    if -6 < lognH < -2 and -2 < logZ < 1 and 3.5 < logT < 6:
         return 0.0
     return -np.inf
 
@@ -76,7 +80,7 @@ def log_posterior(theta, interp_func, data_col, sigma_col):
     return log_p
 
 
-def run_mcmc(model_Q, ions_to_use, true_Q =18, figname = 'testT.pdf', same_error = False):
+def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, figname = 'testT.pdf', same_error = False):
     # run_mcmc(model_Q= model, ions_to_use= ions)
     # ------------------ here is a way to run code
     truths = [-4, -1, 4]  # (lognH, logZ, logT) true values
@@ -96,7 +100,7 @@ def run_mcmc(model_Q, ions_to_use, true_Q =18, figname = 'testT.pdf', same_error
 
     print(np.log10(data_col), sigma_col)
 
-    interp_logf = get_interp_func(model_Q, ions_to_use)
+    interp_logf = get_interp_func(model_path = model_path, ions_to_use= ions_to_use, Q_uvb= Q_uvb)
 
     # Here we'll set up the computation. emcee combines multiple "walkers",
     # each of which is its own MCMC chain. The number of trace results will
@@ -125,10 +129,10 @@ def run_mcmc(model_Q, ions_to_use, true_Q =18, figname = 'testT.pdf', same_error
     # we are discarding some initial steps roughly 5 times the autocorr_time steps
     # then we thin by about half the autocorrelation time steps for plotting => one does not have to do this step
 
-    labels = ['log nH', 'log Z']
-    uvb_q= int((model_Q.split('try_Q')[-1]).split('.fits')[0])
+    labels = ['log nH', 'log Z', 'logT']
+    #uvb_q= int((model_Q.split('try_Q')[-1]).split('.fits')[0])
 
-    if uvb_q == true_Q:
+    if Q_uvb == true_Q:
         fig = corner.corner(flat_samples, labels=labels, truths=truths, quantiles=[0.16, 0.5, 0.84],
             show_titles=True, title_kwargs={"fontsize": 12})
     else:
@@ -148,6 +152,8 @@ def run_mcmc(model_Q, ions_to_use, true_Q =18, figname = 'testT.pdf', same_error
 
 ions_to_use= ['C+3', 'N+3', 'Si+3', 'O+5', 'C+2']
 true_Q =18
-outpath = '/home/vikram/cloudy_run/figures'
+outpath = '/home/vikram/cloudy_run/figures/withT'
 
+model_path  = '/home/vikram/cloudy_run/temperature_NH15'
 
+run_mcmc(model_path= model_path, Q_uvb= true_Q, ions_to_use=ions_to_use)
