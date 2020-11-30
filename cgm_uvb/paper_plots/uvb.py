@@ -64,13 +64,14 @@ ax.set_xscale('log')
 ax.set_yscale('log')
 
 #deco
-ax.tick_params(direction='in', length=6, width=1.5)
-ax.tick_params(direction='in', which='minor', length=3.5, width=1.5)
+ax.tick_params(direction='in', length=7, width=1.7)
+ax.tick_params(direction='in', which='minor', length=4, width=1.7)
 #ax.ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
 ax.yaxis.set_ticks_position('both')
 ax.xaxis.set_ticks_position('both')
 # decorating the plot
 for axis in ['top', 'bottom', 'left', 'right']:
-    ax.spines[axis].set_linewidth(1.5)
+    ax.spines[axis].set_linewidth(1.7)
+    ax.spines[axis].set_color('k')
 
 fig.savefig(out_fig_name, bbox_inches='tight')
