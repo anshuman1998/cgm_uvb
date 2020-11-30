@@ -20,7 +20,7 @@ if 1:
     input_File = '/home/vikram/cloudy_run/scratch/try_p19.in'
 
     # write input file and run cloudy
-    ions, params = cloudy_params_defaults(uvb = 'P19', hden_vary= False, stop_NHI = 14)
+    ions, params = cloudy_params_defaults(uvb = 'P19', hden_vary= False, stop_NHI = 14, T = 10000)
     write_input(input_File, *ions, **params)
     run(cloudy_path=cloudy_path, input_file=input_File)
 
