@@ -100,7 +100,7 @@ def write_input(file_name, *args, **kwargs):
         f.write(density_statement)
 
     if kwargs['abundances'] is not None:
-        abd_statement =  'abundances \"{}\" \n'.format(kwargs['abundances'])
+        abd_statement = 'abundances \"{}\" \n'.format(kwargs['abundances'])
         f.write(abd_statement)
 
     metal_statement =  'metals {:.2f} log \n'.format(kwargs['log_metal'])
@@ -150,7 +150,7 @@ def cloudy_params_defaults(uvb_Q = 18, log_hden = [-4, -4], hden_vary=True, uvb 
                      'constant_T': T,
                      'stop_logNHI': stop_NHI,
                      'scale_He': 0.081632653,
-                     'abundances' : abundances
+                     'abundances' : abundances,
                      'sequential': sequential}
     print(cloudy_params)
 
