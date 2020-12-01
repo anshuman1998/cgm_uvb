@@ -54,11 +54,11 @@ def run_parallel(logZ, uvb_Q, uvb):
     # for vikram
     cloudy_path = '/home/vikram/c17.02'
     fname = (logZ+4)*100
-    input_File = '/mnt/quasar2/vikram/cloudy_run/metal_NH15/try_{}_Q{}_Z{:.0f}.in'.format(uvb, uvb_Q, fname)
+    input_File = '/mnt/quasar2/vikram/cloudy_run/metal_NH15_new/try_{}_Q{}_Z{:.0f}.in'.format(uvb, uvb_Q, fname)
     print(uvb, 'Q=', uvb_Q, 'Z=', logZ)
 
     # write input file and run cloudy
-    ions, params = cloudy_params_defaults(uvb = uvb, uvb_Q=uvb_Q, log_hden=[-6.5, -1, 0.01], stop_NHI = 15, T = None, metal = logZ,
+    ions, params = cloudy_params_defaults(uvb = uvb, uvb_Q=uvb_Q, log_hden=[-6, -2, 0.02], stop_NHI = 15, T = None, metal = logZ,
                                           sequential = True)
     write_input(input_File, *ions, **params)
     run(cloudy_path=cloudy_path, input_file=input_File)
@@ -72,7 +72,7 @@ def run_parallel(logZ, uvb_Q, uvb):
 
 # runnning in parallel
 #uvb_array= [14, 15, 16, 17, 18, 19, 20]
-logZ_array = np.around(np.arange(-3, 1.01, 0.02), decimals = 2)
+logZ_array = np.around(np.arange(-2.5, 0.5, 0.02), decimals = 2)
 uvb = ['KS18', 'HM12',  'P19', 'FG20']
 uvb_Q = [14, 15, 16, 17, 18, 19, 20]
 
