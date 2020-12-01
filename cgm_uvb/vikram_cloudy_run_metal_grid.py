@@ -72,7 +72,7 @@ def run_parallel(logZ, uvb_Q, uvb):
 
 # runnning in parallel
 #uvb_array= [14, 15, 16, 17, 18, 19, 20]
-logZ_array = np.around(np.arange(-2.5, 0.5, 0.05), decimals = 2)
+logZ_array = np.around(np.arange(-3, 1, 0.05), decimals = 2)
 uvb = ['KS18', 'HM12',  'P19', 'FG20']
 uvb_Q = [14, 15, 16, 17, 18, 19, 20]
 
