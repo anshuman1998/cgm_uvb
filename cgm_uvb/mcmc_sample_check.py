@@ -63,8 +63,8 @@ def sample_plot(npy_file, interp_logf, true_ions, true_col, true_sigma, figname 
     ax.errorbar(true_ions, true_col, yerr = (true_col*true_sigma)*2.303, color = 'k', elinewidth =2, marker = '.',  markersize = 15,
                 linestyle = '', zorder =1000)
 
-    ax.set_ylabel('ion')
-    ax.set_xlabel('Nion')
+    ax.set_xlabel('Ion')
+    ax.set_xlabel(r'N$_{\rm ion}$')
     # ax.set_xscale('log')
     ax.set_yscale('log')
 
@@ -110,7 +110,7 @@ def get_mcmc_sample(model_Q, ions_to_use, npyfile,  true_Q =18, figname = 'test.
 
     return
 
-uvb_q= 16
+uvb_q= 18
 model_Q = '/home/vikram/cloudy_run/anshuman/try_Q{}.fits'.format(uvb_q)
 ions_to_use= np.array(['C+3', 'N+3', 'Si+3', 'O+5', 'C+2'])
 true_Q =18
@@ -126,4 +126,4 @@ print(ions_to_use, ': sorted')
 
 npyfile =  '/home/vikram/cloudy_run/figures/anshuman_try_Q{}.npy'.format(uvb_q)
 
-get_mcmc_sample(model_Q, ions_to_use, npyfile, figname= 'test16.png')
+get_mcmc_sample(model_Q, ions_to_use, npyfile, figname= 'test18_sample.png')
