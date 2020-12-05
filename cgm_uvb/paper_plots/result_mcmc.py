@@ -1,12 +1,13 @@
 import numpy as  np
 import corner
 
-path = '/home/vikram/cloudy_run/figures'
+path = '/home/vikram/cloudy_run/figures/2D'
 
-uvb_array = [14, 15, 16, 17, 19, 20]
+uvb_array = ['KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'P19', 'FG20', 'HM12']
+Q_array= [14, 15, 16, 17, 18, 19, 20, 18, 18, 18]
 
-for Q in uvb_array:
-    file = path + '/anshuman_try_Q{}.npy'.format(Q)
+for Q, uvb in zip(Q_array, uvb_array):
+    file = path + '/{}_Q{}.npy'.format(uvb, Q)
     flat_sample = np.load(file)
 
     labels = [r'log n$_{\rm H}$ (cm$^{-3}$)', r'log Z (Z$_{\odot}$)']
@@ -14,7 +15,11 @@ for Q in uvb_array:
 
     ndim = 2
     axes = np.array(fig.axes).reshape((ndim, ndim))
-    axes[1, 0].annotate('KS19 (Q{})'.format(Q), xy=(0.03, 0.85), xycoords='axes fraction', fontsize=9)
+    if uvb == 'KS18':
+        legend_name = 'KS19 (Q{})'.format(Q)
+    else:
+        legend_name = '{}'.format(uvb)
+    axes[1, 0].annotate(legend_name, xy=(0.03, 0.85), xycoords='axes fraction', fontsize=9)
 
     for ax in [axes[0, 0], axes[1, 0], axes[1, 1]]:
         ax.tick_params(direction='out', length=5, width=1.1)
@@ -22,7 +27,7 @@ for Q in uvb_array:
         for axis in ['top', 'bottom', 'left', 'right']:
             ax.spines[axis].set_linewidth(1.1)
 
-    fig.savefig('result_Q{}.pdf'.format(Q), bbox_inches='tight')
+    fig.savefig('result_{}_Q{}.pdf'.format(uvb, Q), bbox_inches='tight')
 
 
 

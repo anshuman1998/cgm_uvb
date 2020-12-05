@@ -1,8 +1,8 @@
 import numpy as  np
 import corner
 
-path = '/home/vikram/cloudy_run/figures'
-file  = path + '/anshuman_try_Q18.npy'
+path = '/home/vikram/cloudy_run/figures/2D'
+file  = path + '/KS18_Q18.npy'
 
 flat_sample = np.load(file)
 
