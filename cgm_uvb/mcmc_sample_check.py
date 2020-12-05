@@ -38,7 +38,7 @@ def get_interp_func(model_Q, ions_to_use):
 
     return logf
 
-def sample_plot(npy_file, interp_logf, true_ions, true_col, true_sigma, figname ='test.png', samples = 100,
+def sample_plot(npy_file, interp_logf, true_ions, true_col, true_sigma, figname ='test.png', samples = 400,
                 reference_log_metal = -1):
 
     # setting the figure
@@ -64,7 +64,7 @@ def sample_plot(npy_file, interp_logf, true_ions, true_col, true_sigma, figname 
                 linestyle = '', zorder =1000)
 
     ax.set_xlabel('Ion')
-    ax.set_xlabel(r'N$_{\rm ion}$')
+    ax.set_ylabel(r'N$_{\rm ion}$ (cm$^{-2}$)')
     # ax.set_xscale('log')
     ax.set_yscale('log')
 
