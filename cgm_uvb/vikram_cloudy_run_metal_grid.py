@@ -72,7 +72,7 @@ def run_parallel(logZ, uvb_Q, uvb):
 
 # runnning in parallel
 #uvb_array= [14, 15, 16, 17, 18, 19, 20]
-logZ_array = np.around(np.arange(-2.5, 0.5, 0.02), decimals = 2)
+logZ_array = np.around(np.arange(-3, 1, 0.05), decimals = 2)
 uvb = ['KS18', 'HM12',  'P19', 'FG20']
 uvb_Q = [14, 15, 16, 17, 18, 19, 20]
 
@@ -94,7 +94,7 @@ for background in uvb:
             logZ.append(metal)
 
 #-----write uvb fg and hm in cloudy format first
-path = '/mnt/quasar2/vikram/cloudy_run/metal_NH15'
+path = '/mnt/quasar2/vikram/cloudy_run/metal_NH15_new'
 
 kwagrs = {'uvb' : 'P19', 'z' : 0.2}
 uvb_files(path, **kwagrs)
@@ -103,7 +103,7 @@ kwagrs = {'uvb' : 'FG20', 'z' : 0.2}
 uvb_files(path, **kwagrs)
 
 
-pool = mp.Pool(processes=50)
+pool = mp.Pool(processes=60)
 results = [pool.apply_async(run_parallel, args=(Z, Q, mod,)) for  Z, Q, mod in zip(logZ, the_Q_values, uvb_models)]
 output = [p.get() for p in results]
 
