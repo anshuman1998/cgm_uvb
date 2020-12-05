@@ -98,8 +98,6 @@ def get_LSF(model_path, Q_uvb, model_uvb, ions_to_use, true_Q, true_uvb):
 
 
 ions_to_use= ['C+3', 'N+3', 'Si+3', 'O+5', 'C+2']
-true_Q =18
-
 model_path  = '/home/vikram/cloudy_run/metal_NH15_new'
 
 get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'FG20', ions_to_use = ions_to_use, true_Q =18, true_uvb = 'KS18')
