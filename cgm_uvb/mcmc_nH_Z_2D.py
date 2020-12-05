@@ -23,7 +23,7 @@ def get_true_model(model_path, Q= 18, logZ = -1, uvb = 'KS18'):
 
 #----model interpolation
 def get_interp_func(model_path, ions_to_use, Q_uvb, uvb = 'KS18'):
-    logZ = np.around(np.arange(-2.5, 0.5, 0.02), decimals = 2) # hardcoded
+    logZ = np.around(np.arange(-3, 1, 0.05), decimals = 2) # hardcoded
     #get nH array
     logZ_try = -1
     model_try = model_path + '/try_{}_Q{}_Z{:.0f}.fits'.format(uvb, Q_uvb, (logZ_try+4)*100)
@@ -34,8 +34,9 @@ def get_interp_func(model_path, ions_to_use, Q_uvb, uvb = 'KS18'):
     for ion in ions_to_use:
         z = np.zeros((len(lognH), len(logZ)))
         for i in range(len(logZ)):
-            model = model_path + '/try_{}_Q{}_Z{:.0f}.fits'.format(uvb, Q_uvb, (logZ+4)*100)
+            model = model_path + '/try_{}_Q{}_Z{:.0f}.fits'.format(uvb, Q_uvb, (logZ[i]+4)*100)
             d = tab.Table.read(model)
+            d[ion][d[ion] == 0 ] = 1e-15 # for avoiding log10 (0) error
             z [:, i] = np.log10(d[ion]) #--- for log - log interpolation
         f = interp2d(lognH, logZ, z.T)
         interpolation_function_list.append(f)
@@ -44,7 +45,7 @@ def get_interp_func(model_path, ions_to_use, Q_uvb, uvb = 'KS18'):
 
 
 #----for mcmc
-def log_likelihood(theta, interp_logf, obs_ion_col, col_err, reference_log_metal = -1.0):
+def log_likelihood(theta, interp_logf, obs_ion_col, col_err):
     """
     For a gaussian distributed errors
     :param theta: parameters [nH, Z]
@@ -62,16 +63,16 @@ def log_likelihood(theta, interp_logf, obs_ion_col, col_err, reference_log_metal
         col_mod = interp_logf[i](lognH, logZ)[0]
         col.append(col_mod)
 
-    
+    model_col  = np.array(col)
 
     lnL = -0.5 * np.sum(np.log(2 * np.pi * col_err ** 2) + (obs_ion_col - model_col) ** 2 / col_err ** 2)
 
     return lnL
 
 def log_prior(theta):
-    lognH, logZ, logT =  theta
+    lognH, logZ =  theta
     # flat prior
-    if -6 < lognH < -2 and -2 < logZ < 1 and 3.6 < logT < 6:
+    if -6 < lognH < -2 and -3 < logZ < 1 :
         return 0.0
     return -np.inf
 
@@ -85,7 +86,7 @@ def log_posterior(theta, interp_func, data_col, sigma_col):
 def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, figname = 'testT.pdf', same_error = False):
     # run_mcmc(model_Q= model, ions_to_use= ions)
     # ------------------ here is a way to run code
-    truths = [-4, -1, 4]  # (lognH, logZ, logT) true values
+    truths = [-4, -1]  # (lognH, logZ, logT) true values
     number_of_ions = len(ions_to_use)
 
     data_col_all = get_true_model(model_path, Q=true_Q)
@@ -108,15 +109,14 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, figname = 'testT.pdf', 
     # each of which is its own MCMC chain. The number of trace results will
     # be nwalkers * nsteps
 
-    ndim = 3  # number of parameters in the model
+    ndim = 2  # number of parameters in the model
     nwalkers = 50  # number of MCMC walkers
     nsteps = 5000  # number of MCMC steps to take
 
     # set theta near the maximum likelihood, with
-    n_guess = np.random.uniform(-5, -2, nwalkers)
-    z_guess = np.random.uniform(-2, 1, nwalkers)
-    T_guess = np.random.uniform(3.6, 6.0, nwalkers)
-    starting_guesses = np.vstack((n_guess, z_guess, T_guess)).T  # initialise at a tiny sphere
+    n_guess = np.random.uniform(-5, -3, nwalkers)
+    z_guess = np.random.uniform(-2, 0, nwalkers)
+    starting_guesses = np.vstack((n_guess, z_guess)).T  # initialise at a tiny sphere
 
     # Here's the function call where all the work happens:
     sampler = emcee.EnsembleSampler(nwalkers, ndim, log_posterior, args=(interp_logf, np.log10(data_col), sigma_col))
@@ -131,7 +131,7 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, figname = 'testT.pdf', 
     # we are discarding some initial steps roughly 5 times the autocorr_time steps
     # then we thin by about half the autocorrelation time steps for plotting => one does not have to do this step
 
-    labels = ['log nH', 'log Z', 'logT']
+    labels = ['log nH', 'log Z']
     #uvb_q= int((model_Q.split('try_Q')[-1]).split('.fits')[0])
 
     if Q_uvb == true_Q:
@@ -154,8 +154,8 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, figname = 'testT.pdf', 
 
 ions_to_use= ['C+3', 'N+3', 'Si+3', 'O+5', 'C+2']
 true_Q =18
-outpath = '/home/vikram/cloudy_run/figures/withT'
+outpath = '/home/vikram/cloudy_run/figures/2D'
 
-model_path  = '/home/vikram/cloudy_run/temperature_NH15'
+model_path  = '/home/vikram/cloudy_run/metal_NH15_new'
 
-run_mcmc(model_path= model_path, Q_uvb= true_Q, ions_to_use=ions_to_use)
+run_mcmc(model_path= model_path, Q_uvb= true_Q, ions_to_use=ions_to_use, figname= outpath + '/test_2D_Q18.pdf')
