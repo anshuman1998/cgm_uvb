@@ -21,7 +21,7 @@ def get_interp_func(model_path, ions_to_use, Q_uvb, uvb = 'KS18'):
     #get nH array
     logZ_try = -1
     model_try = model_path + '/try_{}_Q{}_Z{:.0f}.fits'.format(uvb, Q_uvb, (logZ_try+4)*100)
-    print(model_try)
+
     model = tab.Table.read(model_try)
     lognH = np.log10(np.array(model['hden']))
 
@@ -49,17 +49,27 @@ def get_LSF(model_path, Q_uvb, model_uvb, ions_to_use, true_Q, true_uvb):
     # get interpolation functions for model
     interp_logf = get_interp_func(model_path = model_path, ions_to_use = ions_to_use, Q_uvb = Q_uvb, uvb = model_uvb)
 
-    print('interpolation done')
+    #print('interpolation done')
 
 
     # ---- the nine combinations
     true_nH_array = [1e-5, 1e-4, 1e-3]
     true_logZ_array  = [-2, -1, 0]
+    
+    truuvb=[]
+    Quvb=[]
+    moduvb=[]
+    truen=[]
+    truez=[]
     narr = []
     zarr = []
     lsqr = []
+    ion =[]
+
     for true_nH in true_nH_array:
         for true_logZ in true_logZ_array:
+            
+            
             # getting lsf array
             lognH_true = np.log10(true_nH)
             lognH_array = np.arange(lognH_true - 1, lognH_true + 1, 0.01)
@@ -96,18 +106,26 @@ def get_LSF(model_path, Q_uvb, model_uvb, ions_to_use, true_Q, true_uvb):
 
             #print(lognH_array[ind[0]], logZ_array[ind[1]], np.min(least_square_2D), 'for (nH, Z)',
                 #np.log10(true_nH), true_logZ, 'true uvb: Q', true_Q, true_uvb, 'model uvb: Q', Q_uvb, model_uvb )
+            truuvb.append(true_Q)
+            Quvb.append(Q_uvb)
+            moduvb.append(model_uvb)
+            truen.append(true_nH)
+            truez.append(true_logZ)
             narr.append(lognH_array[ind[0]])
             zarr.append(logZ_array[ind[1]])
             lsqr.append(np.min(least_square_2D))
+            ion.append(str(ions_to_use[0]+'_'+ions_to_use[1]))#+'_'+ions_to_use[2]))#+'_'+ions_to_use[3]+'_'+ions_to_use[4]))
+            
+            
 
-    return narr,zarr,lsqr
+    return truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion
 
 
 
-
+#ions_to_use= ['C+3', 'N+3', 'Si+3', 'O+5', 'C+2']
 model_path  = '/Users/anshumanacharya/Downloads/metal_NH15_new'
 
-
+#get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'FG20', ions_to_use = ions_to_use, true_Q =18, true_uvb = 'KS18')
 
 """
 ions_to_use= ['C+3', 'N+3', 'Si+3', 'O+5', 'C+2']
@@ -128,7 +146,6 @@ for q_num in q:
 outdata = tab.Table([q, narray, zarray, value_ls], names =('Q', 'nH', 'Z', 'LS'))
 outdata.write(outfile, overwrite =  True)
 """
-
 q=[14, 15, 16, 17, 18, 19, 20,'FG20','P19','HM12']
 UVB = ['KS18','FG20','P19','HM12']
 ks = [14, 15, 16, 17, 18, 19, 20]
@@ -144,130 +161,178 @@ ions = ["C+", "C+2", "C+3",
 
 
 print("Let's start")
-mdn = []
-mdz = []
-uvb = []
-ion = []
+
+outpath = '/Users/anshumanacharya/Downloads/cgm_uvb_master/op'
 
 for Q in UVB:
-    logdiffn = []
-    logdiffz = []
+
     for i in range(2):
         ions_to_use=np.random.choice(ions,2,replace = False)
             
         print(ions_to_use)
-        narray = []
-        zarray = []
-        value_ls = []
+
         if Q =='KS18':
             for q_num in ks:
+                outfile = outpath + '/NH14_log_lsf_out_trueQ_'+str(Q)+'_Q'+str(q_num)+'.fits'
                 for mod in UVB:
                     if mod=='KS18':
                         for q_mod in ks:
-                            nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = q_mod, model_uvb= 'KS18', 
+                            truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = q_mod, model_uvb= 'KS18', 
                                                 ions_to_use = ions_to_use, true_Q =q_num, true_uvb = 'KS18')
-                            narray.append(np.log10(nH))
-                            zarray.append(np.log10(Z))
-                            value_ls.append(min_LS)
+                            if q_mod == 14:
+                                outdata = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion], 
+                                                    names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                                outdata.write(outfile, overwrite = True)
+                            else:
+                                outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                                     names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                                outdata = tab.join(outdata,outdata2,join_type='outer')
+                                outdata.write(outfile, overwrite = True)
+      
                     elif mod=='FG20':
-                        nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'FG20', 
+                        truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'FG20', 
                                                 ions_to_use = ions_to_use, true_Q =q_num, true_uvb = 'KS18')
-                        narray.append(np.log10(nH))
-                        zarray.append(np.log10(Z))
-                        value_ls.append(min_LS)
+                        outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                             names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                        outdata = tab.join(outdata,outdata2,join_type='outer')
+                        outdata.write(outfile, overwrite = True)
+
                     elif mod=='P19':
-                        nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'P19', 
+                        truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'P19', 
                                                 ions_to_use = ions_to_use, true_Q =q_num, true_uvb = 'KS18')
-                        narray.append(np.log10(nH))
-                        zarray.append(np.log10(Z))
-                        value_ls.append(min_LS)
+                        outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                             names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                        outdata = tab.join(outdata,outdata2,join_type='outer')
+                        outdata.write(outfile, overwrite = True)
+
                     elif mod=='HM12':
-                        nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'HM12', 
+                        truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'HM12', 
                                                 ions_to_use = ions_to_use, true_Q =q_num, true_uvb = 'KS18')
-                        narray.append(np.log10(nH))
-                        zarray.append(np.log10(Z))
-                        value_ls.append(min_LS)
+                        outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                             names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                        outdata = tab.join(outdata,outdata2,join_type='outer')
+                        outdata.write(outfile, overwrite = True)
+                    
+
         elif Q =='FG20':
+            outfile = outpath + '/NH14_log_lsf_out_trueQ_'+str(Q)+'_Q18.fits'
             for mod in UVB:
                     if mod=='KS18':
                         for q_mod in ks:
-                            nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 'KS18', model_uvb= q_mod, 
+                            truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = q_mod, model_uvb= 'KS18', 
                                                 ions_to_use = ions_to_use, true_Q =18, true_uvb = Q)
-                            narray.append(np.log10(nH))
-                            zarray.append(np.log10(Z))
-                            value_ls.append(min_LS)
+                            if q_mod == 14:
+                                outdata = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion], 
+            names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                                outdata.write(outfile, overwrite =  True)
+                            else:
+                                outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                                    names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                                outdata = tab.join(outdata,outdata2,join_type='outer')
+                                outdata.write(outfile, overwrite = True)
+
                     elif mod=='FG20':
-                        nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 'FG20', model_uvb= 18, 
+                        truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'FG20', 
                                                 ions_to_use = ions_to_use, true_Q =18, true_uvb = Q)
-                        narray.append(np.log10(nH))
-                        zarray.append(np.log10(Z))
-                        value_ls.append(min_LS)
+                        outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                             names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                        outdata = tab.join(outdata,outdata2,join_type='outer')
+                        outdata.write(outfile, overwrite = True)
+
                     elif mod=='P19':
-                        nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 'P19', model_uvb= 18, 
+                        truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'P19', 
                                                 ions_to_use = ions_to_use, true_Q =18, true_uvb = Q)
-                        narray.append(np.log10(nH))
-                        zarray.append(np.log10(Z))
-                        value_ls.append(min_LS)
+                        outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                             names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                        outdata = tab.join(outdata,outdata2,join_type='outer')
+                        outdata.write(outfile, overwrite = True)
                     elif mod=='HM12':
-                        nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 'HM12', model_uvb= 18, 
+                        truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'HM12', 
                                                 ions_to_use = ions_to_use, true_Q =18, true_uvb = Q)
-                        narray.append(np.log10(nH))
-                        zarray.append(np.log10(Z))
-                        value_ls.append(min_LS)
+                        outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                             names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                        outdata = tab.join(outdata,outdata2,join_type='outer')
+                        outdata.write(outfile, overwrite = True)
+                    
         elif Q =='P19':
+            outfile = outpath + '/NH14_log_lsf_out_trueQ_'+str(Q)+'_Q18.fits'
             for mod in UVB:
                     if mod=='KS18':
                         for q_mod in ks:
-                            nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 'KS18', model_uvb= q_mod, 
+                            truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = q_mod, model_uvb= 'KS18', 
                                                 ions_to_use = ions_to_use, true_Q =18, true_uvb = Q)
-                            narray.append(np.log10(nH))
-                            zarray.append(np.log10(Z))
-                            value_ls.append(min_LS)
+                            if q_mod == 14:
+                                outdata = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion], 
+            names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                                outdata.write(outfile, overwrite =  True)
+                            else:
+                                outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                                    names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                                outdata = tab.join(outdata,outdata2,join_type='outer')
+                                outdata.write(outfile, overwrite = True)
+
                     elif mod=='FG20':
-                        nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 'FG20', model_uvb= 18, 
+                        truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'FG20', 
                                                 ions_to_use = ions_to_use, true_Q =18, true_uvb = Q)
-                        narray.append(np.log10(nH))
-                        zarray.append(np.log10(Z))
-                        value_ls.append(min_LS)
+                        outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                             names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                        outdata = tab.join(outdata,outdata2,join_type='outer')
+                        outdata.write(outfile, overwrite = True)
+
                     elif mod=='P19':
-                        nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 'P19', model_uvb= 18, 
+                        truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'P19', 
                                                 ions_to_use = ions_to_use, true_Q =18, true_uvb = Q)
-                        narray.append(np.log10(nH))
-                        zarray.append(np.log10(Z))
-                        value_ls.append(min_LS)
+                        outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                             names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                        outdata = tab.join(outdata,outdata2,join_type='outer')
+                        outdata.write(outfile, overwrite = True)
                     elif mod=='HM12':
-                        nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 'HM12', model_uvb= 18, 
+                        truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'HM12', 
                                                 ions_to_use = ions_to_use, true_Q =18, true_uvb = Q)
-                        narray.append(np.log10(nH))
-                        zarray.append(np.log10(Z))
-                        value_ls.append(min_LS)
+                        outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                             names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                        outdata = tab.join(outdata,outdata2,join_type='outer')
+                        outdata.write(outfile, overwrite = True)
+                    
         elif Q =='HM12':
+            outfile = outpath + '/NH14_log_lsf_out_trueQ_'+str(Q)+'_Q18.fits'
             for mod in UVB:
                     if mod=='KS18':
                         for q_mod in ks:
-                            nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 'KS18', model_uvb= q_mod, 
+                            truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = q_mod, model_uvb= 'KS18', 
                                                 ions_to_use = ions_to_use, true_Q =18, true_uvb = Q)
-                            narray.append(np.log10(nH))
-                            zarray.append(np.log10(Z))
-                            value_ls.append(min_LS)
+                            if q_mod == 14:
+                                outdata = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion], 
+            names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                                outdata.write(outfile, overwrite =  True)
+                            else:
+                                outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                                    names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                                outdata = tab.join(outdata,outdata2,join_type='outer')
+                                outdata.write(outfile, overwrite = True)
+
                     elif mod=='FG20':
-                        nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 'FG20', model_uvb= 18, 
+                        truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'FG20', 
                                                 ions_to_use = ions_to_use, true_Q =18, true_uvb = Q)
-                        narray.append(np.log10(nH))
-                        zarray.append(np.log10(Z))
-                        value_ls.append(min_LS)
+                        outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                             names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                        outdata = tab.join(outdata,outdata2,join_type='outer')
+                        outdata.write(outfile, overwrite = True)
+
                     elif mod=='P19':
-                        nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 'P19', model_uvb= 18, 
+                        truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'P19', 
                                                 ions_to_use = ions_to_use, true_Q =18, true_uvb = Q)
-                        narray.append(np.log10(nH))
-                        zarray.append(np.log10(Z))
-                        value_ls.append(min_LS)
+                        outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                             names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                        outdata = tab.join(outdata,outdata2,join_type='outer')
+                        outdata.write(outfile, overwrite = True)
                     elif mod=='HM12':
-                        nH, Z, min_LS = get_LSF(model_path = model_path, Q_uvb = 'HM12', model_uvb= 18, 
+                        truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion=get_LSF(model_path = model_path, Q_uvb = 18, model_uvb= 'HM12', 
                                                 ions_to_use = ions_to_use, true_Q =18, true_uvb = Q)
-                        narray.append(np.log10(nH))
-                        zarray.append(np.log10(Z))
-                        value_ls.append(min_LS)
-                            
-       
+                        outdata2 = tab.Table([truuvb,truen,truez,moduvb,Quvb, narr, zarr, lsqr,ion],
+                                             names =('True_Q', 'True_nH', 'True_Z', 'Model_UVB','Model_Q','nH','Z','LS','Ions_Used'))
+                        outdata = tab.join(outdata,outdata2,join_type='outer')
+                        outdata.write(outfile, overwrite = True)
+    print("Done for: ",Q)
+
 print("Done")
