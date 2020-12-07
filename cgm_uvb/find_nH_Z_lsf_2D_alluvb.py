@@ -166,14 +166,14 @@ outpath = '/Users/anshumanacharya/Downloads/cgm_uvb_master/op'
 
 for Q in UVB:
 
-    for i in range(2):
+    for i in range(40):
         ions_to_use=np.random.choice(ions,2,replace = False)
             
         print(ions_to_use)
 
         if Q =='KS18':
             for q_num in ks:
-                outfile = outpath + '/NH14_log_lsf_out_trueQ_'+str(Q)+'_Q'+str(q_num)+'.fits'
+                outfile = outpath + '/NH14_log_lsf_out_trueQ_'+str(Q)+'_Q'+str(q_num)+'_iter'+str(i)+'.fits'
                 for mod in UVB:
                     if mod=='KS18':
                         for q_mod in ks:
@@ -215,7 +215,7 @@ for Q in UVB:
                     
 
         elif Q =='FG20':
-            outfile = outpath + '/NH14_log_lsf_out_trueQ_'+str(Q)+'_Q18.fits'
+            outfile = outpath + '/NH14_log_lsf_out_trueQ_'+str(Q)+'_Q18_iter'+str(i)+'.fits'
             for mod in UVB:
                     if mod=='KS18':
                         for q_mod in ks:
@@ -255,7 +255,7 @@ for Q in UVB:
                         outdata.write(outfile, overwrite = True)
                     
         elif Q =='P19':
-            outfile = outpath + '/NH14_log_lsf_out_trueQ_'+str(Q)+'_Q18.fits'
+            outfile = outpath + '/NH14_log_lsf_out_trueQ_'+str(Q)+'_Q18_iter'+str(i)+'.fits'
             for mod in UVB:
                     if mod=='KS18':
                         for q_mod in ks:
@@ -295,7 +295,7 @@ for Q in UVB:
                         outdata.write(outfile, overwrite = True)
                     
         elif Q =='HM12':
-            outfile = outpath + '/NH14_log_lsf_out_trueQ_'+str(Q)+'_Q18.fits'
+            outfile = outpath + '/NH14_log_lsf_out_trueQ_'+str(Q)+'_Q18_iter'+str(i)+'.fits'
             for mod in UVB:
                     if mod=='KS18':
                         for q_mod in ks:
