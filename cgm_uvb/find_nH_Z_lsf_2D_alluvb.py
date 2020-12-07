@@ -54,7 +54,7 @@ def get_LSF(model_path, Q_uvb, model_uvb, ions_to_use, true_Q, true_uvb):
 
     # ---- the nine combinations
     true_nH_array = [1e-5, 1e-4, 1e-3]
-    true_logZ_array  = [-2, -1, 0]
+    true_logZ_array  = np.arange(-2.0,0.0001,0.1)
     
     truuvb=[]
     Quvb=[]
