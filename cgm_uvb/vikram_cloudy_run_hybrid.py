@@ -50,7 +50,7 @@ def uvb_files(file_path, **kwargs):
 
     return
 
-def run_parallel(uvb_Q, uvb, logT = 5.5):
+def run_parallel(uvb_Q, uvb, logT):
     # for vikram
     cloudy_path = '/home/vikram/c17.02'
     fname = logT*10
@@ -71,21 +71,30 @@ def run_parallel(uvb_Q, uvb, logT = 5.5):
     return
 
 
+
+
 uvb = ['KS18', 'HM12',  'P19', 'FG20']
 uvb_Q = [14, 15, 16, 17, 18, 19, 20]
+temp_values  = [5.0, 5.5, 6.0, 6.5]
 
 uvb_models =[]
 the_Q_values = []
-for background in uvb:
-    if background == 'KS18':
-        for q in uvb_Q:
+temp_array = []
+
+for logT in temp_values:
+    for background in uvb:
+
+        if background=='KS18':
+            for q in uvb_Q:
+                uvb_models.append(background)
+                the_Q_values.append(q)
+                temp_array.append(logT)
+
+        else:
+            q = 18
             uvb_models.append(background)
             the_Q_values.append(q)
-
-    else:
-        q = 18
-        uvb_models.append(background)
-        the_Q_values.append(q)
+            temp_array.append(logT)
 
 
 #-----write uvb fg and hm in cloudy format first
@@ -97,9 +106,7 @@ uvb_files(path, **kwagrs)
 kwagrs = {'uvb' : 'FG20', 'z' : 0.2}
 uvb_files(path, **kwagrs)
 
-
-# runnning in parallel
 pool = mp.Pool(processes=6)
-results = [pool.apply_async(run_parallel, args=(uvb_Q, uvb,)) for  uvb_Q, uvb in zip(the_Q_values, uvb_models)]
+results = [pool.apply_async(run_parallel, args=(uvb_Q, uvb, T,)) for uvb_Q, uvb, T in zip(the_Q_values, uvb_models, temp_array)]
 output = [p.get() for p in results]
 
