@@ -12,31 +12,33 @@ mpl.rcParams['axes.linewidth'] = 1.5
 out_fig_name = 'summary.pdf'
 figure_size = [12, 5]
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(figure_size[0], figure_size[1]))
-plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0.1)
+plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0.05)
 
-file_name  =  '/home/vikram/cloudy_run/figures/NH14_out.fits'
+file_name  =  '/home/vikram/cloudy_run/figures/2D/NH15_metal_2D.fits'
 d =  tab.Table.read(file_name)
 
-lsf_file_name = '/home/vikram/cloudy_run/figures/NH14_log_lsf_out.fits'
+lsf_file_name = '/home/vikram/cloudy_run/figures/2D/NH15_log_lsf_out.fits'
 dlsf = tab.Table.read(lsf_file_name)
 
-uvb_array= [14, 15, 16, 17, 18, 19, 20]
-Q_names = []
-for Q in uvb_array:
-    q_name = 'Q{}'.format(Q)
-    Q_names.append(q_name)
+
 lab = 'MCMC'
-ax1.errorbar( d['nH'], Q_names, xerr = [d['n16'], d['n84']], ls = '', marker ='.', markersize = 16, color = 'b', elinewidth =2, alpha =0.7, label = lab)
+num = np.arange(len(d['uvb']))
+ax1.errorbar( d['nH'][:-1], num[:-1], xerr = [d['n16'][:-1], d['n84'][:-1]], ls = '', marker ='.', markersize = 16, color = 'b', elinewidth =2, alpha =0.7, label = lab)
 lab = 'Least Squares'
-ax1.scatter(dlsf['nH'], Q_names, marker = 'x', color ='r', linewidth = 2, s = 350,  alpha =0.7, label = lab)
+ax1.scatter(dlsf['nH'][:-1], num[:-1], marker = 'x', color ='r', linewidth = 2, s = 300,  alpha =0.7, label = lab)
 lab = 'MCMC'
-ax2.errorbar( d['Z'], Q_names, xerr = [d['Z16'], d['Z84']], ls = '', marker ='.', markersize = 16, color = 'b', elinewidth=2, alpha = 0.7,label = lab )
+ax2.errorbar( d['Z'][:-1], num[:-1], xerr = [d['Z16'][:-1], d['Z84'][:-1]], ls = '', marker ='.', markersize = 16, color = 'b', elinewidth=2, alpha = 0.7,label = lab )
 lab = 'Least Squares'
-ax2.scatter(dlsf['Z'], Q_names, marker = 'x', color ='r', linewidth = 2, s = 350,  alpha =0.7, label = lab)
+ax2.scatter(dlsf['Z'][:-1], num[:-1], marker = 'x', color ='r', linewidth = 2, s = 300,  alpha =0.7, label = lab)
 ax1.axvline(x = -4, linestyle = '--', color = 'k', alpha = 0.7)
 ax2.axvline(x = -1, linestyle = '--', color = 'k', alpha = 0.7)
 
-#ax2.set_yticklabels([])
+#ax1.tick_params(axis='x', which='minor', bottom=False)
+ax1.set_yticks(num[:-1])
+
+uvb_column = ['Q14', 'Q15', 'Q16', 'Q17', 'Q18', 'Q19', 'Q20', 'P19', 'FG20', 'HM12']
+ax1.set_yticklabels (uvb_column[:-1])
+ax2.set_yticklabels([])
 
 
 ax1.set_ylabel('UVB models')
@@ -44,7 +46,7 @@ ax1.set_xlabel(r'log n$_{\rm H}$ (cm$^{-3}$)')
 ax2.set_xlabel(r'log Z (Z$_{\odot}$)')
 
 
-ax2.set_xlim(-1.25, -0.55)
+#ax2.set_xlim(-1.4, -0.55)
 #ax.set_ylim(4e-8, 5e-4)
 #ax.set_xscale('log')
 #ax.set_yscale('log')
