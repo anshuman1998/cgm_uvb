@@ -9,7 +9,7 @@ import corner
 
 
 #----data
-def get_true_model(model_path, Q= 18, logT = 5.5, true_uvb = 'KS18'):
+def get_true_model(model_path, Q= 18, logT = 6.0, true_uvb = 'KS18'):
     """
     :param model: The data where Q18 model is stored
     :return: a row of ion column densities at n_H = 1e-4 cm^-2
@@ -23,13 +23,16 @@ def get_true_model(model_path, Q= 18, logT = 5.5, true_uvb = 'KS18'):
 
 
 #----model interpolation
-def get_interp_func(model_path, ions_to_use, Q_uvb, uvb = 'KS18', logT = 5.5):
+def get_interp_func(model_path, ions_to_use, Q_uvb, uvb = 'KS18', logT = 6.0):
     number_of_ions = len(ions_to_use)
 
     model_file = model_path + '/try_{}_Q{}_logT{:.0f}.fits'.format(uvb, Q_uvb, logT*10)
 
     model = tab.Table.read(model_file)
     sorted_model = model[ions_to_use]
+    for ion in ions_to_use:
+        sorted_model[ion][sorted_model[ion]==0] = 1e-15  # for avoiding log10 (0) error
+
     hden_array = np.array(model['hden'])
 
     model_touple = ()
@@ -77,13 +80,13 @@ def log_posterior(theta, interp_func, data_col, sigma_col):
     return log_p
 
 
-def run_mcmc(model_path, ions_to_use, Q_uvb, uvb, true_Q =18, true_uvb= 'KS18', figname = 'test.pdf', same_error = False):
+def run_mcmc(model_path, ions_to_use, Q_uvb, uvb, true_Q =18, true_uvb= 'KS18', figname = 'test.pdf', logT= 5.5, same_error = False):
     # run_mcmc(model_Q= model, ions_to_use= ions)
     # ------------------ here is a way to run code
     truths = [-4, -1]  # (lognH, logZ) true values
     number_of_ions = len(ions_to_use)
 
-    data_col_all = get_true_model(model_path = model_path, Q= true_Q, true_uvb= true_uvb)
+    data_col_all = get_true_model(model_path = model_path, Q= true_Q, true_uvb= true_uvb, logT= logT)
     # converting astropy table row to a list
     data_col = []
     for name in ions_to_use:
@@ -97,7 +100,7 @@ def run_mcmc(model_path, ions_to_use, Q_uvb, uvb, true_Q =18, true_uvb= 'KS18', 
 
     print(np.log10(data_col), sigma_col)
 
-    interp_logf = get_interp_func(model_path= model_path, ions_to_use = ions_to_use, Q_uvb= Q_uvb, uvb= uvb )
+    interp_logf = get_interp_func(model_path= model_path, ions_to_use = ions_to_use, Q_uvb= Q_uvb, uvb= uvb, logT= logT)
 
     # Here we'll set up the computation. emcee combines multiple "walkers",
     # each of which is its own MCMC chain. The number of trace results will
@@ -147,7 +150,7 @@ def run_mcmc(model_path, ions_to_use, Q_uvb, uvb, true_Q =18, true_uvb= 'KS18', 
 
 
 
-
+logT= 6.5
 
 ions_to_use= ['C+3', 'Ne+7', 'Si+4', 'O+5', 'N+4']
 true_Q =1
@@ -161,10 +164,10 @@ Q_array= [14, 15, 16, 17, 18, 19, 20, 18, 18, 18]
 
 out_tab =  tab.Table()
 for uvb, q in zip(uvb_array, Q_array):
-    name =uvb + '_Q{}'.format(q)
-    figname = outpath + '/' + name + '.pdf'
+    name =uvb + '_Q{}_logT50'.format(q)
+    figname = outpath + '/' + name + '_logT{:.0f}.pdf'.format(logT*100)
 
-    flat_samples, ndim = run_mcmc(model_path= model_path, ions_to_use= ions_to_use, Q_uvb= q, uvb= uvb, figname=figname)
+    flat_samples, ndim = run_mcmc(model_path= model_path, ions_to_use= ions_to_use, Q_uvb= q, uvb= uvb, figname=figname, logT= logT)
     # to efficiently save numpy array
     save_file_name = outpath + '/' + name
     np.save(save_file_name, flat_samples)
