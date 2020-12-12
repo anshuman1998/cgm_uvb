@@ -150,45 +150,48 @@ def run_mcmc(model_path, ions_to_use, Q_uvb, uvb, true_Q =18, true_uvb= 'KS18', 
 
 
 
-logT= 6.5
 
-ions_to_use= ['C+3', 'Ne+7', 'Si+4', 'O+5', 'N+4']
-true_Q =1
+
+ions_to_use= ['C+3', 'Ne+7', 'O+5', 'N+4']
+true_Q =18
 
 outpath = '/home/vikram/cloudy_run/figures/hybrid'
 model_path  = '/home/vikram/cloudy_run/hybrid_NH15'
-outfile = outpath + '/NH15_hybrid.fits'
 
-uvb_array = ['KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'P19', 'FG20', 'HM12']
-Q_array= [14, 15, 16, 17, 18, 19, 20, 18, 18, 18]
+logT_array  = [5.0, 5.5, 6.0, 6.5]
+for logT in logT_array:
 
-out_tab =  tab.Table()
-for uvb, q in zip(uvb_array, Q_array):
-    name =uvb + '_Q{}_logT50'.format(q)
-    figname = outpath + '/' + name + '_logT{:.0f}.pdf'.format(logT*100)
+    outfile = outpath + '/NH15_hybrid_logT{:.0f}.fits'.format(logT * 100)
 
-    flat_samples, ndim = run_mcmc(model_path= model_path, ions_to_use= ions_to_use, Q_uvb= q, uvb= uvb, figname=figname, logT= logT)
-    # to efficiently save numpy array
-    save_file_name = outpath + '/' + name
-    np.save(save_file_name, flat_samples)
+    uvb_array = ['KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'P19', 'FG20', 'HM12']
+    Q_array = [14, 15, 16, 17, 18, 19, 20, 18, 18, 18]
 
-    out =[[q]]
-    for i in range(ndim):
-        mcmc = np.percentile(flat_samples[:, i], [16, 50, 84])
-        q = np.diff(mcmc)
-        out.append([mcmc[1]])
-        out.append([q[0]])
-        out.append([q[1]])
+    out_tab = tab.Table()
+    for uvb, q in zip(uvb_array, Q_array):
+        name = uvb + '_Q{}_logT{:.0f}'.format(q, logT*100)
+        figname = outpath + '/' + name + '.pdf'
 
-    print(out)
-    t = tab.Table(out, names = ('Q', 'nH', 'n16', 'n84', 'Z', 'Z16', 'Z84'))
-    out_tab = tab.vstack((out_tab, t))
+        flat_samples, ndim = run_mcmc(model_path=model_path, ions_to_use=ions_to_use, Q_uvb=q, uvb=uvb, figname=figname,
+            logT=logT)
+        # to efficiently save numpy array
+        save_file_name = outpath + '/' + name
+        np.save(save_file_name, flat_samples)
 
+        out = [[q]]
+        for i in range(ndim):
+            mcmc = np.percentile(flat_samples[:, i], [16, 50, 84])
+            q = np.diff(mcmc)
+            out.append([mcmc[1]])
+            out.append([q[0]])
+            out.append([q[1]])
 
+        print(out)
+        t = tab.Table(out, names=('Q', 'nH', 'n16', 'n84', 'Z', 'Z16', 'Z84'))
+        out_tab = tab.vstack((out_tab, t))
 
-uvb_column = ['Q14', 'Q15', 'Q16', 'Q17', 'Q18', 'Q19', 'Q20', 'P19', 'FG20', 'HM12']
-out_tab.add_column(uvb_column, name = 'uvb')
+    uvb_column = ['Q14', 'Q15', 'Q16', 'Q17', 'Q18', 'Q19', 'Q20', 'P19', 'FG20', 'HM12']
+    out_tab.add_column(uvb_column, name='uvb')
 
-out_tab.write(outfile, overwrite = True)
+    out_tab.write(outfile, overwrite=True)
 
 
