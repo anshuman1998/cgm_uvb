@@ -58,7 +58,7 @@ def run_parallel(uvb_Q, uvb, logT):
     print(uvb, 'Q=', uvb_Q, 'T=', logT)
 
     # write input file and run cloudy
-    ions, params = cloudy_params_defaults(uvb = uvb, uvb_Q=uvb_Q, log_hden=[-6, -2, 0.02], stop_NHI = 15, T = 10**logT,
+    ions, params = cloudy_params_defaults(uvb = uvb, uvb_Q=uvb_Q, log_hden=[-6, -0, 0.02], stop_NHI = 15, T = 10**logT,
                                           sequential = True)
     write_input(input_File, *ions, **params)
     run(cloudy_path=cloudy_path, input_file=input_File)
@@ -75,7 +75,7 @@ def run_parallel(uvb_Q, uvb, logT):
 
 uvb = ['KS18', 'HM12',  'P19', 'FG20']
 uvb_Q = [14, 15, 16, 17, 18, 19, 20]
-temp_values  = [5.0, 5.5, 6.0, 6.5]
+temp_values  = [6.0, 6.5]
 
 uvb_models =[]
 the_Q_values = []
@@ -106,7 +106,7 @@ uvb_files(path, **kwagrs)
 kwagrs = {'uvb' : 'FG20', 'z' : 0.2}
 uvb_files(path, **kwagrs)
 
-pool = mp.Pool(processes=6)
+pool = mp.Pool(processes=5)
 results = [pool.apply_async(run_parallel, args=(uvb_Q, uvb, T,)) for uvb_Q, uvb, T in zip(the_Q_values, uvb_models, temp_array)]
 output = [p.get() for p in results]
 
