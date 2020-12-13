@@ -201,8 +201,9 @@ outpath = '/home/vikram/cloudy_run/figures/2DLLS'
 model_path  = '/home/vikram/cloudy_run/metal_NH19'
 outfile = outpath + '/NH19_metal_2D.fits'
 
-uvb_array = ['KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18']
-Q_array= [14, 15, 16, 17, 18, 19, 20]
+
+uvb_array = ['KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'P19', 'FG20', 'HM12']
+Q_array= [14, 15, 16, 17, 18, 19, 20, 18, 18, 18]
 
 out_tab =  tab.Table()
 for uvb, q in zip(uvb_array, Q_array):
@@ -229,7 +230,7 @@ for uvb, q in zip(uvb_array, Q_array):
 
 
 
-uvb_column = ['Q14', 'Q15', 'Q16', 'Q17', 'Q18', 'Q19', 'Q20']
+uvb_column = ['Q14', 'Q15', 'Q16', 'Q17', 'Q18', 'Q19', 'Q20', 'P19', 'FG20', 'HM12']
 out_tab.add_column(uvb_column, name = 'uvb')
 
 out_tab.write(outfile, overwrite = True)
