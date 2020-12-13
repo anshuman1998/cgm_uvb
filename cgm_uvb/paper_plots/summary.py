@@ -9,15 +9,19 @@ font = {'family': 'serif', 'weight': 'normal', 'size': 14}
 plt.rc('font', **font)
 mpl.rcParams['axes.linewidth'] = 1.5
 
-out_fig_name = 'summary.pdf'
+out_fig_name = 'summary_photoionized.pdf'
 figure_size = [12, 5]
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(figure_size[0], figure_size[1]))
 plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0.05)
 
 file_name  =  '/home/vikram/cloudy_run/figures/2D/NH15_metal_2D.fits'
+#file_name  =  '/home/vikram/cloudy_run/figures/hybrid/NH15_hybrid_logT500.fits'
+
 d =  tab.Table.read(file_name)
 
 lsf_file_name = '/home/vikram/cloudy_run/figures/2D/NH15_log_lsf_out.fits'
+#lsf_file_name = '/home/vikram/cloudy_run/figures/hybrid/NH15_log_lsf_hybrid_T500.fits'
+
 dlsf = tab.Table.read(lsf_file_name)
 
 
@@ -26,10 +30,14 @@ num = np.arange(len(d['uvb']))
 ax1.errorbar( d['nH'][:-1], num[:-1], xerr = [d['n16'][:-1], d['n84'][:-1]], ls = '', marker ='.', markersize = 16, color = 'b', elinewidth =2, alpha =0.7, label = lab)
 lab = 'Least Squares'
 ax1.scatter(dlsf['nH'][:-1], num[:-1], marker = 'x', color ='r', linewidth = 2, s = 300,  alpha =0.7, label = lab)
+#ax1.scatter(np.log10(dlsf['nH'][:-1]), num[:-1], marker = 'x', color ='r', linewidth = 2, s = 300,  alpha =0.7, label = lab)
+
 lab = 'MCMC'
 ax2.errorbar( d['Z'][:-1], num[:-1], xerr = [d['Z16'][:-1], d['Z84'][:-1]], ls = '', marker ='.', markersize = 16, color = 'b', elinewidth=2, alpha = 0.7,label = lab )
 lab = 'Least Squares'
 ax2.scatter(dlsf['Z'][:-1], num[:-1], marker = 'x', color ='r', linewidth = 2, s = 300,  alpha =0.7, label = lab)
+#ax2.scatter(np.log10(dlsf['Z'][:-1]), num[:-1], marker = 'x', color ='r', linewidth = 2, s = 300,  alpha =0.7, label = lab)
+
 ax1.axvline(x = -4, linestyle = '--', color = 'k', alpha = 0.7)
 ax2.axvline(x = -1, linestyle = '--', color = 'k', alpha = 0.7)
 
@@ -46,8 +54,8 @@ ax1.set_xlabel(r'log n$_{\rm H}$ (cm$^{-3}$)')
 ax2.set_xlabel(r'log Z (Z$_{\odot}$)')
 
 
-#ax2.set_xlim(-1.4, -0.55)
-#ax.set_ylim(4e-8, 5e-4)
+ax1.set_xlim(-4.45, -3.45)
+ax2.set_xlim(-1.45, -0.55)
 #ax.set_xscale('log')
 #ax.set_yscale('log')
 
