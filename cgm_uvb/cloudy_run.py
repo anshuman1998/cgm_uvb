@@ -74,13 +74,15 @@ def write_input(file_name, *args, **kwargs):
         uvb_statement = 'TABLE SED \"{}\" \n'.format(ebl_file_name)
 
         if not os.path.exists(ebl_file_name_with_path):
-            norm_statement = write_uvb_in_cloudy_format(fg20_file_path_and_name, FG20 = True, outfilename = ebl_file_name_with_path)
-        else:
-            x = tab.Table.read(fg20_file_path_and_name)
-            data = tab.Table([12398.0 / x['Wave'] / 13.6057, x['Jnu'] * 2.99792e18 * np.pi * 4 / x['Wave']],
-                names=('Ryd', 'nufnu'))
-            ind = find_nearest_index(data['Ryd'], 1.000)
-            norm_statement = 'nuf(nu) = {} [at {} Ryd]\n'.format(np.log10(data['nufnu'][ind]), data['Ryd'][ind])
+            print('creating file :{}'.format(fg20_file_path_and_name))
+            write_uvb_in_cloudy_format(fg20_file_path_and_name, FG20 = True, outfilename = ebl_file_name_with_path)
+
+        x = tab.Table.read(fg20_file_path_and_name)
+        data = tab.Table([12398.0 / x['Wave'] / 13.6057, x['Jnu'] * 2.99792e18 * np.pi * 4 / x['Wave']],
+            names=('Ryd', 'nufnu'))
+        ind = find_nearest_index(data['Ryd'], 1.000)
+        norm_statement = 'nuf(nu) = {} [at {} Ryd]\n'.format(np.log10(data['nufnu'][ind] * kwargs['uvb_scale']),
+            data['Ryd'][ind])
 
         f.write(uvb_statement)
         f.write(norm_statement)
@@ -96,13 +98,16 @@ def write_input(file_name, *args, **kwargs):
         uvb_statement = 'TABLE SED \"{}\" \n'.format(ebl_file_name)
 
         if not os.path.exists(ebl_file_name_with_path):
-            norm_statement = write_uvb_in_cloudy_format(p19_file_path_and_name, P19 = True, outfilename = ebl_file_name_with_path)
-        else:
-            x = tab.Table.read(p19_file_path_and_name)
-            data = tab.Table([12398.0 / x['Wave'] / 13.6057, x['Jnu'] * 2.99792e18 * np.pi * 4 / x['Wave']],
-                names=('Ryd', 'nufnu'))
-            ind = find_nearest_index(data['Ryd'], 1.000)
-            norm_statement = 'nuf(nu) = {} [at {} Ryd]\n'.format(np.log10(data['nufnu'][ind]), data['Ryd'][ind])
+            print('creating file: {}'.format(p19_file_path_and_name))
+            write_uvb_in_cloudy_format(p19_file_path_and_name, P19 = True, outfilename = ebl_file_name_with_path)
+
+        x = tab.Table.read(p19_file_path_and_name)
+        data = tab.Table([12398.0 / x['Wave'] / 13.6057, x['Jnu'] * 2.99792e18 * np.pi * 4 / x['Wave']],
+            names=('Ryd', 'nufnu'))
+        ind = find_nearest_index(data['Ryd'], 1.000)
+        norm_statement = 'nuf(nu) = {} [at {} Ryd]\n'.format(np.log10(data['nufnu'][ind] * kwargs['uvb_scale']),
+            data['Ryd'][ind])
+
 
         f.write(uvb_statement)
         f.write(norm_statement)
@@ -164,10 +169,10 @@ def write_input(file_name, *args, **kwargs):
 
 
 # this is the part one needs to change if one wants to change the cloudy program
-def cloudy_params_defaults(uvb_Q = 18, log_hden = [-4, -4], hden_vary=True, uvb = 'KS18', z=0.2, T = None,
-                           metal = -1, stop_NHI = 15, abundances = 'solar_GASS10.abn', sequential = False):
+def cloudy_params_defaults(uvb_Q = 18, uvb_scale = 1, log_hden = [-4, -4], hden_vary=True, uvb = 'KS18', z=0.2,
+                           T = None, metal = -1, stop_NHI = 15, abundances = 'solar_GASS10.abn', sequential = False):
 
-    cloudy_params = {'uvb': uvb, 'z' : z, 'uvb_scale': 1, 'uvb_Q' : uvb_Q,
+    cloudy_params = {'uvb': uvb, 'z' : z, 'uvb_scale': uvb_scale, 'uvb_Q' : uvb_Q,
                      'hden_vary' : hden_vary,
                      'log_metal': metal,
                      'constant_T': T,
