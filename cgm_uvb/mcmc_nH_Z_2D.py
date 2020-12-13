@@ -99,7 +99,7 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, uvb = 'KS18', figname =
     if same_error:
         sigma_col = 0.2 * np.ones(number_of_ions)
     else:
-        sigma_col = np.random.uniform(0.1, 0.3, number_of_ions)
+        sigma_col = np.random.uniform(0.01, 0.2, number_of_ions)
 
     print(np.log10(data_col), sigma_col)
 
@@ -143,6 +143,8 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, uvb = 'KS18', figname =
 
     fig.savefig(figname)
 
+    fig.close()
+
     for i in range(ndim):
         mcmc = np.percentile(flat_samples[:, i], [16, 50, 84])
         q = np.diff(mcmc)
@@ -151,7 +153,7 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, uvb = 'KS18', figname =
 
     return flat_samples, ndim
 
-"""
+
 
 ions_to_use= ['C+3', 'N+3', 'Si+3', 'O+5', 'C+2']
 true_Q =18
@@ -192,7 +194,7 @@ uvb_column = ['Q14', 'Q15', 'Q16', 'Q17', 'Q18', 'Q19', 'Q20', 'P19', 'FG20', 'H
 out_tab.add_column(uvb_column, name = 'uvb')
 
 out_tab.write(outfile, overwrite = True)
-"""
+
 
 ions_to_use= ['C+3', 'N+3', 'Si+3', 'O+5', 'C+2']
 true_Q =18
