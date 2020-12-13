@@ -151,6 +151,7 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, uvb = 'KS18', figname =
 
     return flat_samples, ndim
 
+"""
 
 ions_to_use= ['C+3', 'N+3', 'Si+3', 'O+5', 'C+2']
 true_Q =18
@@ -188,6 +189,47 @@ for uvb, q in zip(uvb_array, Q_array):
 
 
 uvb_column = ['Q14', 'Q15', 'Q16', 'Q17', 'Q18', 'Q19', 'Q20', 'P19', 'FG20', 'HM12']
+out_tab.add_column(uvb_column, name = 'uvb')
+
+out_tab.write(outfile, overwrite = True)
+"""
+
+ions_to_use= ['C+3', 'N+3', 'Si+3', 'O+5', 'C+2']
+true_Q =18
+
+outpath = '/home/vikram/cloudy_run/figures/2DLLS'
+model_path  = '/home/vikram/cloudy_run/metal_NH19'
+outfile = outpath + '/NH19_metal_2D.fits'
+
+uvb_array = ['KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18']
+Q_array= [14, 15, 16, 17, 18, 19, 20]
+
+out_tab =  tab.Table()
+for uvb, q in zip(uvb_array, Q_array):
+    name =uvb + '_Q{}'.format(q)
+    figname = outpath + '/' + name + '.pdf'
+
+    flat_samples, ndim = run_mcmc(model_path= model_path, Q_uvb=q, ions_to_use=ions_to_use, true_Q=true_Q,
+        figname=figname, uvb = uvb)
+    # to efficiently save numpy array
+    save_file_name = outpath + '/' + name
+    np.save(save_file_name, flat_samples)
+
+    out =[[q]]
+    for i in range(ndim):
+        mcmc = np.percentile(flat_samples[:, i], [16, 50, 84])
+        q = np.diff(mcmc)
+        out.append([mcmc[1]])
+        out.append([q[0]])
+        out.append([q[1]])
+
+    print(out)
+    t = tab.Table(out, names = ('Q', 'nH', 'n16', 'n84', 'Z', 'Z16', 'Z84'))
+    out_tab = tab.vstack((out_tab, t))
+
+
+
+uvb_column = ['Q14', 'Q15', 'Q16', 'Q17', 'Q18', 'Q19', 'Q20']
 out_tab.add_column(uvb_column, name = 'uvb')
 
 out_tab.write(outfile, overwrite = True)
