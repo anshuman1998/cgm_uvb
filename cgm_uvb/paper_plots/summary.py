@@ -63,7 +63,8 @@ def make_summary_plot(file_name_fits, lsf_file_name, fig_name, x1lim= [-4.4, -3.
     # ax.annotate (n_level1, xy=(1e4, 2e-7), fontsize=12)
     for ax in (ax1, ax2):
 
-        ax.legend(loc='best', fontsize=14)
+        if ax ==ax1:
+            ax.legend(loc='best', fontsize=14)
 
         # deco
         ax.tick_params(direction='in', length=6, width=1.5)
