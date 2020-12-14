@@ -143,7 +143,7 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, uvb = 'KS18', figname =
 
     fig.savefig(figname)
 
-    fig.close()
+    #fig.close()
 
     for i in range(ndim):
         mcmc = np.percentile(flat_samples[:, i], [16, 50, 84])
