@@ -23,13 +23,13 @@ def make_summary_plot(file_name_fits, lsf_file_name, fig_name, x1lim= [-4.4, -3.
         color='b', elinewidth=2, alpha=0.7, label=lab)
     lab = 'Least Squares'
     if loglsf:
-        ax1.scatter(np.log10(dlsf['nH'][:-1]), num[:-1], marker = 'x', color ='r', linewidth = 2, s = 300,  alpha =0.7)
+        ax1.scatter(np.log10(dlsf['nH'][:-1]), num[:-1], marker = 'x', color ='r', linewidth = 2, s = 300,  alpha =0.7, label=lab)
     else:
-        ax1.scatter(dlsf['nH'][:-1], num[:-1], marker='x', color='r', linewidth=2, s=300, alpha=0.7)
+        ax1.scatter(dlsf['nH'][:-1], num[:-1], marker='x', color='r', linewidth=2, s=300, alpha=0.7, label=lab)
 
     lab = 'MCMC'
     ax2.errorbar(d['Z'][:-1], num[:-1], xerr=[d['Z16'][:-1], d['Z84'][:-1]], ls='', marker='.', markersize=16,
-        color='b', elinewidth=2, alpha=0.7, label=lab)
+        color='b', elinewidth=2, alpha=0.7)
     lab = 'Least Squares'
     if loglsf:
         ax2.scatter(np.log10(dlsf['Z'][:-1]), num[:-1], marker = 'x', color ='r', linewidth = 2, s = 300,  alpha =0.7)
