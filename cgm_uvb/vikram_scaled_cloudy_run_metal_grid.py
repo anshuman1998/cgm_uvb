@@ -56,11 +56,11 @@ def run_parallel(logZ, uvb_Q, uvb, scale_value):
     # for vikram
     cloudy_path = '/home/vikram/c17.02'
     fname = (logZ+4)*100
-    input_File = '/mnt/quasar2/vikram/cloudy_run/metal_NH19_new/try_{}_Q{}_Z{:.0f}.in'.format(uvb, uvb_Q, fname)
+    input_File = '/mnt/quasar2/vikram/cloudy_run/rescaled_metal_NH15/try_{}_Q{}_Z{:.0f}.in'.format(uvb, uvb_Q, fname)
     print(uvb, 'Q=', uvb_Q, 'Z=', logZ)
 
     # write input file and run cloudy
-    ions, params = cloudy_params_defaults(uvb = uvb, uvb_Q=uvb_Q, log_hden=[-6, -2, 0.02], stop_NHI = 19, T = None,
+    ions, params = cloudy_params_defaults(uvb = uvb, uvb_Q=uvb_Q, log_hden=[-6, -2, 0.02], stop_NHI = 15, T = None,
         metal = logZ, uvb_scale = scale_value, sequential = True)
     write_input(input_File, *ions, **params)
     run(cloudy_path=cloudy_path, input_file=input_File)
@@ -80,7 +80,7 @@ uvb_Q = [14, 15, 16, 17, 18, 19, 20]
 
 scale_ks  =  []
 for q_model in uvb_Q:
-    scaling_factor  =  find_uvb_scaling(uvb = 'KS18', Q = q_model)
+    scaling_factor  =  find_uvb_scaling(uvb = 'KS18', uvb_Q = q_model)
     scale_ks.append(scaling_factor)
     print(scale_ks, q_model)
 
@@ -109,8 +109,7 @@ for background in uvb:
 
 
 #-----write uvb fg and hm in cloudy format first
-path = '/mnt/quasar2/vikram/cloudy_run/metal_NH19_new'
-path =  '/mnt/quasar2/vikram/cloudy_run/test_scale'
+path = '/mnt/quasar2/vikram/cloudy_run/rescaled_metal_NH15'
 
 kwagrs = {'uvb' : 'P19', 'z' : 0.2}
 uvb_files(path, **kwagrs)
@@ -120,6 +119,7 @@ uvb_files(path, **kwagrs)
 
 
 pool = mp.Pool(processes=6)
-results = [pool.apply_async(run_parallel, args=(Z, Q, mod,)) for  Z, Q, mod in zip(logZ, the_Q_values, uvb_models)]
+results = [pool.apply_async(run_parallel, args=(Z, Q, mod, scale_val,)) for  Z, Q, mod, scale_val
+           in zip(logZ, the_Q_values, uvb_models, scaling_factor_array)]
 output = [p.get() for p in results]
 
