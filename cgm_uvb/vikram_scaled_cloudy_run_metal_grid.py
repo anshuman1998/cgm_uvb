@@ -15,6 +15,8 @@ import multiprocessing as mp
 import numpy as np
 from cgm_uvb.write_uvb_in_cloudy_format import write_uvb_in_cloudy_format
 import astropy.table as tab
+from cgm_uvb.find_uvb_scaling import find_uvb_scaling
+
 
 def uvb_files(file_path, **kwargs):
     if kwargs['uvb'] == 'FG20':
@@ -50,7 +52,7 @@ def uvb_files(file_path, **kwargs):
 
     return
 
-def run_parallel(logZ, uvb_Q, uvb):
+def run_parallel(logZ, uvb_Q, uvb, scale_value):
     # for vikram
     cloudy_path = '/home/vikram/c17.02'
     fname = (logZ+4)*100
@@ -58,8 +60,8 @@ def run_parallel(logZ, uvb_Q, uvb):
     print(uvb, 'Q=', uvb_Q, 'Z=', logZ)
 
     # write input file and run cloudy
-    ions, params = cloudy_params_defaults(uvb = uvb, uvb_Q=uvb_Q, log_hden=[-6, -2, 0.02], stop_NHI = 19, T = None, metal = logZ,
-                                          sequential = True)
+    ions, params = cloudy_params_defaults(uvb = uvb, uvb_Q=uvb_Q, log_hden=[-6, -2, 0.02], stop_NHI = 19, T = None,
+        metal = logZ, uvb_scale = scale_value, sequential = True)
     write_input(input_File, *ions, **params)
     run(cloudy_path=cloudy_path, input_file=input_File)
 
@@ -76,25 +78,39 @@ logZ_array = np.around(np.arange(-3, 1, 0.05), decimals = 2)
 uvb = ['KS18', 'HM12',  'P19', 'FG20']
 uvb_Q = [14, 15, 16, 17, 18, 19, 20]
 
+scale_ks  =  []
+for q_model in uvb_Q:
+    scaling_factor  =  find_uvb_scaling(uvb = 'KS18', Q = q_model)
+    scale_ks.append(scaling_factor)
+    print(scale_ks, q_model)
+
 logZ = []
 uvb_models =[]
 the_Q_values = []
+scaling_factor_array = []
 for background in uvb:
     if background == 'KS18':
-        for q in uvb_Q:
+        for q, the_scale in zip(uvb_Q, scale_ks):
             for metal in logZ_array:
                 uvb_models.append(background)
                 the_Q_values.append(q)
                 logZ.append(metal)
+                scaling_factor_array.append(the_scale)
+
     else:
         q = 18
+        scaling_factor_uvb  =  find_uvb_scaling(uvb = background)
+        print(scaling_factor_uvb, background)
         for metal in logZ_array:
             uvb_models.append(background)
             the_Q_values.append(q)
             logZ.append(metal)
+            scaling_factor_array.append(scaling_factor_uvb)
+
 
 #-----write uvb fg and hm in cloudy format first
 path = '/mnt/quasar2/vikram/cloudy_run/metal_NH19_new'
+path =  '/mnt/quasar2/vikram/cloudy_run/test_scale'
 
 kwagrs = {'uvb' : 'P19', 'z' : 0.2}
 uvb_files(path, **kwagrs)
@@ -103,7 +119,7 @@ kwagrs = {'uvb' : 'FG20', 'z' : 0.2}
 uvb_files(path, **kwagrs)
 
 
-pool = mp.Pool(processes=60)
+pool = mp.Pool(processes=6)
 results = [pool.apply_async(run_parallel, args=(Z, Q, mod,)) for  Z, Q, mod in zip(logZ, the_Q_values, uvb_models)]
 output = [p.get() for p in results]
 
