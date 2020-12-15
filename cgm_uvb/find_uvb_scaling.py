@@ -6,14 +6,14 @@ import astropy.units as u
 
 
 #todo make this code work for an array of frequencies
-def photoionization_cross_section(nu, element = 'HI'):
+def photoionization_cross_section(nu, element = 'HI', IH_assumed = 13.602 ):
     """
     :param nu: works on only one number
     :param element: {'HI', 'HeII'}
     :return:
     """
     h = (const.h).to(u.eV* u.s).value # h in eV s
-    IH = 13.602 # eV ionization potential for H
+    IH = IH_assumed # eV ionization potential for H
 
     if element == 'HI':
         Z = 1
@@ -32,7 +32,7 @@ def photoionization_cross_section(nu, element = 'HI'):
 
     return cross_section
 
-def get_HI_photoionization_rate(wavelength, intensity):
+def get_HI_photoionization_rate(wavelength, intensity, IH_assumed = 13.602):
 
     # just to simple trapazoid integration
     c = const.c.value # in m/s by default
@@ -42,7 +42,7 @@ def get_HI_photoionization_rate(wavelength, intensity):
 
     sigma_array = []
     for nu in nu_array:
-        sigma = photoionization_cross_section(nu)
+        sigma = photoionization_cross_section(nu, IH_assumed = IH_assumed)
         sigma_array.append(sigma)
 
     sigma_array= np.array(sigma_array)
@@ -61,37 +61,56 @@ def get_uvb(uvb='KS18', Q =18, z = 0.2):
         uvb = tab.Table.read(file_name)
         wave = np.array(uvb['Wave'])  # in angstrom
         jnu = np.array(uvb[q_name])  # in standard units
+        energy_assumed  = 13.598 #so that wavelength is exactly 912 Angstroms
+
 
     if uvb is 'FG20':
         file_name = uvb_file_path + '/fg20_fits_files' + '/FG20_EBL_z_{:.2f}.fits'.format(z)
         uvb = tab.Table.read(file_name)
         wave = np.array(uvb['Wave'])  # in angstrom
         jnu = np.array(uvb['Jnu'])  # in standard units
+        energy_assumed  = 13.5947 # so that wavelength is exactly 912 Angstroms
+
 
     if uvb is 'P19':
         file_name = uvb_file_path  + '/p19_ebl'+ '/P19_EBL_z_{:.2f}.fits'.format(z)
         uvb = tab.Table.read(file_name)
         wave = np.array(uvb['Wave'])  # in angstrom
         jnu = np.array(uvb['Jnu'])  # in standard units
+        energy_assumed  = 13.5947 # so that wavelength is exactly 912 Angstroms
 
     if uvb is 'HM12':
         file_name = uvb_file_path  + '/hm12_ebl'+ '/HM12_EBL_z_{:.2f}.fits'.format(z)
         uvb = tab.Table.read(file_name)
         wave = np.array(uvb['Wave'])  # in angstrom
         jnu = np.array(uvb['Jnu'])  # in standard units
+        energy_assumed  = 13.5947 # so that wavelength is exactly 912 Angstroms
 
 
-    potential_HI = ((13.602*u.eV).to(u.J)).value
-    wave_for_ionization = 1e10*(const.h).value * (const.c).value/potential_HI
-    print((const.h).value)
+    potential_HI = ((energy_assumed * u.eV).to(u.J)).value
+    wave_for_ionization = 1e10 * (const.h).value * (const.c).value / potential_HI
+    #print((const.h).value)
+    """
     print(wave_for_ionization)
-    new_wave = wave[wave<wave_for_ionization]
-    new_jnu = jnu[wave<wave_for_ionization]
+    new_wave = wave[wave <= wave_for_ionization ]
+    new_jnu = jnu[wave <= wave_for_ionization]
+    """
 
+    # interpolation
+    int_fun =  interp1d(np.log10(wave), np.log10(jnu))
+    wavelength_array = np.arange(1.0, 912.1, 1.0)
+    jnu_array = 10**int_fun(np.log10(wavelength_array))
 
-    return new_wave, new_jnu
+    return wavelength_array, jnu_array, energy_assumed
 
+"""
+# checked with actual values. The differences are on second or third decimal palces. That is good enough for now.
+z= 0.0
+UVB_array =['KS18', 'HM12', 'FG20', 'P19']
+for uvb_name in UVB_array:
+    w, j, ih_assumed= get_uvb(uvb= uvb_name, z= z)
+    gamma_HI=get_HI_photoionization_rate(w, j, IH_assumed = ih_assumed)
+    print(gamma_HI, 'z = ', z, 'uvb = ', uvb_name, w[-1])
 
-w, j= get_uvb()
-gamma_HI=get_HI_photoionization_rate(w, j)
-print(gamma_HI)
+"""
+
