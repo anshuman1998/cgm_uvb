@@ -5,7 +5,7 @@ import astropy.constants as const
 import astropy.units as u
 
 
-
+#todo make this code work for an array of frequencies
 def photoionization_cross_section(nu, element = 'HI'):
     """
     :param nu: works on only one number
@@ -54,12 +54,32 @@ def get_HI_photoionization_rate(wavelength, intensity):
     return -1.0*integration
 
 def get_uvb(uvb='KS18', Q =18, z = 0.2):
+    uvb_file_path =  '/home/vikram/cgm_uvb/cgm_uvb/paper_plots'
     if uvb is 'KS18':
-        file_name = '/home/vikram/cgm_uvb/cgm_uvb/paper_plots/ks19_ebl' + '/KS19_EBL_z_{:.1f}.fits'.format(z)
+        file_name = uvb_file_path +'/ks19_ebl' + '/KS19_EBL_z_{:.1f}.fits'.format(z)
         q_name = 'Q{}'.format(Q)
         uvb = tab.Table.read(file_name)
         wave = np.array(uvb['Wave'])  # in angstrom
         jnu = np.array(uvb[q_name])  # in standard units
+
+    if uvb is 'FG20':
+        file_name = uvb_file_path + '/fg20_fits_files' + '/FG20_EBL_z_{:.2f}.fits'.format(z)
+        uvb = tab.Table.read(file_name)
+        wave = np.array(uvb['Wave'])  # in angstrom
+        jnu = np.array(uvb['Jnu'])  # in standard units
+
+    if uvb is 'P19':
+        file_name = uvb_file_path  + '/p19_ebl'+ '/P19_EBL_z_{:.2f}.fits'.format(z)
+        uvb = tab.Table.read(file_name)
+        wave = np.array(uvb['Wave'])  # in angstrom
+        jnu = np.array(uvb['Jnu'])  # in standard units
+
+    if uvb is 'HM12':
+        file_name = uvb_file_path  + '/hm12_ebl'+ '/HM12_EBL_z_{:.2f}.fits'.format(z)
+        uvb = tab.Table.read(file_name)
+        wave = np.array(uvb['Wave'])  # in angstrom
+        jnu = np.array(uvb['Jnu'])  # in standard units
+
 
     potential_HI = ((13.602*u.eV).to(u.J)).value
     wave_for_ionization = 1e10*(const.h).value * (const.c).value/potential_HI
@@ -67,6 +87,8 @@ def get_uvb(uvb='KS18', Q =18, z = 0.2):
     print(wave_for_ionization)
     new_wave = wave[wave<wave_for_ionization]
     new_jnu = jnu[wave<wave_for_ionization]
+
+
     return new_wave, new_jnu
 
 
