@@ -114,3 +114,16 @@ for uvb_name in UVB_array:
 
 """
 
+def find_uvb_scaling(uvb, uvb_Q = 18, z = 0.2, ref_uvb = 'KS18', ref_Q = 18):
+    w, j, ih_assumed= get_uvb(uvb = uvb, Q = uvb_Q, z = z)
+    gamma_HI=get_HI_photoionization_rate(w, j, IH_assumed = ih_assumed)
+
+    w, j, ih_assumed= get_uvb(uvb= ref_uvb, Q= ref_Q, z= z)
+    gamma_HI_ref=get_HI_photoionization_rate(w, j, IH_assumed = ih_assumed)
+
+    return gamma_HI_ref/gamma_HI
+
+
+
+
+
