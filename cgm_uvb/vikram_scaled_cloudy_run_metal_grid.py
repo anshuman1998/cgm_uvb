@@ -118,7 +118,7 @@ kwagrs = {'uvb' : 'FG20', 'z' : 0.2}
 uvb_files(path, **kwagrs)
 
 
-pool = mp.Pool(processes=6)
+pool = mp.Pool(processes=30)
 results = [pool.apply_async(run_parallel, args=(Z, Q, mod, scale_val,)) for  Z, Q, mod, scale_val
            in zip(logZ, the_Q_values, uvb_models, scaling_factor_array)]
 output = [p.get() for p in results]
