@@ -143,7 +143,7 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, uvb = 'KS18', figname =
 
     fig.savefig(figname)
 
-    #fig.close()
+    plt.close()
 
     for i in range(ndim):
         mcmc = np.percentile(flat_samples[:, i], [16, 50, 84])
@@ -158,9 +158,9 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, uvb = 'KS18', figname =
 ions_to_use= ['C+3', 'N+3', 'Si+3', 'O+5', 'C+2']
 true_Q =18
 
-outpath = '/home/vikram/cloudy_run/figures/2D'
-model_path  = '/home/vikram/cloudy_run/metal_NH15_new'
-outfile = outpath + '/NH15_metal_2D.fits'
+outpath = '/home/vikram/cloudy_run/figures/rescaled'
+model_path  = '/home/vikram/cloudy_run/rescaled_metal_NH15'
+outfile = outpath + '/rescaled_NH15_metal_2D.fits'
 
 uvb_array = ['KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'P19', 'FG20', 'HM12']
 Q_array= [14, 15, 16, 17, 18, 19, 20, 18, 18, 18]
@@ -196,6 +196,7 @@ out_tab.add_column(uvb_column, name = 'uvb')
 out_tab.write(outfile, overwrite = True)
 
 
+"""
 ions_to_use= ['C+3', 'N+3', 'Si+3', 'O+5', 'C+2']
 true_Q =18
 
@@ -236,3 +237,4 @@ uvb_column = ['Q14', 'Q15', 'Q16', 'Q17', 'Q18', 'Q19', 'Q20', 'P19', 'FG20', 'H
 out_tab.add_column(uvb_column, name = 'uvb')
 
 out_tab.write(outfile, overwrite = True)
+"""
