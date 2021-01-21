@@ -81,7 +81,7 @@ def make_summary_plot(file_name_fits, lsf_file_name, fig_name, x1lim= [-4.4, -3.
     return
 
 
-
+"""
 lsf_file_name = '/home/vikram/cloudy_run/figures/2D/NH15_log_lsf_out.fits'
 file_name = '/home/vikram/cloudy_run/figures/2D/NH15_metal_2D.fits'
 out_fig_name = 'summary_photoionized.pdf'
@@ -91,3 +91,10 @@ file_name  =  '/home/vikram/cloudy_run/figures/hybrid/NH15_hybrid_logT500.fits'
 lsf_file_name = '/home/vikram/cloudy_run/figures/hybrid/NH15_log_lsf_hybrid_T500.fits'
 out_fig_name = 'summary_hybrid.pdf'
 make_summary_plot(file_name_fits= file_name, lsf_file_name =lsf_file_name, fig_name= out_fig_name, loglsf= True)
+
+"""
+
+file_name  =  '/home/vikram/cloudy_run/figures/rescaled/rescaled_NH15_metal_2D.fits'
+lsf_file_name = '/home/vikram/cloudy_run/figures/rescaled/rescaled_NH15_log_lsf_out.fits'
+out_fig_name = 'summary_rescaled.pdf'
+make_summary_plot(file_name_fits= file_name, lsf_file_name =lsf_file_name, fig_name= out_fig_name, loglsf= False)
