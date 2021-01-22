@@ -7,7 +7,6 @@ import emcee
 import corner
 
 
-
 #----data
 def get_true_model(model_path, Q, logT, true_uvb = 'KS18'):
     """
@@ -96,8 +95,8 @@ def run_mcmc(model_path, ions_to_use, Q_uvb, uvb, true_Q =18, true_uvb= 'KS18', 
     if same_error:
         sigma_col = 0.2 * np.ones(number_of_ions)
     else:
-#        sigma_col = np.random.uniform(0.1, 0.3, number_of_ions)
-        sigma_col = np.random.uniform(0.01, 0.05, number_of_ions)
+#       #sigma_col = np.random.uniform(0.1, 0.3, number_of_ions)
+        sigma_col = np.random.uniform(0.01, 0.2, number_of_ions)
 
 
     print(np.log10(data_col), sigma_col)
@@ -147,21 +146,19 @@ def run_mcmc(model_path, ions_to_use, Q_uvb, uvb, true_Q =18, true_uvb= 'KS18', 
         q = np.diff(mcmc)
         print(labels[i], '=', mcmc[1], q[0], q[1])
 
-    fig.close()
+    plt.close()
 
     return flat_samples, ndim
-
-
 
 
 
 ions_to_use= ['Ne+7', 'O+5', 'N+4', 'C+3']
 true_Q =18
 
-outpath = '/home/vikram/cloudy_run/figures/hybrid'
-model_path  = '/home/vikram/cloudy_run/hybrid_NH15'
+outpath = '/home/vikram/cloudy_run/figures/rescaled_hybrid'
+model_path  = '/home/vikram/cloudy_run/rescaled_hybrid_NH15'
 
-logT_array  = [5.75, 6.0, 6.5]
+logT_array  = [5.5]
 for logT in logT_array:
 
     outfile = outpath + '/NH15_hybrid_logT{:.0f}.fits'.format(logT * 100)
