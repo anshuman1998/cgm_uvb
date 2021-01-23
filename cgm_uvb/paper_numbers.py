@@ -44,5 +44,21 @@ def find_max_numbers(filename):
     return
 
 
-path = '/home/vikram/cloudy_run/figures/hybrid'
-find_max_numbers(path + '/NH15_log_lsf_hybrid_T500.fits')
+
+print('-------------------for the photoinized model all uvb')
+
+lsf_file_name = '/home/vikram/cloudy_run/figures/2D/NH15_log_lsf_out.fits'
+find_max_numbers(lsf_file_name)
+
+print('-------------------for the hybrid model all uvb')
+
+lsf_file_name = '/home/vikram/cloudy_run/figures/hybrid/NH15_log_lsf_hybrid_T550.fits'
+find_max_numbers(lsf_file_name)
+
+print('-------------------for the photoinized model with rescaled uvb')
+lsf_file_name = '/home/vikram/cloudy_run/figures/rescaled/rescaled_NH15_log_lsf_out.fits'
+find_max_numbers(lsf_file_name)
+
+print('-------------------for the hybrid model with rescaled uvb')
+lsf_file_name = '/home/vikram/cloudy_run/figures/rescaled_hybrid/NH15_log_lsf_hybrid_T550.fits'
+find_max_numbers(lsf_file_name)
