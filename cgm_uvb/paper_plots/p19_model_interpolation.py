@@ -17,7 +17,7 @@ for j in range(len(inds)):
 # now do the interpolation
 f = interp1d(z, sorted_data)
 
-my_z = np.arange(0, 1.1, 0.2)
+my_z = np.arange(0.1, 1.1, 0.2)
 
 folder_to_store = '/home/vikram/cgm_uvb/cgm_uvb/paper_plots/p19_ebl'
 for z_val in my_z:

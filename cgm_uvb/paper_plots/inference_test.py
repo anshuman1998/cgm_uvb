@@ -32,7 +32,7 @@ fig.savefig('inference_Q18.pdf', bbox_inches='tight')
 # for "Hybrid model"
 
 path = '/home/vikram/cloudy_run/figures/hybrid'
-file  = path + '/KS18_Q18_logT500.npy'
+file  = path + '/KS18_Q18_logT550.npy'
 
 flat_sample = np.load(file)
 
@@ -44,7 +44,7 @@ fig = corner.corner(flat_sample, labels=labels, truths=truths, truth_color = 'r'
 ndim = 2
 axes = np.array(fig.axes).reshape((ndim, ndim))
 axes[1,0].annotate ('KS19 (Q18)', xy=(0.03, 0.85), xycoords='axes fraction', fontsize=9)
-axes[0,1].annotate (r'Hybrid Model (${\rm T=10^5}$ K)', xy=(0.06, 0.5), xycoords='axes fraction', fontsize=11)
+axes[0,1].annotate (r'Hybrid Model (${\rm T=10^{5.5}}$ K)', xy=(0.06, 0.5), xycoords='axes fraction', fontsize=11)
 
 
 for ax in [axes[0, 0], axes[1, 0], axes[1,1 ]]:
@@ -54,6 +54,6 @@ for ax in [axes[0, 0], axes[1, 0], axes[1,1 ]]:
         ax.spines[axis].set_linewidth(1.1)
 
 
-fig.savefig('inference_Q18_hybrid_T500.pdf', bbox_inches='tight')
+fig.savefig('inference_Q18_hybrid_T550.pdf', bbox_inches='tight')
 
 
