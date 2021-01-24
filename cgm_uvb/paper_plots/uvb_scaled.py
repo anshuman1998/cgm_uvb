@@ -17,7 +17,7 @@ figure_size = [7, 6]
 fig, ax = plt.subplots(1, 1, figsize=(figure_size[0], figure_size[1]))
 c = (const.c).to(u.m/u.s).value # speed of light in m/s
 z = 0.2
-alpha = 0.7
+alpha = 0.9
 path = os.getcwd() + '/ks19_ebl'
 file_name  =  path + '/KS19_EBL_z_{:.1f}.fits'.format(z)
 uvb =  tab.Table.read(file_name)
@@ -29,7 +29,7 @@ for Q in uvb_array:
     q_name = 'Q{}'.format(Q)
     label= 'KS19 ({})'.format(q_name)
     mult = find_uvb_scaling(uvb = 'KS18', uvb_Q = Q)
-    if Q ==17:
+    if Q ==18:
         ax.plot(12398/uvb['Wave'], mult*uvb[q_name]*4*np.pi*c/(uvb['Wave']*1e-10), label = label, linewidth = 3,
                 alpha = alpha )
     else:
@@ -44,7 +44,7 @@ uvb =  tab.Table.read(file_name)
 label= 'FG20'
 mult = find_uvb_scaling(uvb=label)
 ax.plot(12398/uvb['Wave'], mult*uvb['Jnu'] * 4 * np.pi * c / (uvb['Wave'] * 1e-10), label=label, linewidth=3,
-        linestyle  = '--',alpha = alpha, c= 'g')
+        linestyle  = '--',alpha = alpha, c= 'grey')
 
 fg20_path = os.getcwd() + '/p19_ebl'
 file_name  =  fg20_path + '/P19_EBL_z_{:.2f}.fits'.format(z)
@@ -52,11 +52,11 @@ uvb =  tab.Table.read(file_name)
 label= 'P19'
 mult = find_uvb_scaling(uvb=label)
 ax.plot(12398/uvb['Wave'], mult* uvb['Jnu'] * 4 * np.pi * c / (uvb['Wave'] * 1e-10), label=label, linewidth=3,
-        linestyle  = '-.', alpha = alpha, c= 'b')
+        linestyle  = '-.', alpha = alpha, c= 'cyan')
 
 # 1 ryd = 13.6057 eV
 
-ax.legend( loc = 'best', fontsize = 11, handlelength=2.8)
+ax.legend( loc = 'best', fontsize = 12, ncol=2, handlelength=2.6)
 n_level1 = 'z = {:0.1f}'.format(z)
 ax.annotate (n_level1, xy=(1e4, 2e-7), fontsize=12)
 
