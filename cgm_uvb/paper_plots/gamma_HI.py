@@ -44,28 +44,38 @@ l='Kollmeier et al. 2014'
 
 uvb_array= [14, 15, 16, 17, 18, 19, 20]
 
+path_gamma_files  = '/home/vikram/cgm_uvb/cgm_uvb/paper_plots/gamma_HI_files/'
 al = 0.9
 for Q in uvb_array:
   q_name = 'Q{}'.format(Q)
   label = 'KS19 ({})'.format(q_name)
-  uvb = np.loadtxt('/home/vikram/Downloads/KS_2018_EBL/parameters_Q{}.txt'.format(Q))
-  z = uvb[:, 0]
-  g = uvb[:, 1]
-  #ax.plot(z, g, color='k', label=label, linestyle='-', dashes=(5, 4), linewidth=2, alpha= al)
-  ax.plot(z, g, label=label, linewidth=2, alpha= al)
-
-  gamma_file = '/home/vikram/cgm_uvb/cgm_uvb/paper_plots/gamma_HI_files/' + 'Gamma_HI_KS18_Q{}.fits'.format(Q)
+  gamma_file = path_gamma_files + 'Gamma_HI_KS18_Q{}.fits'.format(Q)
   data = t.Table.read(gamma_file)
-  ax.plot(data['z'], data['g'], linestyle='-', dashes=(5, 4), linewidth=2, alpha= al, color = 'k')
+  if  Q == 18:
+      ax.plot(data['z'], data['g'],  label=label, linewidth=3, alpha= al)
+  else:
+      ax.plot(data['z'], data['g'],  label=label, linewidth=2, alpha= al)
+
+  #ax.plot(z, g, color='k', label=label, linestyle='-', dashes=(5, 4), linewidth=2, alpha= al)
+
+uvb_model = 'FG20'
+file_name  =  path_gamma_files + 'Gamma_HI_{}.fits'.format(uvb_model)
+data =  t.Table.read(file_name)
+ax.plot(data['z'], data['g'],  label=uvb_model, linewidth=3, linestyle  = '--',alpha = alpha, c= 'cyan')
+
+uvb_model = 'P19'
+file_name  =  path_gamma_files + 'Gamma_HI_{}.fits'.format(uvb_model)
+data =  t.Table.read(file_name)
+ax.plot(data['z'], data['g'],  label=uvb_model, linewidth=3, linestyle  = '-.',alpha = alpha, c= 'grey')
 
 
 
 #ax.plot(z, g, color='k', label=r'Khaire & Srianand 2018 ', linewidth=2, alpha=0.8)
 
-uvb=np.loadtxt('/home/vikram/Work/data_literature/gamma_h1/HM_gama.dat')
-z=uvb[:,0]
-g=uvb[:,1]
-ax.plot(z, g, color='magenta', label='Haardt & Madau 2012', linestyle='-.', linewidth=2, dashes=(5, 4, 1, 2), alpha=0.8)
+#uvb=np.loadtxt('/home/vikram/Work/data_literature/gamma_h1/HM_gama.dat')
+#z=uvb[:,0]
+#g=uvb[:,1]
+#ax.plot(z, g, color='magenta', label='Haardt & Madau 2012', linestyle='-.', linewidth=2, dashes=(5, 4, 1, 2), alpha=0.8)
 #ax.plot(z, g, color='magenta', label='Haardt & Madau 2012', alpha=0.8)
 
 filename='/home/vikram/Work/ucsb/chi_square/diagonal_best_fit_gamma.txt'
@@ -89,17 +99,18 @@ l='Gaikwad et al. 2017'
 ax.errorbar(pz, pg, pe, marker='D', label=l, markersize=8, ls='', c='k',  alpha=0.8, elinewidth=2.5, zorder = 10, capsize=4, capthick=2.2)
 
 
-l='Fumagalli + in prep'
+l='Caruso et al. 2019'
 z=[0.004,]
-g=[6.39e-14,]
-err1=[2.73e-14,]
-err2=[2.91e-14,]
-ax.errorbar(z, g, yerr=[err1, err2,],  marker='s', label=l, markersize=8, zorder=11,  c='green',  alpha=alpha,  elinewidth=2.5, clip_on=False)
+g=[7.27e-14,]
+err1=[2.93e-14,]
+err2=[2.90e-14,]
+ax.errorbar(z, g, yerr=[err1, err2,],  marker='s', label=l, markersize=8, zorder=11,  c='gold',
+            alpha=alpha,  elinewidth=2.5, clip_on=False)
 
 ax.set_yscale('log')
 ax.set_ylabel(r'$\Gamma_{\rm H \, I}$ ( s$^{-1} )$')
 ax.set_xlabel('Redshift')
-ax.legend( loc = 'best', fontsize = 11, handlelength=2.8)
+ax.legend( loc = 'best', fontsize = 12, handlelength=3.6, ncol=2, labelspacing=1 )
 
 
 ax.set_xlim(-0.005, 0.55)
@@ -116,7 +127,7 @@ ax.yaxis.set_ticks_position('both')
 for axis in ['top','bottom','left','right']:
   ax.spines[axis].set_linewidth(1.7)
 
-ax.legend(loc='lower right')
+#ax.legend(loc='lower right')
 
 fig.tight_layout(rect=[-0.03, -0.03, 1.02, 1.02])
 
