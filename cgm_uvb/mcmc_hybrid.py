@@ -155,11 +155,18 @@ def run_mcmc(model_path, ions_to_use, Q_uvb, uvb, true_Q =18, true_uvb= 'KS18', 
 ions_to_use= ['Ne+7', 'O+5', 'N+4', 'C+3']
 true_Q =18
 
-outpath = '/home/vikram/cloudy_run/figures/rescaled_hybrid'
-model_path  = '/home/vikram/cloudy_run/rescaled_hybrid_NH15'
+#outpath = '/home/vikram/cloudy_run/figures/rescaled_hybrid'
+#model_path  = '/home/vikram/cloudy_run/rescaled_hybrid_NH15'
 
-logT_array  = [5.5]
+outpath = '/home/vikram/cloudy_run/figures/hybrid'
+model_path  = '/home/vikram/cloudy_run/hybrid_NH15'
+
+logT_array  = np.arange(5, 6.01, 0.25)
+#logT_array.append([6.5])
+logT_array = [6.5]
 for logT in logT_array:
+
+    print('--------for T = ', logT)
 
     outfile = outpath + '/NH15_hybrid_logT{:.0f}.fits'.format(logT * 100)
 
