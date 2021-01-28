@@ -1,9 +1,6 @@
 import numpy as np
 import astropy.table as tab
 
-
-
-
 def get_true_model(model_path, Q= 18, true_nH = 1e-4,  logT = 5.0, uvb = 'KS18'):
     """
     :param model: The data where Q18 model is stored
@@ -94,30 +91,38 @@ outdata.write(outfile, overwrite =  True)
 
 
 
-
 ions_to_use= ['Ne+7', 'O+5', 'N+4', 'C+3']
 true_Q =18
 true_uvb = 'KS18'
-logT= 5.0
-path  = '/home/vikram/cloudy_run/hybrid_NH15/'
+logT_array =  np.arange(5, 6.01, 0.25)
+logT_array = np.append(logT_array, [6.5])
+#path  = '/home/vikram/cloudy_run/rescaled_hybrid_NH15/'
+#outpath = '/home/vikram/cloudy_run/figures/rescaled_hybrid'
+
+path  = '/home/vikram/cloudy_run/hybrid_NH15'
 outpath = '/home/vikram/cloudy_run/figures/hybrid'
-outfile = outpath + '/NH15_log_lsf_hybrid_T{:.0f}.fits'.format(logT*100)
 
-uvb_array = ['KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'P19', 'FG20', 'HM12']
-Q_array= [14, 15, 16, 17, 18, 19, 20, 18, 18, 18]
+for logT in logT_array:
+    print('--------for T = ', logT)
 
-narray = []
-zarray = []
-value_ls=[]
-for uvb, q in zip(uvb_array, Q_array):
-    nH, Z, min_LS= find_nH_and_Z_LSF_log(model_path= path, model_Q= q, model_uvb= uvb, ions_to_use= ions_to_use, logT=logT)
-    narray.append(nH)
-    zarray.append(Z)
-    value_ls.append(min_LS)
+    outfile = outpath + '/NH15_log_lsf_hybrid_T{:.0f}.fits'.format(logT * 100)
 
-uvb_column = ['Q14', 'Q15', 'Q16', 'Q17', 'Q18', 'Q19', 'Q20', 'P19', 'FG20', 'HM12']
-outdata = tab.Table([uvb_column, Q_array, narray, zarray, value_ls], names =('uvb', 'Q', 'nH', 'Z', 'LS'))
-print(outdata)
+    uvb_array = ['KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'P19', 'FG20', 'HM12']
+    Q_array = [14, 15, 16, 17, 18, 19, 20, 18, 18, 18]
 
-outdata.write(outfile, overwrite =  True)
+    narray = []
+    zarray = []
+    value_ls = []
+    for uvb, q in zip(uvb_array, Q_array):
+        nH, Z, min_LS = find_nH_and_Z_LSF_log(model_path=path, model_Q=q, model_uvb=uvb, ions_to_use=ions_to_use,
+                                              logT=logT)
+        narray.append(nH)
+        zarray.append(Z)
+        value_ls.append(min_LS)
+
+    uvb_column = ['Q14', 'Q15', 'Q16', 'Q17', 'Q18', 'Q19', 'Q20', 'P19', 'FG20', 'HM12']
+    outdata = tab.Table([uvb_column, Q_array, narray, zarray, value_ls], names=('uvb', 'Q', 'nH', 'Z', 'LS'))
+    print(outdata)
+
+    outdata.write(outfile, overwrite=True)
 
