@@ -1,5 +1,6 @@
 import astropy.table as tab
 import numpy as np
+from cgm_uvb.find_uvb_scaling import find_uvb_scaling
 
 def find_max_numbers(filename):
     print('for file: ', filename)
@@ -62,3 +63,17 @@ find_max_numbers(lsf_file_name)
 print('-------------------for the hybrid model with rescaled uvb')
 lsf_file_name = '/home/vikram/cloudy_run/figures/rescaled_hybrid/NH15_log_lsf_hybrid_T550.fits'
 find_max_numbers(lsf_file_name)
+
+
+
+#-------------uvb scaling
+print('--------------- for UVB scaling')
+uvb_Q = [14, 15, 16, 17, 18, 19, 20]
+
+for q_model in uvb_Q:
+    scaling_factor  =  find_uvb_scaling(uvb = 'KS18', uvb_Q = q_model)
+    print(scaling_factor, np.log10(scaling_factor), q_model, 'KS19')
+
+for i in ['HM12',  'P19', 'FG20']:
+    scaling_factor_uvb = find_uvb_scaling(uvb=i)
+    print(scaling_factor_uvb, np.log10(scaling_factor_uvb), i)
