@@ -73,7 +73,6 @@ def run_parallel(uvb_Q, uvb, scale_value, logT = 5.5):
     return
 
 
-
 # runnning in parallel
 uvb = ['KS18', 'HM12',  'P19', 'FG20']
 uvb_Q = [14, 15, 16, 17, 18, 19, 20]
@@ -123,5 +122,4 @@ uvb_files(path, **kwagrs)
 pool = mp.Pool(processes=5)
 results = [pool.apply_async(run_parallel, args=(uvb_Q, uvb, scale,)) for uvb_Q, uvb, scale in zip(the_Q_values, uvb_models, scaling_factor_array)]
 output = [p.get() for p in results]
-
 
