@@ -27,6 +27,9 @@ def make_summary_plot_new(file_name_fits, lsf_file_name, fig_name, add_fits = No
         lab = add_label
         ax1.errorbar(dn['nH'][:-1], num[:-1]+0.1, xerr=[dn['n16'][:-1], dn['n84'][:-1]], ls='', marker='.', markersize=16,
                      color='gold', elinewidth=2, alpha=0.99, label=lab, zorder  =-1)
+        for i in num:
+            print('Delta N= ',  d['nH'][i]- dn['nH'][i], 'for', d['uvb'][i],  d['Q'][i] )
+
 
     lab = 'Least Squares'
     if loglsf:
@@ -120,6 +123,7 @@ make_summary_plot(file_name_fits= file_name, lsf_file_name =lsf_file_name, fig_n
 
 """
 
+print('Hybrid')
 file_name  =  '/home/vikram/cloudy_run/figures/rescaled_hybrid/NH15_hybrid_logT550.fits'
 lsf_file_name = '/home/vikram/cloudy_run/figures/rescaled_hybrid/NH15_log_lsf_hybrid_T550.fits'
 add_fits =  '/home/vikram/cloudy_run/figures/hybrid/NH15_hybrid_logT550.fits'
@@ -129,7 +133,7 @@ make_summary_plot_new(file_name_fits= file_name, lsf_file_name =lsf_file_name, f
                       add_lsf= add_lsf, loglsf= True,
                       add_fits  =  add_fits, add_label= 'original')
 
-
+print('Photoionized')
 file_name  =  '/home/vikram/cloudy_run/figures/rescaled/rescaled_NH15_metal_2D.fits'
 lsf_file_name = '/home/vikram/cloudy_run/figures/rescaled/rescaled_NH15_log_lsf_out.fits'
 add_fits =  '/home/vikram/cloudy_run/figures/2D/NH15_metal_2D.fits'
