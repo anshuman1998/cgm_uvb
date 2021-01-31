@@ -51,7 +51,7 @@ num_list = [4, 5, 6]
 
 for num, ax in zip(num_list, (ax1, ax2, ax3)):
     lname = r'True log n$_{\rm H}$'
-    color_list = ['skyblue', 'orange', 'green']
+    color_list = ['dodgerblue', 'orange', 'green']
 
     for nH, col in zip(den, color_list):
         d = tab.Table.read(path + '/diff_res_{}ions_newhyb.txt'.format(num), format='ascii')
@@ -70,7 +70,7 @@ for num, ax in zip(num_list, (ax1, ax2, ax3)):
             binwidth = 0.05
             ax.set_ylabel('Frequency')
 
-            p = ax.hist(n2_all_new, bins=np.arange(min(n2_all_new), max(n2_all_new) + binwidth, binwidth)-binwidth/2, alpha=0.95,
+            p = ax.hist(n2_all_new, bins=np.arange(min(n2_all_new), max(n2_all_new) + binwidth, binwidth)-binwidth/2, alpha=0.85,
                         histtype='step', linewidth=3, density=1,
                         label=lname + ' = {:.1f}'.format(np.log10(nH)) ,
                         color=col)
@@ -79,7 +79,7 @@ for num, ax in zip(num_list, (ax1, ax2, ax3)):
             binwidth = 0.022
             #ax.set_ylim(0.01, 25)
 
-            p = ax.hist(n2_all_new, bins=np.arange(min(n2_all_new), max(n2_all_new) + binwidth, binwidth)-binwidth/2, alpha=0.95,
+            p = ax.hist(n2_all_new, bins=np.arange(min(n2_all_new), max(n2_all_new) + binwidth, binwidth)-binwidth/2, alpha=0.85,
                         histtype='step', linewidth=3, density=1,
                         color=col)
 
