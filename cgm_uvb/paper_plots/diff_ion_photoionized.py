@@ -65,7 +65,7 @@ for num in ion_num:
                 n2_all.append(n)
                 z2_all.append(Z)
     print(len(n2_all))
-    ax1.scatter(n2_all_new, z2_all_new, alpha=0.6, label='{} ions'.format(num), s=13)
+    ax1.scatter(n2_all_new, z2_all_new, alpha=0.5, label='{} ions'.format(num), s=13)
 
     binwidth = 0.025
     ax2.hist(n2_all_new, bins=np.arange(min(n2_all_new), max(n2_all_new) + binwidth, binwidth), alpha = 0.75,
@@ -74,6 +74,10 @@ for num in ion_num:
     ax3.hist(z2_all_new, bins=np.arange(min(z2_all_new), max(z2_all_new) + binwidth, binwidth), alpha = 0.8,
              histtype = 'bar',  edgecolor= 'k', linewidth = 1.5, density = 1, label = '{} ions'.format(num))
 
+
+ax1.annotate ('Photoionized \n' + 'absorber' , xy=(0.06, 0.85), xycoords='axes fraction', fontsize=12)
+
+ax1.annotate (r'True (log Z, log n$_{\rm H}$) = (-1, -4)' , xy=(0.06, 0.77), xycoords='axes fraction', fontsize=12)
 
 
 ax2.axvline(0.7, linestyle = '--', color = 'cyan')
