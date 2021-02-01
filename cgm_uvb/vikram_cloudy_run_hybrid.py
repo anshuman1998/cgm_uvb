@@ -53,12 +53,12 @@ def uvb_files(file_path, **kwargs):
 def run_parallel(uvb_Q, uvb, logT):
     # for vikram
     cloudy_path = '/home/vikram/c17.02'
-    fname = logT*10
-    input_File = '/home/vikram/cloudy_run/hybrid_NH15/try_{}_Q{}_logT{:.0f}.in'.format(uvb, uvb_Q, fname)
+    fname = logT*100
+    input_File = '/home/vikram/cloudy_run/hybrid_NH19/try_{}_Q{}_logT{:.0f}.in'.format(uvb, uvb_Q, fname)
     print(uvb, 'Q=', uvb_Q, 'T=', logT)
 
     # write input file and run cloudy
-    ions, params = cloudy_params_defaults(uvb = uvb, uvb_Q=uvb_Q, log_hden=[-6, -2, 0.02], stop_NHI = 15, T = 10**logT,
+    ions, params = cloudy_params_defaults(uvb = uvb, uvb_Q=uvb_Q, log_hden=[-6, -2, 0.02], stop_NHI = 19, T = 10**logT,
                                           sequential = True)
     write_input(input_File, *ions, **params)
     run(cloudy_path=cloudy_path, input_file=input_File)
@@ -75,7 +75,7 @@ def run_parallel(uvb_Q, uvb, logT):
 
 uvb = ['KS18', 'HM12',  'P19', 'FG20']
 uvb_Q = [14, 15, 16, 17, 18, 19, 20]
-temp_values  = [5.25, 5.75]
+temp_values  = [5.00, 5.25, 5.50, 5.75, 6.00, 6.25, 6.50]
 
 uvb_models =[]
 the_Q_values = []
@@ -98,7 +98,7 @@ for logT in temp_values:
 
 
 #-----write uvb fg and hm in cloudy format first
-path = '/home/vikram/cloudy_run/hybrid_NH15'
+path = '/home/vikram/cloudy_run/hybrid_NH19'
 
 kwagrs = {'uvb' : 'P19', 'z' : 0.2}
 uvb_files(path, **kwagrs)
@@ -106,7 +106,7 @@ uvb_files(path, **kwagrs)
 kwagrs = {'uvb' : 'FG20', 'z' : 0.2}
 uvb_files(path, **kwagrs)
 
-pool = mp.Pool(processes=5)
+pool = mp.Pool(processes=4)
 results = [pool.apply_async(run_parallel, args=(uvb_Q, uvb, T,)) for uvb_Q, uvb, T in zip(the_Q_values, uvb_models, temp_array)]
 output = [p.get() for p in results]
 
