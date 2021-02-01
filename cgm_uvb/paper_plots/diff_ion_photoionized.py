@@ -15,8 +15,8 @@ font = {'family': 'serif', 'weight': 'normal', 'size': 14}
 plt.rc('font', **font)
 mpl.rcParams['axes.linewidth'] = 1.5
 
-out_fig_name = 'scatter_diff_ion_nH4.pdf'
-figure_size = [14, 4]
+out_fig_name = 'scatter_diff_ion_nH4_aspect_ratio.pdf'
+figure_size = [12, 3.8]
 fig, (ax1, ax2, ax3)  = plt.subplots(1, 3, figsize=(figure_size[0], figure_size[1]))
 plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0.15)
 
@@ -50,8 +50,9 @@ ax.scatter(n2_all, z2_all, alpha = 0.5, color = 'b')
 den = 1e-4
 ion_num = [3, 4, 5, 6]
 
+color_list = ['dodgerblue', 'orange', 'green', 'magenta']
 
-for num in ion_num:
+for num, col in zip(ion_num, color_list):
     d = tab.Table.read(path + '/diff_res_{}ions_new.txt'.format(num), format='ascii')
 
     n2_all_new = []
@@ -65,14 +66,49 @@ for num in ion_num:
                 n2_all.append(n)
                 z2_all.append(Z)
     print(len(n2_all))
+    #ax1.scatter(n2_all_new, z2_all_new, alpha=0.5, label='{} ions'.format(num), s=13, color = col)
     ax1.scatter(n2_all_new, z2_all_new, alpha=0.5, label='{} ions'.format(num), s=13)
 
+
     binwidth = 0.025
+
     ax2.hist(n2_all_new, bins=np.arange(min(n2_all_new), max(n2_all_new) + binwidth, binwidth), alpha = 0.75,
              histtype = 'bar', edgecolor= 'k', linewidth = 1.5, density = 1, label = '{} ions'.format(num) )
-    binwidth = 0.025
+
+
     ax3.hist(z2_all_new, bins=np.arange(min(z2_all_new), max(z2_all_new) + binwidth, binwidth), alpha = 0.8,
              histtype = 'bar',  edgecolor= 'k', linewidth = 1.5, density = 1, label = '{} ions'.format(num))
+
+
+
+    """
+    #--------tasted but discarded
+    binwidth = 0.025
+
+    p = ax2.hist(n2_all_new, bins=np.arange(min(n2_all_new), max(n2_all_new) + binwidth, binwidth)-binwidth/2, alpha=0.35,
+                histtype='stepfilled', linewidth=2, density=1, edgecolor ='None',
+                label='' ,
+                facecolor=col)
+
+
+    p = ax2.hist(n2_all_new, bins=np.arange(min(n2_all_new), max(n2_all_new) + binwidth, binwidth)-binwidth/2, alpha=0.99,
+                histtype='step', linewidth=2, density=1, edgecolor =col,
+                label='')
+
+
+    p = ax3.hist(z2_all_new, bins=np.arange(min(z2_all_new), max(z2_all_new) + binwidth, binwidth)-binwidth/2, alpha=0.35,
+                histtype='stepfilled', linewidth=2, density=1, edgecolor ='None',
+                label='' ,
+                facecolor=col)
+
+    p = ax3.hist(z2_all_new, bins=np.arange(min(z2_all_new), max(z2_all_new) + binwidth, binwidth)-binwidth/2, alpha=0.99,
+                histtype='step', linewidth=2, density=1, edgecolor =col,
+                label='' )
+    
+    """
+
+    print(np.median(n2_all_new), np.median(z2_all_new), 'ions', num)
+
 
 
 ax1.annotate ('Photoionized \n' + 'absorber' , xy=(0.06, 0.85), xycoords='axes fraction', fontsize=12)
