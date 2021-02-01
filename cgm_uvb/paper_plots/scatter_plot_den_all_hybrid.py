@@ -15,7 +15,7 @@ font = {'family': 'serif', 'weight': 'normal', 'size': 14}
 plt.rc('font', **font)
 mpl.rcParams['axes.linewidth'] = 1.5
 
-out_fig_name = 'scatter_den_hybrid_all_6_ions.pdf'
+out_fig_name = 'scatter_den_hybrid_all_4_ions.pdf'
 figure_size = [14, 4]
 fig, (ax1, ax2, ax3)  = plt.subplots(1, 3, figsize=(figure_size[0], figure_size[1]))
 plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0.15)
@@ -47,7 +47,7 @@ print(len(n2_all))
 ax.scatter(n2_all, z2_all, alpha = 0.5, color = 'b')
 """
 
-num = 6
+num = 4
 d = tab.Table.read(path + '/diff_res_{}ions_newhyb.txt'.format(num), format='ascii')
 
 color_list = ['dodgerblue', 'orange', 'green']
