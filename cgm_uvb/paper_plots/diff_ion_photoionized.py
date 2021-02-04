@@ -131,8 +131,8 @@ print(np.median(n2_all), np.median(z2_all))
 
 ax1.legend(loc = 'best',  fontsize = 12, ncol=2)
 
-ax1.set_ylabel(r'$\Delta_{\rm max}$ log n$_{\rm H}$ (cm $^{-3}$)')
-ax1.set_xlabel(r'$\Delta_{\rm max}$ log Z(Z$_{\odot}$)')
+ax1.set_xlabel(r'$\Delta_{\rm max}$ log n$_{\rm H}$ (cm $^{-3}$)')
+ax1.set_ylabel(r'$\Delta_{\rm max}$ log Z(Z$_{\odot}$)')
 ax1.set_xlim (0.5, 1.02)
 ax1.set_ylim (0.25, 1.02)
 ax2.set_xlim (0.45, 1.0)
