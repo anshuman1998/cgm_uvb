@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 
 def make_summary_plot_new(file_name_fits, lsf_file_name, fig_name, add_fits = None, add_lsf = None,  add_log_lsf = False,
-                          add_label = '',  x1lim= [-4.4, -3.45], x2lim = [-1.35, -0.62], loglsf = False):
+                          add_label = '',  x1lim= [-4.3, -3.45], x2lim = [-1.3, -0.65], loglsf = False):
     # setting the figure
     font = {'family': 'serif', 'weight': 'normal', 'size': 14}
     plt.rc('font', **font)
@@ -96,30 +96,32 @@ def make_summary_plot_new(file_name_fits, lsf_file_name, fig_name, add_fits = No
     return
 
 
-"""
+
 lsf_file_name = '/home/vikram/cloudy_run/figures/2D/NH15_log_lsf_out.fits'
 file_name = '/home/vikram/cloudy_run/figures/2D/NH15_metal_2D.fits'
 out_fig_name = 'summary_photoionized.pdf'
-make_summary_plot(file_name_fits= file_name, lsf_file_name =lsf_file_name, fig_name= out_fig_name)
+make_summary_plot_new(file_name_fits= file_name, lsf_file_name =lsf_file_name, fig_name= out_fig_name)
 
+file_name  =  '/home/vikram/cloudy_run/figures/hybrid/NH15_hybrid_logT550.fits'
+lsf_file_name = '/home/vikram/cloudy_run/figures/hybrid/NH15_log_lsf_hybrid_T550.fits'
+out_fig_name = 'summary_hybrid.pdf'
+make_summary_plot_new(file_name_fits= file_name, lsf_file_name =lsf_file_name, fig_name= out_fig_name, loglsf= True)
+
+
+"""
 #file_name  =  '/home/vikram/cloudy_run/figures/hybrid/NH15_hybrid_logT500.fits'
 #lsf_file_name = '/home/vikram/cloudy_run/figures/hybrid/NH15_log_lsf_hybrid_T500.fits'
 #out_fig_name = 'summary_hybrid.pdf'
 #make_summary_plot(file_name_fits= file_name, lsf_file_name =lsf_file_name, fig_name= out_fig_name, loglsf= True)
 
 #---------------
+
+
 file_name  =  '/home/vikram/cloudy_run/figures/rescaled/rescaled_NH15_metal_2D.fits'
 lsf_file_name = '/home/vikram/cloudy_run/figures/rescaled/rescaled_NH15_log_lsf_out.fits'
 out_fig_name = 'summary_rescaled.pdf'
 make_summary_plot(file_name_fits= file_name, lsf_file_name =lsf_file_name, fig_name= out_fig_name, loglsf= False)
 
-
-#---------------
-
-file_name  =  '/home/vikram/cloudy_run/figures/hybrid/NH15_hybrid_logT550.fits'
-lsf_file_name = '/home/vikram/cloudy_run/figures/hybrid/NH15_log_lsf_hybrid_T550.fits'
-out_fig_name = 'summary_hybrid.pdf'
-make_summary_plot(file_name_fits= file_name, lsf_file_name =lsf_file_name, fig_name= out_fig_name, loglsf= True)
 
 """
 
