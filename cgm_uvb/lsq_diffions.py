@@ -59,7 +59,7 @@ def combination(true_Q=18,true_nH=1e-4,no=8,setno=0):
         if np.log10(obs_ion_col[i][0])>11.0:
             ions_wecanuse.append(i)
 
-    ion_combis=list(set(itertools.combinations(ion_wecanuse, no)))
+    ion_combis=list(set(itertools.combinations(ions_wecanuse, no)))
     #k = len(ion_combis)
     #print(k)
     #i = int(np.random.choice(k,1))
