@@ -21,7 +21,7 @@ fig, (ax1, ax2, ax3)  = plt.subplots(1, 3, figsize=(figure_size[0], figure_size[
 plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0.15)
 
 
-path  = '/home/vikram/cgm_uvb/cgm_uvb/paper_plots/more_models/new_h'
+path  = '/home/vikram/cgm_uvb/cgm_uvb/paper_plots/more_models'
 
 #d  = tab.Table.read(path + '/diff_res_2ions_new.txt', format = 'ascii')
 ks_array = ['14', '15', '16', '17', '18', '19', '20']
@@ -48,11 +48,11 @@ ax.scatter(n2_all, z2_all, alpha = 0.5, color = 'b')
 """
 
 den = 1e-4
-ion_num = [3, 4, 5, 6]
+ion_num = [3, 4, 5, 6, 7, 8]
 
 
 for num in ion_num:
-    d = tab.Table.read(path + '/diff_res_{}ions_newhyb.txt'.format(num), format='ascii')
+    d = tab.Table.read(path + '/full_{}ions_t550.txt'.format(num), format='ascii')
 
     n2_all_new = []
     z2_all_new = []
@@ -96,11 +96,11 @@ print(np.median(n2_all), np.median(z2_all))
 
 ax1.legend(loc = 'best',  fontsize = 12, ncol=2)
 
-ax1.set_ylabel(r'$\Delta_{\rm max}$ log n$_{\rm H}$ (cm $^{-3}$)')
-ax1.set_xlabel(r'$\Delta_{\rm max}$ log Z(Z$_{\odot}$)')
-ax1.set_xlim (0.5, 1.4)
+ax1.set_xlabel(r'$\Delta_{\rm max}$ log n$_{\rm H}$ (cm $^{-3}$)')
+ax1.set_ylabel(r'$\Delta_{\rm max}$ log Z(Z$_{\odot}$)')
+#ax1.set_xlim (0.5, 1.4)
 #ax1.set_ylim (0.25, 1.02)
-ax2.set_xlim (0.45, 1.4)
+#ax2.set_xlim (0.45, 1.4)
 #ax3.set_xlim (0.25, 1.2)
 
 ax2.set_xlabel(r'$\Delta_{\rm max}$ log n$_{\rm H}$ (cm $^{-3}$)')
@@ -124,3 +124,5 @@ for ax in (ax1, ax2, ax3):
         ax.spines[axis].set_color('k')
 
 fig.savefig(out_fig_name, bbox_inches='tight')
+
+#plt.show()
