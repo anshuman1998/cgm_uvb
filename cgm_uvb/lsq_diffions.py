@@ -1,3 +1,4 @@
+import itertools
 import numpy as np
 import astropy.table as tab
 
@@ -8,24 +9,22 @@ def get_true_model(Q= 18, nH = 1e-4):
     """
     ks = [14,15,16,17,18,19,20]
     if Q=='FG20':
-        #model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/output/try_FG20.fits'
-        model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/hybrid/try_FG20_Q18_logT550.fits'
+        model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/output/try_FG20.fits'
+        #model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/hybrid/try_FG20_Q18_logT550.fits'
         data = tab.Table.read(model)
         true_ion_col = data [data['hden'] == nH]
     
     elif Q=='P19':
-        #model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/output/try_P19.fits'
-        model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/hybrid/try_P19_Q18_logT550.fits'
+        model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/output/try_P19.fits'
+        #model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/hybrid/try_P19_Q18_logT550.fits'
         data = tab.Table.read(model)
         true_ion_col = data [data['hden'] == nH]
 
     elif Q in ks:
-        #model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/output/try_Q{}.fits'.format(Q)
-        model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/hybrid/try_KS18_Q{}_logT550.fits'.format(Q)
+        model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/output/try_Q{}.fits'.format(Q)
+        #model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/hybrid/try_KS18_Q{}_logT550.fits'.format(Q)
         data = tab.Table.read(model)
         true_ion_col = data [data['hden'] == nH]
-   # print(true_ion_col)
-
     return true_ion_col
 
 def find_nH_and_Z_LSF_log(model_Q,  ions_to_use, reference_log_metal = -1.0, true_Q = 18, true_nH = 1e-4):
@@ -51,27 +50,6 @@ def find_nH_and_Z_LSF_log(model_Q,  ions_to_use, reference_log_metal = -1.0, tru
 
     return  hden_array[ind[0]], metal_array[ind[1]], np.min(least_square_2D)
 
-def combination(true_Q=18,true_nH=1e-4,no=8,setno=0):
-    #ions_to_use = []
-    obs_ion_col = get_true_model(Q=true_Q,nH=true_nH)
-    ions_wecanuse =[]
-    for i in ions:
-        if np.log10(obs_ion_col[i][0])>11.0:
-            ions_wecanuse.append(i)
-
-    ion_combis=list(set(itertools.combinations(ions_wecanuse, no)))
-    #k = len(ion_combis)
-    #print(k)
-    #i = int(np.random.choice(k,1))
-    if len(ion_combis)<setno:
-        print("Warning, invalid call!",len(ion_combis))
-        return 0
-    return ion_combis[setno]
-
-q=[14, 15, 16, 17, 18, 19, 20,'FG20','P19']
-
-ks = [14,15,16,17,18,19,20]
-
 ions = ["C+", "C+2", "C+3",
         "N+2", "N+3", "N+4",
         "O+", "O+2", "O+3", "O+4", "O+5",
@@ -84,10 +62,31 @@ ions = ["C+", "C+2", "C+3",
         "Fe+"
        ]
 
-print("Start")
+def combination(true_Q=18,true_nH=1e-4,no=8,setno=0,ions_wecanuse=ions):
+    ion_combis=list(set(itertools.combinations(ions_wecanuse, no)))
+    combno = len(ion_combis)
+    if len(ion_combis)<setno: #To ensure that the number of combinations requested is always less than possible no. of combinations
+        print("Warning, invalid call!",len(ion_combis))
+        return 0
+    return ion_combis[setno],combno
+
+#Getting the ions that we can use and number of iterations
+obs_ion_col = get_true_model(Q=18,nH=1e-4)
+ions_wecanuse =[]                      #This is the number of ions that we can use, assuming true obs as Q18, nH=1e-4
+for i in ions:
+    if np.log10(obs_ion_col[i][0])>11.0:
+        ions_wecanuse.append(i)
+
+one_combo,combno = combination(true_Q=18,true_nH=1e-4,no=8,setno=0,ions_wecanuse=ions_wecanuse)
+print(combno)
+if combno>165:
+    combno=165 #Ensuring number of draws is 165 at most
+q=[14, 15, 16, 17, 18, 19, 20,'FG20','P19']
+#oneq = [18]
+ks = [14,15,16,17,18,19,20]
 
 true_nH = [1e-5, 1e-4, 1e-3]
-
+#true_nH=[1e-5]
 mdn = []
 mdz = []
 uvb = []
@@ -114,23 +113,26 @@ nqp=[]
 zqp=[]
 h = [nq14,nq15,nq16,nq17,nq18,nq19,nq20,nqfg,nqp]
 z = [zq14,zq15,zq16,zq17,zq18,zq19,zq20,zqfg,zqp]
+
+print("Start")
 for n in true_nH:
     for Q in q:
-        #print(Q, n)
+        print(Q, n)
         logdiffn = []
         logdiffz = []
         
-        for i in range(40):
+        for i in range(combno):
             narray = []
             zarray = []
-            #Change variable no to change number of ions to be used for calculation
-            no = 9
-            ions_to_use = combination(true_Q=Q,true_nH=n,no=no)
-            print(ions_to_use)
+            #Choosing ions for the model from the list made above
+            no = 8
+            ions_to_use,ionno=combination(true_Q=Q,true_nH=n,no=no,setno=0,ions_wecanuse=ions_wecanuse)
+
+
             for q_num,nfile,zfile in zip(q,h,z):
                 if q_num=='FG20':
-                    #model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/output/try_FG20.fits'
-                    model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/hybrid/try_FG20_Q18_logT550.fits'
+                    model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/output/try_FG20.fits'
+                    #model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/hybrid/try_FG20_Q18_logT550.fits'
                     if Q in ks:
                         nH, Z, min_LS = find_nH_and_Z_LSF_log(model, ions_to_use, true_Q=Q, true_nH=n)
                     if Q=='FG20':
@@ -143,8 +145,8 @@ for n in true_nH:
                     zfile.append(str(round(np.log10(zarray[7]),4)))
                     
                 elif q_num=='P19':
-                    #model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/output/try_P19.fits'
-                    model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/hybrid/try_P19_Q18_logT550.fits'
+                    model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/output/try_P19.fits'
+                    #model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/hybrid/try_P19_Q18_logT550.fits'
                     if Q in ks:
                         nH, Z, min_LS = find_nH_and_Z_LSF_log(model, ions_to_use, true_Q=Q, true_nH=n)
                     if Q=='FG20':
@@ -157,8 +159,8 @@ for n in true_nH:
                     zfile.append(str(round(np.log10(zarray[8]),4)))
                     
                 elif q_num in ks:
-                    #model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/output/try_Q{}.fits'.format(q_num)
-                    model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/hybrid/try_KS18_Q{}_logT550.fits'.format(q_num)
+                    model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/output/try_Q{}.fits'.format(q_num)
+                    #model = '/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/hybrid/try_KS18_Q{}_logT550.fits'.format(q_num)
                     if Q in ks:
                         nH, Z, min_LS = find_nH_and_Z_LSF_log(model, ions_to_use, true_Q=Q, true_nH=n)
                     if Q=='FG20':
@@ -178,7 +180,8 @@ for n in true_nH:
             
             uvb.append(Q)
             tnH.append(n)
-            #ion.append(str(ions_to_use[0]+'_'+ions_to_use[1]+'_'+ions_to_use[2]+'_'+ions_to_use[3]+'_'+ions_to_use[4]+'_'+ions_to_use[5]+'_'+ions_to_use[6]+'_'+ions_to_use[7]))
+            ion.append(str(ions_to_use[0]+'_'+ions_to_use[1]+'_'+ions_to_use[2]+'_'+ions_to_use[3]+'_'+ions_to_use[4]+'_'+
+                           ions_to_use[5]+'_'+ions_to_use[6]+'_'+ions_to_use[7]))#+'_'+ions_to_use[8]))
         
 from astropy.table import Table
 
@@ -191,9 +194,9 @@ for i,j in zip(mdn,mdz):
     zaza.append(str(round(float(j),4)))
     
 diff_res=Table([uvb,tnH, nq14,nq15,nq16,nq17,nq18,nq19,nq20,nqfg,nqp,nana,
-                zq14,zq15,zq16,zq17,zq18,zq19,zq20,zqfg,zqp, zaza],
+                zq14,zq15,zq16,zq17,zq18,zq19,zq20,zqfg,zqp, zaza,ion],
                names=('Q','true_nH','N_Q14','N_Q15','N_Q16','N_Q17','N_Q18','N_Q19','N_Q20','N_FG20','N_P19','Max_diff_nH',
-                     'Z_Q14','Z_Q15','Z_Q16','Z_Q17','Z_Q18','Z_Q19','Z_Q20','Z_FG20','Z_P19','Max_diff_Z'))
-diff_res.write('/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/full_{}ions_t550.txt'.format(no), format='ascii.tab',overwrite='True')
+                     'Z_Q14','Z_Q15','Z_Q16','Z_Q17','Z_Q18','Z_Q19','Z_Q20','Z_FG20','Z_P19','Max_diff_Z','Ions_Used'))
+diff_res.write('/Users/anshumanacharya/Downloads/cgm_uvb_master/mytry/full_{}ions.txt'.format(no), format='ascii.tab',overwrite='True')
 
 print("Done")
