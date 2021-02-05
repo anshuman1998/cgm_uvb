@@ -51,7 +51,7 @@ def find_nH_and_Z_LSF_log(model_Q,  ions_to_use, reference_log_metal = -1.0, tru
 
     return  hden_array[ind[0]], metal_array[ind[1]], np.min(least_square_2D)
 
-def combination(true_Q=18,true_nH=1e-4,no=8):
+def combination(true_Q=18,true_nH=1e-4,no=8,setno=0):
     #ions_to_use = []
     obs_ion_col = get_true_model(Q=true_Q,nH=true_nH)
     ions_wecanuse =[]
@@ -60,16 +60,18 @@ def combination(true_Q=18,true_nH=1e-4,no=8):
             ions_wecanuse.append(i)
 
     ion_combis=list(set(itertools.combinations(ion_wecanuse, no)))
-    k = len(ion_combis)
-    print(k)
-    i = int(np.random.choice(k,1))
-    return ion_combis[i]
+    #k = len(ion_combis)
+    #print(k)
+    #i = int(np.random.choice(k,1))
+    if len(ion_combis)<setno:
+        print("Warning, invalid call!",len(ion_combis))
+        return 0
+    return ion_combis[setno]
 
 q=[14, 15, 16, 17, 18, 19, 20,'FG20','P19']
 
 ks = [14,15,16,17,18,19,20]
 
-np.random.seed(seed)
 ions = ["C+", "C+2", "C+3",
         "N+2", "N+3", "N+4",
         "O+", "O+2", "O+3", "O+4", "O+5",
