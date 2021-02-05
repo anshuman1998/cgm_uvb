@@ -122,7 +122,8 @@ for n in true_nH:
             narray = []
             zarray = []
             #Change variable no to change number of ions to be used for calculation
-            ions_to_use = combination(true_Q=Q,true_nH=n,no=9)
+            no = 9
+            ions_to_use = combination(true_Q=Q,true_nH=n,no=no)
             print(ions_to_use)
             for q_num,nfile,zfile in zip(q,h,z):
                 if q_num=='FG20':
