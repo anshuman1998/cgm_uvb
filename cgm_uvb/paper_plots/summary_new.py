@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 
 def make_summary_plot_new(file_name_fits, lsf_file_name, fig_name, add_fits = None, add_lsf = None,  add_log_lsf = False,
-                          add_label = '',  x1lim= [-4.3, -3.45], x2lim = [-1.3, -0.65], loglsf = False):
+                          add_label = '',  x1lim= [-4.3, -3.45], x2lim = [-1.3, -0.65], fig_text = '', loglsf = False):
     # setting the figure
     font = {'family': 'serif', 'weight': 'normal', 'size': 14}
     plt.rc('font', **font)
@@ -70,6 +70,7 @@ def make_summary_plot_new(file_name_fits, lsf_file_name, fig_name, add_fits = No
     # ax.set_xscale('log')
     # ax.set_yscale('log')
 
+    ax2.annotate(fig_text, xy=(0.65, 0.8), xycoords='axes fraction', fontsize=14)
 
     # change the marker size manually for both lines
     # lgnd.legendHandles[0]._legmarker.set_markersize(6)
@@ -98,14 +99,18 @@ def make_summary_plot_new(file_name_fits, lsf_file_name, fig_name, add_fits = No
 
 
 lsf_file_name = '/home/vikram/cloudy_run/figures/2D/NH15_log_lsf_out.fits'
-file_name = '/home/vikram/cloudy_run/figures/2D/NH15_metal_2D.fits'
+file_name_phot = '/home/vikram/cloudy_run/figures/2D/NH15_metal_2D.fits'
 out_fig_name = 'summary_photoionized.pdf'
-make_summary_plot_new(file_name_fits= file_name, lsf_file_name =lsf_file_name, fig_name= out_fig_name)
+txt = 'Photoionized\nabsorber'
+make_summary_plot_new(file_name_fits= file_name_phot, lsf_file_name =lsf_file_name, fig_name= out_fig_name,
+                      fig_text= txt)
 
 file_name  =  '/home/vikram/cloudy_run/figures/hybrid/NH15_hybrid_logT550.fits'
 lsf_file_name = '/home/vikram/cloudy_run/figures/hybrid/NH15_log_lsf_hybrid_T550.fits'
 out_fig_name = 'summary_hybrid.pdf'
-make_summary_plot_new(file_name_fits= file_name, lsf_file_name =lsf_file_name, fig_name= out_fig_name, loglsf= True)
+txt = 'Warm-hot absorber\n' + r'(T = 10$^{5.5}$ K)'
+make_summary_plot_new(file_name_fits= file_name, lsf_file_name =lsf_file_name, add_fits= file_name_phot,
+                      fig_name= out_fig_name, loglsf= True, add_label= 'photoionized', fig_text= txt)
 
 
 """
@@ -131,8 +136,9 @@ lsf_file_name = '/home/vikram/cloudy_run/figures/rescaled_hybrid/NH15_log_lsf_hy
 add_fits =  '/home/vikram/cloudy_run/figures/hybrid/NH15_hybrid_logT550.fits'
 add_lsf = '/home/vikram/cloudy_run/figures/hybrid/NH15_log_lsf_hybrid_T550.fits'
 out_fig_name = 'summary_rescaled_hybrid_new.pdf'
+txt = 'Warm-hot absorber\n' + r'(T = 10$^{5.5}$ K)' +'\nrescaled UVB'
 make_summary_plot_new(file_name_fits= file_name, lsf_file_name =lsf_file_name, fig_name= out_fig_name,
-                      add_lsf= add_lsf, loglsf= True,
+                      add_lsf= add_lsf, loglsf= True, fig_text= txt,
                       add_fits  =  add_fits, add_label= 'original')
 
 print('Photoionized')
@@ -141,6 +147,7 @@ lsf_file_name = '/home/vikram/cloudy_run/figures/rescaled/rescaled_NH15_log_lsf_
 add_fits =  '/home/vikram/cloudy_run/figures/2D/NH15_metal_2D.fits'
 add_lsf = '/home/vikram/cloudy_run/figures/2D/NH15_log_lsf_out.fits'
 out_fig_name = 'summary_rescaled_photoinized_new.pdf'
+txt = 'Photoionized\nabsorber\nrescaled UVB'
 make_summary_plot_new(file_name_fits= file_name, lsf_file_name =lsf_file_name, fig_name= out_fig_name,
-                      add_lsf= add_lsf, loglsf= False,
+                      add_lsf= add_lsf, loglsf= False, fig_text= txt,
                       add_fits  =  add_fits, add_label= 'original')
