@@ -15,8 +15,8 @@ font = {'family': 'serif', 'weight': 'normal', 'size': 14}
 plt.rc('font', **font)
 mpl.rcParams['axes.linewidth'] = 1.5
 
-out_fig_name = 'scatter_diff_ion_nH4_aspect_ratio.pdf'
-figure_size = [12, 3.8]
+out_fig_name = 'scatter_diff_ion_nH4.pdf'
+figure_size = [14, 4]
 fig, (ax1, ax2, ax3)  = plt.subplots(1, 3, figsize=(figure_size[0], figure_size[1]))
 plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0.15)
 
@@ -48,12 +48,12 @@ ax.scatter(n2_all, z2_all, alpha = 0.5, color = 'b')
 """
 
 den = 1e-4
-ion_num = [3, 4, 5, 6]
+ion_num = [3, 5,  8]
 
 color_list = ['dodgerblue', 'orange', 'green', 'magenta']
 
 for num, col in zip(ion_num, color_list):
-    d = tab.Table.read(path + '/diff_res_{}ions_new.txt'.format(num), format='ascii')
+    d = tab.Table.read(path + '/full_{}ions.txt'.format(num), format='ascii')
 
     n2_all_new = []
     z2_all_new = []
@@ -70,13 +70,13 @@ for num, col in zip(ion_num, color_list):
     ax1.scatter(n2_all_new, z2_all_new, alpha=0.5, label='{} ions'.format(num), s=13)
 
 
-    binwidth = 0.025
+    binwidth = 0.02
 
     ax2.hist(n2_all_new, bins=np.arange(min(n2_all_new), max(n2_all_new) + binwidth, binwidth), alpha = 0.75,
              histtype = 'bar', edgecolor= 'k', linewidth = 1.5, density = 1, label = '{} ions'.format(num) )
 
 
-    ax3.hist(z2_all_new, bins=np.arange(min(z2_all_new), max(z2_all_new) + binwidth, binwidth), alpha = 0.8,
+    ax3.hist(z2_all_new, bins=np.arange(min(z2_all_new), max(z2_all_new) + binwidth, binwidth), alpha = 0.75i,
              histtype = 'bar',  edgecolor= 'k', linewidth = 1.5, density = 1, label = '{} ions'.format(num))
 
 
@@ -111,20 +111,22 @@ for num, col in zip(ion_num, color_list):
 
 
 
-ax1.annotate ('Photoionized \n' + 'absorber' , xy=(0.06, 0.85), xycoords='axes fraction', fontsize=12)
+ax1.annotate ('Photoionized \n' + 'absorber' , xy=(0.06, 0.65), xycoords='axes fraction', fontsize=12)
 
 ax1.annotate (r'True (log Z, log n$_{\rm H}$) = (-1, -4)' , xy=(0.06, 0.77), xycoords='axes fraction', fontsize=12)
 
+n_med = np.median(n2_all)
+z_med = np.median(z2_all)
 
-ax2.axvline(0.7, linestyle = '--', color = 'cyan')
-ax3.axvline (0.52, linestyle = '--', color = 'cyan')
+ax2.axvline(n_med, linestyle = '--', color = 'cyan')
+ax3.axvline (z_med, linestyle = '--', color = 'cyan')
 
 ax2.annotate (r'Median' , xy=(0.6, 0.9), xycoords='axes fraction', fontsize=12)
-ax2.annotate (r'$\Delta_{\rm max}$ (log n$_{\rm H}$) = 0.7' , xy=(0.6, 0.83), xycoords='axes fraction', fontsize=11)
+ax2.annotate (r'$\Delta_{\rm max}$ (log n$_{\rm H}$) =' + '{:.2f}'.format(n_med) , xy=(0.6, 0.83), xycoords='axes fraction', fontsize=11)
 
 
 ax3.annotate (r'Median' , xy=(0.6, 0.9), xycoords='axes fraction', fontsize=12)
-ax3.annotate (r'$\Delta_{\rm max}$ (log Z) = 0.52' , xy=(0.6, 0.83), xycoords='axes fraction', fontsize=11)
+ax3.annotate (r'$\Delta_{\rm max}$ (log Z) =' + '{:.2f}'.format(z_med) , xy=(0.6, 0.83), xycoords='axes fraction', fontsize=11)
 
 
 print(np.median(n2_all), np.median(z2_all))
@@ -133,10 +135,10 @@ ax1.legend(loc = 'best',  fontsize = 12, ncol=2)
 
 ax1.set_xlabel(r'$\Delta_{\rm max}$ log n$_{\rm H}$ (cm $^{-3}$)')
 ax1.set_ylabel(r'$\Delta_{\rm max}$ log Z(Z$_{\odot}$)')
-ax1.set_xlim (0.5, 1.02)
-ax1.set_ylim (0.25, 1.02)
-ax2.set_xlim (0.45, 1.0)
-ax3.set_xlim (0.25, 0.95)
+ax1.set_xlim (0.45, 1.02)
+ax1.set_ylim (0.18, 1.02)
+ax2.set_xlim (0.45, 1.05)
+ax3.set_xlim (0.18, 1.05)
 
 ax2.set_xlabel(r'$\Delta_{\rm max}$ log n$_{\rm H}$ (cm $^{-3}$)')
 ax3.set_xlabel(r'$\Delta_{\rm max}$ log Z(Z$_{\odot}$)')
