@@ -126,7 +126,7 @@ for n in true_nH:
             zarray = []
             #Choosing ions for the model from the list made above
             no = 8
-            ions_to_use,ionno=combination(true_Q=Q,true_nH=n,no=no,setno=0,ions_wecanuse=ions_wecanuse)
+            ions_to_use,ionno=combination(true_Q=Q,true_nH=n,no=no,setno=i,ions_wecanuse=ions_wecanuse)
 
 
             for q_num,nfile,zfile in zip(q,h,z):
