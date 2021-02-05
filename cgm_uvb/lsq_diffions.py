@@ -1,7 +1,7 @@
 import itertools
 import numpy as np
 import astropy.table as tab
-
+seed = 123
 def get_true_model(Q= 18, nH = 1e-4):
     """
     :param model: The data where Q18 model is stored
@@ -114,6 +114,8 @@ zqp=[]
 h = [nq14,nq15,nq16,nq17,nq18,nq19,nq20,nqfg,nqp]
 z = [zq14,zq15,zq16,zq17,zq18,zq19,zq20,zqfg,zqp]
 
+np.random.seed(seed)
+
 print("Start")
 for n in true_nH:
     for Q in q:
@@ -126,8 +128,8 @@ for n in true_nH:
             zarray = []
             #Choosing ions for the model from the list made above
             no = 8
-            ions_to_use,ionno=combination(true_Q=Q,true_nH=n,no=no,setno=i,ions_wecanuse=ions_wecanuse)
-
+            setno=int(np.random.choice(range(int(combno)),1,replace = False))
+            ions_to_use,ionno=combination(true_Q=Q,true_nH=n,no=no,setno=setno,ions_wecanuse=ions_wecanuse)
 
             for q_num,nfile,zfile in zip(q,h,z):
                 if q_num=='FG20':
