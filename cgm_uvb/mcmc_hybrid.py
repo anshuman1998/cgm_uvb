@@ -96,7 +96,7 @@ def run_mcmc(model_path, ions_to_use, Q_uvb, uvb, true_Q =18, true_uvb= 'KS18', 
         sigma_col = 0.2 * np.ones(number_of_ions)
     else:
 #       #sigma_col = np.random.uniform(0.1, 0.3, number_of_ions)
-        sigma_col = np.random.uniform(0.01, 0.02, number_of_ions)
+        sigma_col = np.random.uniform(0.01, 0.25, number_of_ions)
 
 
     print(np.log10(data_col), sigma_col)
@@ -152,18 +152,20 @@ def run_mcmc(model_path, ions_to_use, Q_uvb, uvb, true_Q =18, true_uvb= 'KS18', 
 
 
 
-ions_to_use= ['Ne+7', 'O+5', 'N+4', 'C+3']
+ions_to_use= ['O+5', 'N+4', 'C+3', 'Si+3', 'Ne+7']
+#ions_to_use= ['C+3', 'N+3', 'N+4', 'S+4', 'O+5']
 true_Q =18
 
-#outpath = '/home/vikram/cloudy_run/figures/rescaled_hybrid'
-#model_path  = '/home/vikram/cloudy_run/rescaled_hybrid_NH15'
+outpath = '/home/vikram/cloudy_run/figures/rescaled_hybrid'
+model_path  = '/home/vikram/cloudy_run/rescaled_hybrid_NH15'
 
-outpath = '/home/vikram/cloudy_run/figures/hybrid_precise'
-model_path  = '/home/vikram/cloudy_run/hybrid_NH15'
+#outpath = '/home/vikram/cloudy_run/figures/hybrid'
+#model_path  = '/home/vikram/cloudy_run/hybrid_NH15'
 
-logT_array  = np.arange(5, 6.01, 0.25)
+#logT_array  = np.arange(5, 6.01, 0.25)
 #logT_array.append([6.5])
-logT_array = np.append(logT_array, [6.5])
+#logT_array = np.append(logT_array, [6.5])
+logT_array = [5.5]
 for logT in logT_array:
 
     print('--------for T = ', logT)
