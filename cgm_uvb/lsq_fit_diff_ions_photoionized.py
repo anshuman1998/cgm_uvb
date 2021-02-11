@@ -1,8 +1,19 @@
+#------------------
+# for reducing  numpy threads
+import os
+os.environ["NUMEXPR_NUM_THREADS"] = "1"
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+#-----------------
 import itertools
 import numpy as np
 import astropy.table as tab
 import random
 from scipy.interpolate import interp2d
+import multiprocessing as mp
+
 
 seed = 123
 
@@ -196,8 +207,12 @@ def get_a_set_of_ions_for_inference(list_of_qualified_ions, num_ions =8, total_u
 
 
 
-def inference_for_photoionized_cloud(model_path, true_nH_array= [1e-4], true_logZ_array = [-1], number_of_ions_array = [4],
-                                     model_uvb = 'KS18', model_Q = 18, true_uvb_model = 'all', outpath  = '/home/vikram/tmp/new',
+def inference_for_photoionized_cloud(model_uvb = 'KS18', model_Q = 18, true_uvb_model = 'all',
+                                     true_nH_array= [1e-5, 5e-4, 1e-4, 5e-3, 1e-3],
+                                     true_logZ_array = [-2,-1.5, -1, -0.5, 0],
+                                     number_of_ions_array = [2, 3, 4, 5, 6, 7, 8],
+                                     model_path='/home/vikram/cloudy_run/metal_NH15_new',
+                                     outpath  = '/home/vikram/tmp/new',
                                      total_ion_comb = 165):
 
     # get the ion list from a default true model
@@ -248,7 +263,7 @@ def inference_for_photoionized_cloud(model_path, true_nH_array= [1e-4], true_log
 
     for n in number_of_ions_array:
         #fits_filename = 'photo_n_ions_{}.fits'.format(n)
-        print('----------->for n number of ions', n)
+        print('----------->for n number of ions', n, 'uvb_model', model_uvb, model_Q)
 
         ion_set = get_a_set_of_ions_for_inference(list_of_qualified_ions= qualified_ion_list, num_ions= n, total_unique_comb= total_ion_comb)
 
@@ -295,7 +310,34 @@ def inference_for_photoionized_cloud(model_path, true_nH_array= [1e-4], true_log
     result_table.write(output_file_name, overwrite = True)
 
 
+#----------test
+#inference_for_photoionized_cloud(model_path='/home/vikram/cloudy_run/metal_NH15_new', total_ion_comb=10)
+
+def run_parallel(model_uvb, model_Q):
+    outpath  = '/home/vikram/cloudy_run/diff_op/photo_NH15'
+    inference_for_photoionized_cloud(model_uvb= model_uvb, model_Q= model_Q, outpath= outpath)
+    return
+
+# runnning in parallel
+uvb = ['KS18', 'HM12',  'P19', 'FG20']
+uvb_Q = [14, 15, 16, 17, 18, 19, 20]
+
+uvb_models =[]
+the_Q_values = []
+for background in uvb:
+    if background == 'KS18':
+        for q in uvb_Q:
+            for metal in logZ_array:
+                uvb_models.append(background)
+                the_Q_values.append(q)
+    else:
+        q = 18
+        uvb_models.append(background)
+        the_Q_values.append(q)
 
 
+pool = mp.Pool(processes=5)
+results = [pool.apply_async(run_parallel, args=(for_uvb_model, for_Q,)) for for_uvb_mode, for_Q
+           in zip(uvb_models, the_Q_values)]
+output = [p.get() for p in results]
 
-inference_for_photoionized_cloud(model_path='/home/vikram/cloudy_run/metal_NH15_new', total_ion_comb=10)
