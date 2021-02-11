@@ -21,9 +21,23 @@ fig, (ax1, ax2, ax3)  = plt.subplots(1, 3, figsize=(figure_size[0], figure_size[
 plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0.15)
 
 
-path  = '/home/vikram/cgm_uvb/cgm_uvb/paper_plots/more_models'
+path  = '/home/vikram/cloudy_run/diff_op/photo_NH15'
 
-#d  = tab.Table.read(path + '/diff_res_2ions_new.txt', format = 'ascii')
+uvb = ['KS18', 'HM12',  'P19', 'FG20']
+uvb_Q = [14, 15, 16, 17, 18, 19, 20]
+
+uvb_models =[]
+the_Q_values = []
+for background in uvb:
+    if background == 'KS18':
+        for q in uvb_Q:
+            uvb_models.append(background)
+            the_Q_values.append(q)
+    else:
+        q = 18
+        uvb_models.append(background)
+        the_Q_values.append(q)
+
 ks_array = ['14', '15', '16', '17', '18', '19', '20']
 all_uvb = ks_array + ['FG20', 'P19']
 n_H_array = [1e-3, 1e-4, 1e-5]
