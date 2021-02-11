@@ -92,15 +92,18 @@ outdata.write(outfile, overwrite =  True)
 
 
 ions_to_use= ['Ne+7', 'O+5', 'N+4', 'C+3']
+ions_to_use= ['O+5', 'N+4', 'C+3', 'Si+3', 'Ne+7']
+
 true_Q =18
 true_uvb = 'KS18'
-logT_array =  np.arange(5, 6.01, 0.25)
-logT_array = np.append(logT_array, [6.5])
-#path  = '/home/vikram/cloudy_run/rescaled_hybrid_NH15/'
-#outpath = '/home/vikram/cloudy_run/figures/rescaled_hybrid'
+#logT_array =  np.arange(5, 6.01, 0.25)
+logT_array =[5.5]
+#logT_array = np.append(logT_array, [6.5])
+path  = '/home/vikram/cloudy_run/rescaled_hybrid_NH15'
+outpath = '/home/vikram/cloudy_run/figures/rescaled_hybrid'
 
-path  = '/home/vikram/cloudy_run/hybrid_NH15'
-outpath = '/home/vikram/cloudy_run/figures/hybrid'
+#path  = '/home/vikram/cloudy_run/hybrid_NH15'
+#outpath = '/home/vikram/cloudy_run/figures/hybrid'
 
 for logT in logT_array:
     print('--------for T = ', logT)
