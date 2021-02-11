@@ -26,7 +26,7 @@ path  = '/home/vikram/cgm_uvb/cgm_uvb/paper_plots/more_models'
 #d  = tab.Table.read(path + '/diff_res_2ions_new.txt', format = 'ascii')
 ks_array = ['14', '15', '16', '17', '18', '19', '20']
 all_uvb = ks_array + ['FG20', 'P19']
-all_uvb = [18]
+#all_uvb = [18]
 n_H_array = [1e-3, 1e-4, 1e-5]
 n2_ks = []
 z2_ks = []
@@ -49,7 +49,7 @@ print(len(n2_all))
 ax.scatter(n2_all, z2_all, alpha = 0.5, color = 'b')
 """
 
-den = 1e-5
+den = 1e-3
 ion_num = [9]
 color_list = ['dodgerblue']
 #, 'grey', 'green', 'magenta',  'cyan', 'gold']
@@ -125,7 +125,7 @@ for num, colr, in zip(ion_num, color_list):
     print(np.median(n2_all_new), np.median(z2_all_new), 'for ions', num)
 
 ax1.annotate ('Hybrid \n' + r'absorber (10$^{5.5}$ K) ' , xy=(0.06, 0.75), xycoords='axes fraction', fontsize=12)
-ax1.annotate (r'True (log Z, log n$_{\rm H}$) = (-1, -4)' , xy=(0.06, 0.67), xycoords='axes fraction', fontsize=12)
+ax1.annotate (r'True (log Z, log n$_{\rm H}$) = (-1, '+'{:.0f})'.format(np.log10(den)) , xy=(0.06, 0.67), xycoords='axes fraction', fontsize=12)
 
 
 ax2.axvline(np.median(nall_low), linestyle = '--', color = 'blue', zorder = 20)
@@ -151,7 +151,7 @@ ax1.set_xlabel(r'$\Delta_{\rm max}$ log n$_{\rm H}$ (cm $^{-3}$)')
 ax1.set_ylabel(r'$\Delta_{\rm max}$ log Z(Z$_{\odot}$)')
 #ax1.set_xlim (0.5, 1.4)
 #ax1.set_ylim (0.25, 1.02)
-ax2.set_xlim (0.45, 1.07)
+#ax2.set_xlim (0.45, 1.07)
 ax3.set_xlim (-0.05, 0.55)
 
 ax2.set_xlabel(r'$\Delta_{\rm max}$ log n$_{\rm H}$ (cm $^{-3}$)')
