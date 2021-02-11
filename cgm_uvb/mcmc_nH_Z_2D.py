@@ -99,7 +99,7 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, uvb = 'KS18', figname =
     if same_error:
         sigma_col = 0.2 * np.ones(number_of_ions)
     else:
-        sigma_col = np.random.uniform(0.01, 0.2, number_of_ions)
+        sigma_col = np.random.uniform(0.01, 0.25, number_of_ions)
 
     print(np.log10(data_col), sigma_col)
 
@@ -154,12 +154,21 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, uvb = 'KS18', figname =
     return flat_samples, ndim
 
 
+#ions_to_use= ['C+3', 'N+3', 'Si+3', 'O+5', 'C+2']
 
-ions_to_use= ['C+3', 'N+3', 'Si+3', 'O+5', 'C+2']
+#ions_to_use= ['C+3', 'N+3', 'N+4', 'O+2', 'O+5']
+#ions_to_use= ['Ne+7', 'O+5', 'N+4', 'C+3']
+#ions_to_use= ['Ne+7', 'O+5', 'N+4', 'C+3', 'Si+3']
+ions_to_use= ['O+5', 'N+4', 'C+3', 'Si+3', 'Ne+7']
+
 true_Q =18
 
-outpath = '/home/vikram/cloudy_run/figures/rescaled'
+#outpath = '/home/vikram/cloudy_run/figures/2D'
+#model_path  = '/home/vikram/cloudy_run/metal_NH15_new'
+#outfile = outpath + '/NH15_metal_2D.fits'
+
 model_path  = '/home/vikram/cloudy_run/rescaled_metal_NH15'
+outpath = '/home/vikram/cloudy_run/figures/rescaled'
 outfile = outpath + '/rescaled_NH15_metal_2D.fits'
 
 uvb_array = ['KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'KS18', 'P19', 'FG20', 'HM12']
