@@ -104,7 +104,10 @@ def get_LSF_phot(ions_to_use, model_path, Q_uvb, model_uvb, true_Q, true_uvb, in
             # converting astropy table row to a list
             data_col = []
             for name in ions_to_use:
-                data_col.append(data_col_all[name][0])
+                try:
+                    data_col.append(data_col_all[name][0])
+                except:
+                    print(name, data_col_all)
 
             obs_ion_col = np.log10(np.array(data_col))
             #print(obs_ion_col)
@@ -208,8 +211,8 @@ def get_a_set_of_ions_for_inference(list_of_qualified_ions, num_ions =8, total_u
 
 
 def inference_for_photoionized_cloud(model_uvb = 'KS18', model_Q = 18, true_uvb_model = 'all',
-                                     true_nH_array= [1e-5, 5e-4, 1e-4, 5e-3, 1e-3],
-                                     true_logZ_array = [-2,-1.5, -1, -0.5, 0],
+                                     true_nH_array= [1e-5, 1e-4, 1e-3],
+                                     true_logZ_array = [-2,-1, 0],
                                      number_of_ions_array = [2, 3, 4, 5, 6, 7, 8],
                                      model_path='/home/vikram/cloudy_run/metal_NH15_new',
                                      outpath  = '/home/vikram/tmp/new',
@@ -327,17 +330,19 @@ the_Q_values = []
 for background in uvb:
     if background == 'KS18':
         for q in uvb_Q:
-            for metal in logZ_array:
-                uvb_models.append(background)
-                the_Q_values.append(q)
+            uvb_models.append(background)
+            the_Q_values.append(q)
     else:
         q = 18
         uvb_models.append(background)
         the_Q_values.append(q)
 
 
+print(uvb_models, '==== models all')
+print(the_Q_values, '===Q val')
+
 pool = mp.Pool(processes=5)
-results = [pool.apply_async(run_parallel, args=(for_uvb_model, for_Q,)) for for_uvb_mode, for_Q
+results = [pool.apply_async(run_parallel, args=(for_uvb_model, for_Q,)) for for_uvb_model, for_Q
            in zip(uvb_models, the_Q_values)]
 output = [p.get() for p in results]
 
