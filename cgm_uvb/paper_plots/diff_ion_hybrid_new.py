@@ -15,56 +15,29 @@ font = {'family': 'serif', 'weight': 'normal', 'size': 14}
 plt.rc('font', **font)
 mpl.rcParams['axes.linewidth'] = 1.5
 
-out_fig_name = 'scatter_diff_ion_hybrid_NH4.pdf'
+out_fig_name = 'scatter_hybrid_new.pdf'
 figure_size = [14, 4]
 fig, (ax1, ax2, ax3)  = plt.subplots(1, 3, figsize=(figure_size[0], figure_size[1]))
 plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0.15)
 
 
-path  = '/home/vikram/cgm_uvb/cgm_uvb/paper_plots/more_models'
+path  = '/home/vikram/cloudy_run/diff_op/hybrid_NH15'
 
-#d  = tab.Table.read(path + '/diff_res_2ions_new.txt', format = 'ascii')
-ks_array = ['14', '15', '16', '17', '18', '19', '20']
-all_uvb = ks_array + ['FG20', 'P19']
-n_H_array = [1e-3, 1e-4, 1e-5]
-n2_ks = []
-z2_ks = []
-n2_all = []
-z2_all = []
-
-
-"""
-for num in ion_num:
-    d = tab.Table.read(path + '/diff_res_{}ions_new.txt'.format(num), format='ascii')
-    print(num,  len(d))
-    for m, n, Z, in zip(d['Q'], d['Max_diff_nH'], d['Max_diff_Z']):
-        for uvb in all_uvb:
-            if uvb == m:
-                n2_all.append(n)
-                z2_all.append(Z)
-
-print(len(n2_all))
-ax.scatter(n2_all, z2_all, alpha = 0.5, color = 'b')
-"""
 
 den = 1e-4
-ion_num = [3, 4, 5, 6, 7, 8]
+met= -1
+ion_num = [3, 5,  8]
 
+d = tab.Table.read(path + '/all_combined_logT550.fits')
 
-for num in ion_num:
-    d = tab.Table.read(path + '/full_{}ions_t550.txt'.format(num), format='ascii')
+for num in ion_num :
+    dnum = d[d['n_ions'] == num]
+    sort_d = dnum[dnum['true_nH'] == den]
+    sort_d = sort_d[sort_d['true_logZ'] == met]
 
-    n2_all_new = []
-    z2_all_new = []
-    for m, n, Z, in zip(d['Q'][d['true_nH'] == den], d['Max_diff_nH'][d['true_nH'] == den],
-                        d['Max_diff_Z'][d['true_nH'] == den]):
-        for uvb in all_uvb:
-            if uvb == m:
-                n2_all_new.append(n)
-                z2_all_new.append(Z)
-                n2_all.append(n)
-                z2_all.append(Z)
-    print(len(n2_all))
+    n2_all_new = sort_d['n_dmax']
+    z2_all_new = sort_d['z_dmax']
+
     ax1.scatter(n2_all_new, z2_all_new, alpha=0.5, label='{} ions'.format(num), s=13)
 
     binwidth = 0.035
@@ -81,18 +54,18 @@ ax1.annotate ('Hybrid \n' + r'absorber (10$^{5.5}$ K) ' , xy=(0.06, 0.75), xycoo
 ax1.annotate (r'True (log Z, log n$_{\rm H}$) = (-1, -4)' , xy=(0.06, 0.67), xycoords='axes fraction', fontsize=12)
 
 
-ax2.axvline(np.median(n2_all), linestyle = '--', color = 'cyan')
-ax3.axvline (np.median(z2_all), linestyle = '--', color = 'cyan')
+ax2.axvline(np.median(n2_all_new), linestyle = '--', color = 'cyan')
+ax3.axvline (np.median(z2_all_new), linestyle = '--', color = 'cyan')
 
 ax2.annotate (r'Median' , xy=(0.6, 0.9), xycoords='axes fraction', fontsize=12)
-ax2.annotate (r'$\Delta_{\rm max}$ (log n$_{\rm H}$)' + '= {:.2f}'.format(np.median(n2_all)) , xy=(0.6, 0.83), xycoords='axes fraction', fontsize=11)
+ax2.annotate (r'$\Delta_{\rm max}$ (log n$_{\rm H}$)' + '= {:.2f}'.format(np.median(n2_all_new)) , xy=(0.6, 0.83), xycoords='axes fraction', fontsize=11)
 
 
 ax3.annotate (r'Median' , xy=(0.6, 0.9), xycoords='axes fraction', fontsize=12)
-ax3.annotate (r'$\Delta_{\rm max}$' +' (log Z) = {:.2f}'.format(np.median(z2_all)) , xy=(0.6, 0.83), xycoords='axes fraction', fontsize=11)
+ax3.annotate (r'$\Delta_{\rm max}$' +' (log Z) = {:.2f}'.format(np.median(z2_all_new)) , xy=(0.6, 0.83), xycoords='axes fraction', fontsize=11)
 
 
-print(np.median(n2_all), np.median(z2_all))
+print(np.median(n2_all_new), np.median(z2_all_new))
 
 ax1.legend(loc = 'best',  fontsize = 12, ncol=2)
 
