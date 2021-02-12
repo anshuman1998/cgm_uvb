@@ -15,7 +15,7 @@ font = {'family': 'serif', 'weight': 'normal', 'size': 14}
 plt.rc('font', **font)
 mpl.rcParams['axes.linewidth'] = 1.5
 
-out_fig_name = 'scatter_diff_ion_nH4.pdf'
+out_fig_name = 'scatter_diff_ion_photo_newfile.pdf'
 figure_size = [14, 4]
 fig, (ax1, ax2, ax3)  = plt.subplots(1, 3, figsize=(figure_size[0], figure_size[1]))
 plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0.15)
@@ -38,13 +38,10 @@ for background in uvb:
         uvb_models.append(background)
         the_Q_values.append(q)
 
-ks_array = ['14', '15', '16', '17', '18', '19', '20']
-all_uvb = ks_array + ['FG20', 'P19']
-n_H_array = [1e-3, 1e-4, 1e-5]
-n2_ks = []
-z2_ks = []
-n2_all = []
-z2_all = []
+#ks_array = ['14', '15', '16', '17', '18', '19', '20']
+#all_uvb = ks_array + ['FG20', 'P19']
+#n_H_array = [1e-3, 1e-4, 1e-5]
+
 
 
 """
@@ -62,35 +59,29 @@ ax.scatter(n2_all, z2_all, alpha = 0.5, color = 'b')
 """
 
 den = 1e-4
+met = -1
 ion_num = [3, 5,  8]
+d = tab.Table.read(path + '/all_combined.fits')
 
 color_list = ['dodgerblue', 'orange', 'green', 'magenta']
 
-for num, col in zip(ion_num, color_list):
-    d = tab.Table.read(path + '/full_{}ions.txt'.format(num), format='ascii')
 
-    n2_all_new = []
-    z2_all_new = []
-    for m, n, Z, in zip(d['Q'][d['true_nH'] == den], d['Max_diff_nH'][d['true_nH'] == den],
-                        d['Max_diff_Z'][d['true_nH'] == den]):
-        for uvb in all_uvb:
-            if uvb == m:
-                n2_all_new.append(n)
-                z2_all_new.append(Z)
-                n2_all.append(n)
-                z2_all.append(Z)
-    print(len(n2_all))
-    #ax1.scatter(n2_all_new, z2_all_new, alpha=0.5, label='{} ions'.format(num), s=13, color = col)
-    ax1.scatter(n2_all_new, z2_all_new, alpha=0.5, label='{} ions'.format(num), s=13)
+
+for num, col in zip(ion_num, color_list):
+    dnum = d[d['n_ions'] == num]
+    sort_d = dnum[dnum['true_nH'] == den]
+    sort_d = sort_d[sort_d['true_logZ'] == met]
+
+    ax1.scatter(sort_d['n_dmax'], sort_d['z_dmax'], alpha=0.5, label='{} ions'.format(num), s=13)
 
 
     binwidth = 0.02
 
-    ax2.hist(n2_all_new, bins=np.arange(min(n2_all_new), max(n2_all_new) + binwidth, binwidth), alpha = 0.75,
+    ax2.hist(sort_d['n_dmax'], bins=np.arange(min(sort_d['n_dmax']), max(sort_d['n_dmax']) + binwidth, binwidth), alpha = 0.75,
              histtype = 'bar', edgecolor= 'k', linewidth = 1.5, density = 1, label = '{} ions'.format(num) )
 
 
-    ax3.hist(z2_all_new, bins=np.arange(min(z2_all_new), max(z2_all_new) + binwidth, binwidth), alpha = 0.75i,
+    ax3.hist(sort_d['z_dmax'], bins=np.arange(min(sort_d['z_dmax']), max(sort_d['z_dmax']) + binwidth, binwidth), alpha = 0.75,
              histtype = 'bar',  edgecolor= 'k', linewidth = 1.5, density = 1, label = '{} ions'.format(num))
 
 
@@ -121,7 +112,7 @@ for num, col in zip(ion_num, color_list):
     
     """
 
-    print(np.median(n2_all_new), np.median(z2_all_new), 'ions', num)
+    #print(np.median(n2_all_new), np.median(z2_all_new), 'ions', num)
 
 
 
@@ -129,8 +120,8 @@ ax1.annotate ('Photoionized \n' + 'absorber' , xy=(0.06, 0.65), xycoords='axes f
 
 ax1.annotate (r'True (log Z, log n$_{\rm H}$) = (-1, -4)' , xy=(0.06, 0.77), xycoords='axes fraction', fontsize=12)
 
-n_med = np.median(n2_all)
-z_med = np.median(z2_all)
+n_med = np.median(sort_d['n_dmax'])
+z_med = np.median(sort_d['z_dmax'])
 
 ax2.axvline(n_med, linestyle = '--', color = 'cyan')
 ax3.axvline (z_med, linestyle = '--', color = 'cyan')
@@ -143,16 +134,16 @@ ax3.annotate (r'Median' , xy=(0.6, 0.9), xycoords='axes fraction', fontsize=12)
 ax3.annotate (r'$\Delta_{\rm max}$ (log Z) =' + '{:.2f}'.format(z_med) , xy=(0.6, 0.83), xycoords='axes fraction', fontsize=11)
 
 
-print(np.median(n2_all), np.median(z2_all))
+print(np.median(sort_d['n_dmax']), np.median(sort_d['z_dmax']))
 
 ax1.legend(loc = 'best',  fontsize = 12, ncol=2)
 
 ax1.set_xlabel(r'$\Delta_{\rm max}$ log n$_{\rm H}$ (cm $^{-3}$)')
 ax1.set_ylabel(r'$\Delta_{\rm max}$ log Z(Z$_{\odot}$)')
-ax1.set_xlim (0.45, 1.02)
-ax1.set_ylim (0.18, 1.02)
-ax2.set_xlim (0.45, 1.05)
-ax3.set_xlim (0.18, 1.05)
+#ax1.set_xlim (0.45, 1.02)
+#ax1.set_ylim (0.18, 1.02)
+#ax2.set_xlim (0.45, 1.05)
+#ax3.set_xlim (0.18, 1.05)
 
 ax2.set_xlabel(r'$\Delta_{\rm max}$ log n$_{\rm H}$ (cm $^{-3}$)')
 ax3.set_xlabel(r'$\Delta_{\rm max}$ log Z(Z$_{\odot}$)')
