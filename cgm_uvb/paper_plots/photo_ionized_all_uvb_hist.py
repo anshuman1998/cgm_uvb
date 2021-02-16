@@ -10,7 +10,7 @@ import scipy.optimize as sciopt
 import astropy.table as tab
 import os
 
-def make_many_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true = 18):
+def make_many_plots(den, met, outpath, ion_num = [5], uvb_true ='KS18', q_true = 18):
     # setting the figure
     font = {'family': 'serif', 'weight': 'normal', 'size': 14}
     plt.rc('font', **font)
@@ -21,7 +21,7 @@ def make_many_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
     if not os.path.isdir(final_path):
         os.mkdir(final_path)
 
-    out_fig_name = outpath + '/true_UVB_{}_Q{}_{:.0f}ions_logZ{}_logN{}_vertical_8ions.pdf'.format(uvb_true, q_true, ion_num[0], met, np.log10(den))
+    out_fig_name = outpath + '/true_UVB_{}_Q{}_{:.0f}ions_logZ{}_logN{}_vertical_5ions.pdf'.format(uvb_true, q_true, ion_num[0], met, np.log10(den))
     #figure_size = [14, 4]
     #fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(figure_size[0], figure_size[1]))
 
@@ -86,12 +86,20 @@ def make_many_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
         col_name_Z = 'Z_' + the_uvb + '_Q{}'.format(q_val)
         n_max_array = sort_d[col_name_nH]
         z_max_array = sort_d[col_name_Z]
-        sc= ax1.scatter(n_max_array, z_max_array, alpha=0.5, label='{} Q{}'.format(the_uvb, q_val), s=13)
+
+        if the_uvb =='KS18':
+            label0 = 'KS19 Q{}'.format(the_uvb, q_val)
+        else:
+            label0 = '{} '.format(the_uvb)
+
+        sc= ax1.scatter(n_max_array, z_max_array, alpha=0.3, s=13)
 
         plt.draw()
         color_draw = sc.get_edgecolor()[0]
         new_colr = [color_draw[0], color_draw[1], color_draw[2], 1]
         #print(line[0].get_color())
+        new_colr_alp = [color_draw[0], color_draw[1], color_draw[2], 0.7]
+        ax1.scatter(n_max_array, z_max_array, alpha=0.3, facecolor = 'None', s=13, edgecolor  = new_colr_alp, linewidth = 0.6, zorder = -1)
 
         ax2.hist(n_max_array, bins=np.arange(min(n_max_array)-0.5*binwidth, max(n_max_array) + 1.5*binwidth, binwidth),
                  alpha=0.75,
@@ -143,10 +151,15 @@ def make_many_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
 
 
 
-    ax1.annotate('Photoionized \n' + 'absorber (KS18 Q18)', xy=(0.6, 0.17), xycoords='axes fraction', fontsize=11)
+    ax1.annotate('Photoionized absorber \n' +'True UVB KS19 (Q18)', xy=(0.06, 0.83), xycoords='axes fraction', fontsize=11)
 
     ax1.annotate(r'True (log Z, log n$_{\rm H}$) = ' + '({:.0f}, {:.0f})'.format(met, np.log10(den)),
-                 xy=(0.5, 0.07), xycoords='axes fraction', fontsize=11)
+                 xy=(0.06, 0.76), xycoords='axes fraction', fontsize=11)
+
+    x = [-1000, -1000]
+    ax1.scatter(x, x, alpha=0.5, s=18, label='Using 5 ions', color = 'b')
+    lg = ax1.legend(fontsize=11, loc=4)
+    lg.get_frame().set_facecolor('none')
 
     """
     n_med = np.median(n_max_array)
@@ -166,7 +179,7 @@ def make_many_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
     print(n_med, z_med)
     """
 
-    ax1.legend(loc='best', fontsize=9, ncol=2)
+    #ax1.legend(loc='best', fontsize=9, ncol=2)
     #ax2.legend(loc='best', fontsize=9)
     #ax3.legend(loc='best', fontsize=9)
 
@@ -178,8 +191,8 @@ def make_many_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
     ax1.set_ylim(-1.4, met+add_num)
     ax2.set_xlim(-4.4, np.log10(den)+add_num)
     ax3.set_xlim(-1.4, met+add_num)
-    ax2.set_ylim(0, 170)
-    ax3.set_ylim(0, 170)
+    ax2.set_ylim(0, 174)
+    ax3.set_ylim(0, 174)
 
     ax2.set_xlabel(r'log n$_{\rm H}$ (cm $^{-3}$)')
     ax3.set_xlabel(r'log Z(Z$_{\odot}$)')
