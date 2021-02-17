@@ -123,29 +123,58 @@ def make_many_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
         label_name = r' log Z =' + '{:.2f} ->{} Q{}'.format(z_med, the_uvb, q_val)
         ax3.axvline(z_med, label=label_name, linewidth = 0.8, dashes=[5, 7], color = new_colr, zorder =50)
         txt = '{:.2f}'.format(z_med)
-        if the_uvb != 'P19' and q_val !=20:
-            if q_val == 17:
-                ax3.annotate(txt, (z_med + 0.007, 160), fontsize=8, color=new_colr)
+        if den == 1e-3:
+            if the_uvb != 'P19' and q_val != 20:
+                if q_val == 17:
+                    ax3.annotate(txt, (z_med + 0.007, 160), fontsize=8, color=new_colr)
+                else:
+                    ax3.annotate(txt, (z_med + 0.007, 150), fontsize=8, color=new_colr)
             else:
-                ax3.annotate(txt, (z_med+0.007, 150), fontsize=8, color = new_colr)
+                ax3.annotate(txt, (z_med + 0.007, 135), fontsize=8, color=new_colr)
+
+        elif den == 1e-5:
+            if the_uvb != 'P19' and q_val != 20:
+                if q_val == 17:
+                    ax3.annotate(txt, (z_med + 0.007, 160), fontsize=8, color=new_colr)
+                else:
+                    ax3.annotate(txt, (z_med + 0.007, 150), fontsize=8, color=new_colr)
+            else:
+                if q_val == 20:
+                    ax3.annotate(txt, (z_med + 0.007, 160), fontsize=8, color=new_colr)
+                else:
+                    ax3.annotate(txt, (z_med + 0.007, 135), fontsize=8, color=new_colr)
+
+
+
+        if den == 1e-5:
+
+            if the_uvb != 'P19' and the_uvb != 'FG20':
+                txt = 'Q{}'.format(q_val)
+                if q_val <= 18:
+                    ax1.annotate(txt, (n_med - 0.025, z_med + 0.09), fontsize=8, color=new_colr)
+                else:
+                    ax1.annotate(txt, (n_med - 0.025, z_med + 0.12), fontsize=8, color=new_colr)
+            else:
+                txt = '{}'.format(the_uvb)
+                if the_uvb == 'FG20':
+                    ax1.annotate(txt, (n_med - 0.025, z_med + 0.17), fontsize=8, color=new_colr)
+                else:
+                    ax1.annotate(txt, (n_med - 0.025, z_med - 0.2), fontsize=8, color=new_colr)
+
         else:
-            ax3.annotate(txt, (z_med + 0.007, 135), fontsize=8, color=new_colr)
 
-
-
-
-        if the_uvb != 'P19' and the_uvb !='FG20':
-            txt = 'Q{}'.format(q_val)
-            if q_val <=15:
-                ax1.annotate(txt, (n_med- 0.03, z_med + 0.082), fontsize=8, color = new_colr)
+            if the_uvb != 'P19' and the_uvb != 'FG20':
+                txt = 'Q{}'.format(q_val)
+                if q_val <= 15:
+                    ax1.annotate(txt, (n_med - 0.03, z_med + 0.092), fontsize=8, color=new_colr)
+                else:
+                    ax1.annotate(txt, (n_med - 0.03, z_med + 0.055), fontsize=8, color=new_colr)
             else:
-                ax1.annotate(txt, (n_med - 0.03, z_med + 0.055), fontsize=8, color=new_colr)
-        else:
-            txt = '{}'.format(the_uvb)
-            if the_uvb == 'FG20':
-                ax1.annotate(txt, (n_med -0.03, z_med + 0.12), fontsize=8, color = new_colr)
-            else:
-                ax1.annotate(txt, (n_med -0.03, z_med - 0.1), fontsize=8, color = new_colr)
+                txt = '{}'.format(the_uvb)
+                if the_uvb == 'FG20':
+                    ax1.annotate(txt, (n_med - 0.03, z_med + 0.15), fontsize=8, color=new_colr)
+                else:
+                    ax1.annotate(txt, (n_med - 0.03, z_med - 0.11), fontsize=8, color=new_colr)
 
 
 
