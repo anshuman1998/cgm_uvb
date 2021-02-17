@@ -124,9 +124,14 @@ def make_many_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
         ax3.axvline(z_med, label=label_name, linewidth = 0.8, dashes=[5, 7], color = new_colr, zorder =50)
         txt = '{:.2f}'.format(z_med)
         if the_uvb != 'P19' and q_val !=20:
-            ax3.annotate(txt, (z_med+0.008, 150), fontsize=8, color = new_colr)
+            if q_val == 17:
+                ax3.annotate(txt, (z_med + 0.007, 160), fontsize=8, color=new_colr)
+            else:
+                ax3.annotate(txt, (z_med+0.007, 150), fontsize=8, color = new_colr)
         else:
-            ax3.annotate(txt, (z_med+0.008, 135), fontsize=8, color = new_colr)
+            ax3.annotate(txt, (z_med + 0.007, 135), fontsize=8, color=new_colr)
+
+
 
 
         if the_uvb != 'P19' and the_uvb !='FG20':
@@ -187,10 +192,10 @@ def make_many_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
     ax1.set_ylabel(r'log Z(Z$_{\odot}$)')
 
     if den == 1e-3:
-        add_num = 0.4
+        add_num = 0.43
         add_num0 = 0.3
-        add_num_met = 0.3
-        add_num_met0 = 0.4
+        add_num_met = 0.25
+        add_num_met0 = 0.25
 
     if den == 1e-5:
         add_num = 0.65
@@ -246,7 +251,7 @@ for n in Narray:
 """
 
 Zarray = [-1]
-Narray = [1e-3]
+Narray = [1e-5]
 
 for n in Narray:
     for z in Zarray:
