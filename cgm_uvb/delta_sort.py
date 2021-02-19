@@ -135,13 +135,13 @@ def find_med_all( true_nH = 1e-4, true_logZ = -1,
             del_z_array.append(del_z_all)
 
             #print('for true', true_uvb, true_Q, 'KS', del_n_ks, del_z_ks, 'nion:', nion)
-            print('for true', true_uvb, true_Q, 'AL', del_n_all, del_z_all, 'nion:', nion)
+            #print('for true', true_uvb, true_Q, 'AL', del_n_all, del_z_all, 'nion:', nion)
 
     return full_n, full_z, del_n_array, del_z_array
 
 
 
-def make_plot_photoionized(figname, outpath = '/home/vikram/cgm_uvb/cgm/uvb/paper_plots'):
+def make_plot_photoionized(figname, outpath = '/home/vikram/cgm_uvb/cgm_uvb/paper_plots'):
 
     # setting the figure
     font = {'family': 'serif', 'weight': 'normal', 'size': 14}
@@ -161,8 +161,26 @@ def make_plot_photoionized(figname, outpath = '/home/vikram/cgm_uvb/cgm/uvb/pape
 
             x = np.median((np.array(dn) / 2))
             y = np.median((np.array(dz) / 2))
-            plt.errorbar([np.log10(nn)], [zz], [x], [y], alpha=0.5)
+            print(x, y)
+            ax.errorbar([np.log10(nn)], [zz], xerr= x, yerr= y, marker ='.', markersize= 12, capsize = 5,  elinewidth = 2,
+                        markeredgewidth=2, color = 'b')
+                        #mec = 'k',  mfc= 'k', alpha=0.9)
 
+            txt = '({:.2f}, {:.2f})'.format(x, y)
+            ax.annotate(txt, (np.log10(nn)+0.1, zz+0.1), fontsize=10, color='k')
+
+
+
+    #ax.legend(loc='best', fontsize=12, ncol=2, handlelength=2.6)
+    #n_level1 = 'z = {:0.1f}'.format(z)
+    ax.annotate(r'Photoionized absorbers ( $\Delta_{\rm max}$ (log n$_{\rm H}$)/2,  $\Delta_{\rm max}$ (log Z)/2 )',
+                xy=(-5.3, 0.466), fontsize=12)
+
+    ax.set_xlabel(r'log n$_{\rm H}$ (cm $^{-3}$)')
+    ax.set_ylabel(r'log Z(Z$_{\odot}$)')
+
+    ax.set_xlim(-5.5, -2.3)
+    ax.set_ylim(-2.5, 0.7)
 
 
     #--------------------------------------------
@@ -204,3 +222,6 @@ for nn in nH:
 plt.show()
 
 """
+
+
+make_plot_photoionized(figname='res_final_phot.pdf')
