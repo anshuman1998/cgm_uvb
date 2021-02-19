@@ -173,7 +173,7 @@ def make_plot_photoionized(figname, outpath = '/home/vikram/cgm_uvb/cgm_uvb/pape
 
     #ax.legend(loc='best', fontsize=12, ncol=2, handlelength=2.6)
     #n_level1 = 'z = {:0.1f}'.format(z)
-    ax.annotate(r'Photoionized absorbers ( $\Delta_{\rm max}$ (log n$_{\rm H}$)/2,  $\Delta_{\rm max}$ (log Z)/2 )',
+    ax.annotate(r'Photoionized absorbers ( $\Delta_{\rm max}$(log n$_{\rm H}$)/2,  $\Delta_{\rm max}$(log Z)/2 )',
                 xy=(-5.3, 0.466), fontsize=12)
 
     ax.set_xlabel(r'log n$_{\rm H}$ (cm $^{-3}$)')
