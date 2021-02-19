@@ -21,7 +21,7 @@ def make_many_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
     if not os.path.isdir(final_path):
         os.mkdir(final_path)
 
-    out_fig_name = outpath + '/true_UVB_{}_Q{}_{:.0f}ions_logZ{}_logN{}_vertical_hybrid_T550.jpg'.format(uvb_true, q_true, ion_num[0], met, np.log10(den))
+    out_fig_name = outpath + '/test_true_UVB_{}_Q{}_{:.0f}ions_logZ{}_logN{}_vertical_hybrid_T550.jpg'.format(uvb_true, q_true, ion_num[0], met, np.log10(den))
     #figure_size = [14, 4]
     #fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(figure_size[0], figure_size[1]))
 
@@ -36,7 +36,7 @@ def make_many_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
     #uvb = ['KS18', 'HM12', 'P19', 'FG20']
     uvb = ['KS18',  'P19', 'FG20']
 
-    uvb_Q = [14, 15, 16, 17, 18, 19, 20]
+    uvb_Q = [14]
 
     uvb_models = []
     the_Q_values = []
@@ -68,7 +68,7 @@ def make_many_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
     ax.scatter(n2_all, z2_all, alpha = 0.5, color = 'b')
     """
 
-    binwidth = 0.01
+    binwidth = 0.005
 
     d = tab.Table.read(path + '/all_combined_logT550.fits')
     d = d [d['true_uvb'] == uvb_true]
@@ -80,13 +80,40 @@ def make_many_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
     dnum = d[d['n_ions'] == num]
     sort_d = dnum[dnum['true_nH'] == den]
     sort_d = sort_d[sort_d['true_logZ'] == met]
+
+    ions_used_coloum = sort_d['ions']
+    flag = []
+    for i in range(len(sort_d)):
+        ions = ions_used_coloum[i].split('_')
+        ne8 = False
+        for j in ions:
+            if j == 'Ne+7':
+                ne8 = True
+        if ne8 == True:
+            flag.append(1)
+        else:
+            flag.append(0)
+
+    flag = np.array(flag)
+
+    sort_d_with_ne = sort_d[flag==1]
+    sort_d_no_ne = sort_d[flag==0]
+
+
     for the_uvb, q_val in zip(uvb_models, the_Q_values):
 
         col_name_nH = 'nH_' + the_uvb + '_Q{}'.format(q_val)
         col_name_Z = 'Z_' + the_uvb + '_Q{}'.format(q_val)
-        n_max_array = sort_d[col_name_nH]
-        z_max_array = sort_d[col_name_Z]
-        print(len(z_max_array), ': num')
+
+
+        n_max_array = sort_d_with_ne[col_name_nH]
+        z_max_array = sort_d_with_ne[col_name_Z]
+
+        n_max_array_none= sort_d_no_ne[col_name_nH]
+        z_max_array_none = sort_d_no_ne[col_name_Z]
+
+
+        print(len(n_max_array), ': num', len(n_max_array_none))
 
         if the_uvb =='KS18':
             label0 = 'KS19 Q{}'.format(the_uvb, q_val)
@@ -104,11 +131,26 @@ def make_many_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
 
         ax2.hist(n_max_array, bins=np.arange(min(n_max_array)-0.5*binwidth, max(n_max_array) + 1.5*binwidth, binwidth),
                  alpha=0.75,
-                 histtype='stepfilled', linewidth=1.2, edgecolor = 'k')
+                 histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor = new_colr_alp)
 
         ax3.hist(z_max_array, bins=np.arange(min(z_max_array)-0.5*binwidth, max(z_max_array) + 1.5*binwidth, binwidth),
                  alpha=0.75,
-                 histtype='stepfilled', linewidth=1.2, edgecolor = 'k')
+                 histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor =new_colr_alp)
+
+
+        #--------------------second hist
+        ax1.scatter(n_max_array_none, z_max_array_none, s=13, marker= 'D', color= 'magenta', alpha = 0.5)
+        ax1.scatter(n_max_array_none, z_max_array_none, alpha=0.3, facecolor = 'None', s=13, edgecolor  = new_colr_alp,
+                    linewidth = 0.6, zorder = -1, marker = 'D')
+        ax2.hist(n_max_array_none, bins=np.arange(min(n_max_array_none)-0.5*binwidth, max(n_max_array_none) + 1.5*binwidth, binwidth),
+                 alpha=0.75,
+                 histtype='stepfilled', linewidth=1.2, edgecolor = 'magenta', facecolor= 'magenta')
+
+        ax3.hist(z_max_array_none, bins=np.arange(min(z_max_array_none)-0.5*binwidth, max(z_max_array_none) + 1.5*binwidth, binwidth),
+                 alpha=0.75,
+                 histtype='stepfilled', linewidth=1.2, edgecolor = 'magenta', facecolor = 'magenta')
+
+
 
         n_med = np.median(n_max_array)
         z_med = np.median(z_max_array)
