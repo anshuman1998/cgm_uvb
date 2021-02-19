@@ -1,5 +1,8 @@
 import numpy as np
 import astropy.table as tab
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import os
 
 def find_med(true_uvb, true_Q = 18, true_nH = 1e-4, true_logZ = -1, nion = 8,
              table_file ='/home/vikram/cloudy_run/diff_op/photo_NH15/all_combined.fits' ):
@@ -138,9 +141,45 @@ def find_med_all( true_nH = 1e-4, true_logZ = -1,
 
 
 
-def make_plot():
+def make_plot_photoionized(figname, outpath = '/home/vikram/cgm_uvb/cgm/uvb/paper_plots'):
 
-    return 
+    # setting the figure
+    font = {'family': 'serif', 'weight': 'normal', 'size': 14}
+    plt.rc('font', **font)
+    mpl.rcParams['axes.linewidth'] = 1.5
+
+    out_fig_name = outpath + '/' + figname
+    figure_size = [7, 6]
+    fig, ax = plt.subplots(1, 1, figsize=(figure_size[0], figure_size[1]))
+    #---------------------------------------------Plotting code
+    nH = [1e-5, 1e-4, 1e-3]
+    lgZ = [-2, -1, 0]
+
+    for nn in nH:
+        for zz in lgZ:
+            n, z, dn, dz = find_med_all(true_nH=nn, true_logZ=zz)
+
+            x = np.median((np.array(dn) / 2))
+            y = np.median((np.array(dz) / 2))
+            plt.errorbar([np.log10(nn)], [zz], [x], [y], alpha=0.5)
+
+
+
+    #--------------------------------------------
+    # deco
+    ax.tick_params(direction='in', length=7, width=1.7)
+    ax.tick_params(direction='in', which='minor', length=4, width=1.7)
+    # ax.ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
+    ax.yaxis.set_ticks_position('both')
+    ax.xaxis.set_ticks_position('both')
+    # decorating the plot
+    for axis in ['top', 'bottom', 'left', 'right']:
+        ax.spines[axis].set_linewidth(1.7)
+        ax.spines[axis].set_color('k')
+
+    fig.savefig(out_fig_name, bbox_inches='tight')
+
+    return
 
 
 #a , b = find_med('KS18')
@@ -151,6 +190,7 @@ def make_plot():
 #n, z= find_med_all(true_nH= nn, true_logZ=0)
 
 #------------------ use following code for the work
+"""
 nH = [1e-5, 1e-4, 1e-3]
 lgZ = [-2, -1, 0]
 
@@ -163,5 +203,4 @@ for nn in nH:
         plt.errorbar([np.log10(nn)], [zz], [x], [y], alpha=0.5)
 plt.show()
 
-
-
+"""
