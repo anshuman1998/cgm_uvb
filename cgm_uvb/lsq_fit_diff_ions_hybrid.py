@@ -78,8 +78,8 @@ def get_LSF_hybrid(ions_to_use, model_path, Q_uvb, model_uvb, true_Q, true_uvb, 
 
     #------------default array: KEEP AS IT IS IN THE  inference_for_photoionized_cloud sub
     # interpolating grid
-    lognH_array = np.arange(-6, -1.999, 0.01)
-    logZ_array = np.arange(-3, 1.0001, 0.01)
+    lognH_array = np.arange(-6, -1.9999, 0.001)
+    logZ_array = np.arange(-3, 1.0001, 0.001)
     number_nH = len(lognH_array)
     number_Z = len(logZ_array)
     #-----------------------------
@@ -233,8 +233,8 @@ def inference_for_hybrid_cloud(model_uvb = 'KS18', model_Q = 18, true_uvb_model 
     print('interpolation done')
 
     # interpolating grid
-    lognH_array = np.arange(-6, -1.999, 0.002)
-    logZ_array = np.arange(-3, 1.0001, 0.002)
+    lognH_array = np.arange(-6, -1.9999, 0.001)
+    logZ_array = np.arange(-3, 1.0001, 0.001)
     number_nH = len(lognH_array)
     number_Z = len(logZ_array)
     number_of_qualified_ions = len(qualified_ion_list)
