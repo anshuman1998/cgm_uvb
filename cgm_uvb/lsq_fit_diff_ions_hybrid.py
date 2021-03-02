@@ -233,8 +233,8 @@ def inference_for_hybrid_cloud(model_uvb = 'KS18', model_Q = 18, true_uvb_model 
     print('interpolation done')
 
     # interpolating grid
-    lognH_array = np.arange(-6, -1.999, 0.01)
-    logZ_array = np.arange(-3, 1.0001, 0.01)
+    lognH_array = np.arange(-6, -1.999, 0.002)
+    logZ_array = np.arange(-3, 1.0001, 0.002)
     number_nH = len(lognH_array)
     number_Z = len(logZ_array)
     number_of_qualified_ions = len(qualified_ion_list)
