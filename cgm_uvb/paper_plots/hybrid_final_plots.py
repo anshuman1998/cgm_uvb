@@ -69,8 +69,8 @@ def make_plot_with_neon_1(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
     ax.scatter(n2_all, z2_all, alpha = 0.5, color = 'b')
     """
 
-    binwidth = 0.02
-    binwidth_met = 0.004
+    binwidth = 0.006
+    binwidth_met = 0.0035
 
     d = tab.Table.read(path + '/all_combined_logT550.fits')
     d = d [d['true_uvb'] == uvb_true]
@@ -135,11 +135,11 @@ def make_plot_with_neon_1(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
 
         ax2.hist(n_max_array, bins=np.arange(min(n_max_array)-0.5*binwidth, max(n_max_array) + 1.5*binwidth, binwidth),
                  alpha=0.75,
-                 histtype='stepfilled', linewidth=1.2, edgecolor = 'k', facecolor = new_colr_alp)
+                 histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor = new_colr_alp)
 
         ax3.hist(z_max_array, bins=np.arange(min(z_max_array)-0.5*binwidth, max(z_max_array) + 1.5*binwidth_met, binwidth_met),
                  alpha=0.75,
-                 histtype='stepfilled', linewidth=1.2, edgecolor = 'k', facecolor =new_colr_alp)
+                 histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor =new_colr_alp)
 
 
         n_med = np.median(n_max_array)
@@ -159,9 +159,9 @@ def make_plot_with_neon_1(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
         label_name = r' log Z =' + '{:.2f} ->{} Q{}'.format(z_med, the_uvb, q_val)
         ax3.axvline(z_med, label=label_name, linewidth = 0.8, dashes=[5, 7], color = new_colr, zorder =50)
         txt = '{:.2f}'.format(z_med)
-        if q_val == 16:
-            ax3.annotate(txt, (z_med+0.002, 85), fontsize=8, color = new_colr)
-        else:
+        if q_val == 16 or q_val == 15 or q_val == 14:
+            ax3.annotate(txt, (z_med+0.002, 90), fontsize=8, color = new_colr)
+        if the_uvb == 'P19':
             ax3.annotate(txt, (z_med+0.002, 90), fontsize=8, color = new_colr)
 
 
@@ -175,9 +175,9 @@ def make_plot_with_neon_1(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
         else:
             txt = '{}'.format(the_uvb)
             if the_uvb == 'FG20':
-                ax1.annotate(txt, (n_med -0.03, z_med + 0.05), fontsize=8, color = new_colr)
+                ax1.annotate(txt, (n_med -0.03, z_med + 0.04), fontsize=8, color = new_colr)
             else:
-                ax1.annotate(txt, (n_med -0.03, z_med - 0.1), fontsize=8, color = new_colr)
+                ax1.annotate(txt, (n_med -0.025, z_med + 0.03), fontsize=8, color = new_colr)
 
         print(the_uvb)
 
@@ -219,12 +219,12 @@ def make_plot_with_neon_1(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
     #ax1.set_xlabel(r'log n$_{\rm H}$ (cm $^{-3}$)')
     ax1.set_ylabel(r'log Z(Z$_{\odot}$)')
 
-    add_num0 = 0.35
-    ax1.set_xlim(np.log10(den)-add_num0, np.log10(den)+add_num0 + 0.20)
+    add_num0 = 0.31
+    ax1.set_xlim(np.log10(den)-add_num0, np.log10(den)+add_num0 + 0.25)
     add_num  = 0.15
-    ax1.set_ylim(-1.09, -0.88)
-    ax2.set_xlim(np.log10(den)-add_num0, np.log10(den)+add_num0 +0.22)
-    #ax3.set_xlim(-1.05, -0.92)
+    ax1.set_ylim(-1.12, -0.88)
+    ax2.set_xlim(np.log10(den)-add_num0, np.log10(den)+add_num0 +0.25)
+    ax3.set_xlim(-1.085, -0.93)
     #ax2.set_ylim(0, 174)
     #ax3.set_ylim(0, 174)
     ax2.set_ylim(0, 99)
@@ -318,8 +318,8 @@ def make_plot_with_neon_2(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
     ax.scatter(n2_all, z2_all, alpha = 0.5, color = 'b')
     """
 
-    binwidth = 0.012
-    binwidth_met = 0.00055
+    binwidth = 0.003
+    binwidth_met = 0.001
 
     d = tab.Table.read(path + '/all_combined_logT550.fits')
     d = d [d['true_uvb'] == uvb_true]
@@ -384,11 +384,11 @@ def make_plot_with_neon_2(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
 
         ax2.hist(n_max_array, bins=np.arange(min(n_max_array)-0.5*binwidth, max(n_max_array) + 1.5*binwidth, binwidth),
                  alpha=0.75,
-                 histtype='stepfilled', linewidth=1.2, edgecolor = 'k', facecolor = new_colr_alp)
+                 histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor = new_colr_alp)
 
         ax3.hist(z_max_array, bins=np.arange(min(z_max_array)-0.5*binwidth, max(z_max_array) + 1.5*binwidth_met, binwidth_met),
                  alpha=0.75,
-                 histtype='stepfilled', linewidth=1.2, edgecolor = 'k', facecolor =new_colr_alp)
+                 histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor =new_colr_alp)
 
 
         n_med = np.median(n_max_array)
@@ -400,29 +400,43 @@ def make_plot_with_neon_2(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
         label_name = r'log n$_{\rm H}$) =' + '{:.2f} ->{} Q{}'.format(n_med, the_uvb, q_val)
         ax2.axvline(n_med, label=label_name, linewidth = 0.8, dashes=[5, 7], color = new_colr, zorder =50)
         txt = '{:.2f}'.format(n_med)
-        if the_uvb != 'P19' and the_uvb != 'FG20':
-            ax2.annotate(txt, (n_med+0.01, 90), fontsize=8, color = new_colr)
+        if the_uvb == 'P19' or the_uvb == 'FG20':
+            ax2.annotate(txt, (n_med + 0.007, 85), fontsize=8, color=new_colr)
         else:
-            ax2.annotate(txt, (n_med+0.01, 85), fontsize=8, color = new_colr)
+            if q_val == 19:
+                ax2.annotate(txt, (n_med + 0.007, 80), fontsize=8, color=new_colr)
+            else:
+                ax2.annotate(txt, (n_med + 0.007, 90), fontsize=8, color=new_colr)
 
         label_name = r' log Z =' + '{:.2f} ->{} Q{}'.format(z_med, the_uvb, q_val)
         ax3.axvline(z_med, label=label_name, linewidth = 0.8, dashes=[5, 7], color = new_colr, zorder =50)
         txt = '{:.2f}'.format(z_med)
-        ax3.annotate(txt, (z_med + 0.001, 90 - dd), fontsize=8, color=new_colr)
-        dd = dd+8
+        if the_uvb =='FG20' or q_val ==14:
+            ax3.annotate(txt, (z_med + 0.0002, 85), fontsize=8, color=new_colr)
+        if the_uvb == 'KS18' and q_val ==18:
+            ax3.annotate(txt, (z_med + 0.0002, 85), fontsize=8, color=new_colr)
+
+
+        #dd = dd+8
 
 
 
 
         if the_uvb != 'P19' and the_uvb !='FG20':
             txt = 'Q{}'.format(q_val)
-            if q_val <= 16:
-                ax1.annotate(txt, (n_med -0.01, z_med + 0.022), fontsize=8, color = new_colr)
-            else:
-                ax1.annotate(txt, (n_med - 0.01, z_med + 0.022), fontsize=8, color=new_colr)
+            if q_val <= 17 or q_val ==19:
+                ax1.annotate(txt, (n_med -0.01, z_med + 0.007), fontsize=8, color = new_colr)
+            if q_val == 20:
+                ax1.annotate(txt, (n_med -0.01, z_med + 0.005), fontsize=8, color = new_colr)
+            if q_val == 18:
+                ax1.annotate(txt, (n_med - 0.01, z_med - 0.004), fontsize=8, color=new_colr)
         else:
             txt = '{}'.format(the_uvb)
-            ax1.annotate(txt, (n_med -0.01, z_med - 0.022), fontsize=8, color = new_colr)
+            if the_uvb == 'FG20':
+                ax1.annotate(txt, (n_med -0.01, z_med - 0.006), fontsize=8, color = new_colr)
+            else:
+                ax1.annotate(txt, (n_med -0.01, z_med + 0.004), fontsize=8, color = new_colr)
+
 
         print(the_uvb)
 
@@ -465,11 +479,11 @@ def make_plot_with_neon_2(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
     ax1.set_ylabel(r'log Z(Z$_{\odot}$)')
 
     add_num0 = 0.1
-    ax1.set_xlim(-3.13, -2.55)
+    ax1.set_xlim(-3.13, -2.57)
     add_num  = 0.15
-    ax1.set_ylim(-1.09, -0.88)
-    ax2.set_xlim(-3.13, -2.55)
-    ax3.set_xlim(-1.012, -0.986)
+    ax1.set_ylim(-1.03, -0.96)
+    ax2.set_xlim(-3.13, -2.57)
+    ax3.set_xlim(-1.013, -0.983)
     ax2.set_ylim(0, 99)
     ax3.set_ylim(0, 99)
 
