@@ -113,6 +113,9 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
         n_max_array_none= sort_d_no_ne[col_name_nH]
         z_max_array_none = sort_d_no_ne[col_name_Z]
 
+        orig_n = sort_d[col_name_nH]
+        orig_z = sort_d[col_name_Z]
+
 
         print(len(n_max_array), ': num', len(n_max_array_none))
 
@@ -129,31 +132,31 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
         #print(line[0].get_color())
         new_colr_alp = [color_draw[0], color_draw[1], color_draw[2], 0.7]
         #--------------------second hist
-        ax1.scatter(n_max_array_none, z_max_array_none, s=13, marker= 'D', color= 'magenta', alpha = 0.3)
+        ax1.scatter(n_max_array_none, z_max_array_none, s=13, marker= 'D', color= 'cyan', alpha = 0.3)
         if q_val == 18:
             sc = ax1.scatter(n_max_array, z_max_array, alpha=0.3, s=13, facecolor  = new_colr_alp)
 
         ax1.scatter(n_max_array_none, z_max_array_none, alpha=0.3, facecolor = 'None', s=13, edgecolor  = new_colr_alp,
                     linewidth = 0.3, zorder = -1, marker = 'D')
-        ax2.hist(n_max_array_none, bins=np.arange(min(n_max_array_none)-0.5*binwidth, max(n_max_array_none) + 1.5*binwidth, binwidth),
+        ax2.hist(n_max_array_none, bins=np.arange(min(orig_n)-0.5*binwidth, max(orig_n) + 1.5*binwidth, binwidth),
                  alpha=0.75,
-                 histtype='stepfilled', linewidth=1.2, edgecolor = 'k', facecolor= 'magenta')
+                 histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor= 'cyan', hatch = '/')
 
-        ax3.hist(z_max_array_none, bins=np.arange(min(z_max_array_none)-0.5*binwidth, max(z_max_array_none) + 1.5*binwidth_met, binwidth_met),
+        ax3.hist(z_max_array_none, bins=np.arange(min(orig_z)-0.5*binwidth, max(orig_z) + 1.5*binwidth_met, binwidth_met),
                  alpha=0.75,
-                 histtype='stepfilled', linewidth=1.2, edgecolor = 'k', facecolor = 'magenta')
+                 histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor = 'cyan', hatch = '/')
 
 
 
         ax1.scatter(n_max_array, z_max_array, alpha=0.3, facecolor = 'None', s=13, edgecolor  = new_colr_alp, linewidth = 0.6, zorder = -1)
 
-        ax2.hist(n_max_array, bins=np.arange(min(n_max_array)-0.5*binwidth, max(n_max_array) + 1.5*binwidth, binwidth),
+        ax2.hist(n_max_array, bins=np.arange(min(orig_n)-0.5*binwidth, max(orig_n) + 1.5*binwidth, binwidth),
                  alpha=0.75,
-                 histtype='stepfilled', linewidth=1.2, edgecolor = 'k', facecolor = new_colr_alp)
+                 histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor = new_colr_alp)
 
-        ax3.hist(z_max_array, bins=np.arange(min(z_max_array)-0.5*binwidth, max(z_max_array) + 1.5*binwidth_met, binwidth_met),
+        ax3.hist(z_max_array, bins=np.arange(min(orig_z)-0.5*binwidth, max(orig_z) + 1.5*binwidth_met, binwidth_met),
                  alpha=0.75,
-                 histtype='stepfilled', linewidth=1.2, edgecolor = 'k', facecolor =new_colr_alp)
+                 histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor =new_colr_alp)
 
 
         n_med = np.median(n_max_array)
@@ -166,17 +169,17 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
         ax2.axvline(n_med, label=label_name, linewidth = 0.8, dashes=[5, 7], color = new_colr, zorder =50)
         txt = '{:.2f}'.format(n_med)
         if the_uvb != 'P19':
-            ax2.annotate(txt, (n_med+0.012, 75), fontsize=8, color = new_colr)
+            ax2.annotate(txt, (n_med+0.015, 80), fontsize=8, color = new_colr)
         else:
-            ax2.annotate(txt, (n_med+0.012, 135), fontsize=8, color = new_colr)
+            ax2.annotate(txt, (n_med+0.015, 135), fontsize=8, color = new_colr)
 
 
         txt = '{:.2f}'.format(n_med_none)
-        ax2.axvline(n_med_none, label=label_name, linewidth = 0.8, dashes=[5, 7], color = 'magenta', zorder =50)
-        if the_uvb != 'P19':
-            ax2.annotate(txt, (n_med_none+0.012, 50), fontsize=8, color = 'magenta')
+        ax2.axvline(n_med_none, label=label_name, linewidth = 0.8, dashes=[5, 7], color = 'cyan', zorder =50)
+        if q_val != 14:
+            ax2.annotate(txt, (n_med_none+0.018, 50), fontsize=8, color = 'cyan')
         else:
-            ax2.annotate(txt, (n_med_none+0.012, 135), fontsize=8, color = 'magenta')
+            ax2.annotate(txt, (n_med_none+0.025, 50), fontsize=8, color = 'cyan')
 
         label_name = r' log Z =' + '{:.2f} ->{} Q{}'.format(z_med, the_uvb, q_val)
         ax3.axvline(z_med, label=label_name, linewidth = 0.8, dashes=[5, 7], color = new_colr, zorder =50)
@@ -186,12 +189,12 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
         else:
             ax3.annotate(txt, (z_med+0.002, 80), fontsize=8, color = new_colr)
 
-        ax3.axvline(z_med_none, label=label_name, linewidth = 0.8, dashes=[5, 7], color = 'magenta', zorder =50)
+        ax3.axvline(z_med_none, label=label_name, linewidth = 0.8, dashes=[5, 7], color = 'cyan', zorder =50)
         txt = '{:.2f}'.format(z_med_none)
         if q_val == 16:
-            ax3.annotate(txt, (z_med_none+0.002, 55), fontsize=8, color = 'magenta')
+            ax3.annotate(txt, (z_med_none+0.002, 55), fontsize=8, color = 'cyan')
         else:
-            ax3.annotate(txt, (z_med_none+0.002, 60), fontsize=8, color = 'magenta')
+            ax3.annotate(txt, (z_med_none+0.002, 60), fontsize=8, color = 'cyan')
 
 
         if the_uvb != 'P19' and the_uvb !='FG20':
@@ -220,7 +223,7 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
     ax1.scatter(x, x, alpha=0.5, s=18, label='with Ne VIII', color = 'b', facecolor = 'white')
 
     x = [-1000, -1000]
-    ax1.scatter(x, x, alpha=0.5, s=18, marker = 'D', label='without Ne VIII', color = 'magenta')
+    ax1.scatter(x, x, alpha=0.5, s=18, marker = 'D', label='without Ne VIII', color = 'cyan')
     lg = ax1.legend(fontsize=11, loc=4)
     lg.get_frame().set_facecolor('none')
 
@@ -252,11 +255,13 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
     add_num0 = 0.42
     ax1.set_xlim(np.log10(den)-add_num0, np.log10(den)+add_num0 + 0.22)
     add_num  = 0.15
-    ax1.set_ylim(-1.09, -0.88)
+    #ax1.set_ylim(-1.09, -0.88)
+    ax1.set_ylim(-1.065, -0.885)
+
     ax2.set_xlim(np.log10(den)-add_num0, np.log10(den)+add_num0 +0.22)
-    ax3.set_xlim(-1.05, -0.92)
-    #ax2.set_ylim(0, 174)
-    #ax3.set_ylim(0, 174)
+    ax3.set_xlim(-1.05, -0.93)
+    ax2.set_ylim(0, 174)
+    ax3.set_ylim(0, 174)
 
     ax2.set_xlabel(r'log n$_{\rm H}$ (cm $^{-3}$)')
     ax3.set_xlabel(r'log Z(Z$_{\odot}$)')
@@ -388,11 +393,11 @@ def make_normal_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true
 
         ax2.hist(n_max_array, bins=np.arange(min(n_max_array)-0.5*binwidth, max(n_max_array) + 1.5*binwidth, binwidth),
                  alpha=0.75,
-                 histtype='stepfilled', linewidth=1.2, edgecolor = 'k', facecolor = new_colr_alp)
+                 histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor = new_colr_alp)
 
         ax3.hist(z_max_array, bins=np.arange(min(z_max_array)-0.5*binwidth, max(z_max_array) + 1.5*binwidth_met, binwidth_met),
                  alpha=0.75,
-                 histtype='stepfilled', linewidth=1.2, edgecolor = 'k', facecolor =new_colr_alp)
+                 histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor =new_colr_alp)
 
 
         n_med = np.median(n_max_array)
@@ -403,9 +408,9 @@ def make_normal_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true
         ax2.axvline(n_med, label=label_name, linewidth = 0.8, dashes=[5, 7], color = new_colr, zorder =50)
         txt = '{:.2f}'.format(n_med)
         if the_uvb != 'P19':
-            ax2.annotate(txt, (n_med+0.012, 150), fontsize=8, color = new_colr)
+            ax2.annotate(txt, (n_med+0.014, 150), fontsize=8, color = new_colr)
         else:
-            ax2.annotate(txt, (n_med+0.012, 135), fontsize=8, color = new_colr)
+            ax2.annotate(txt, (n_med+0.014, 135), fontsize=8, color = new_colr)
 
 
         label_name = r' log Z =' + '{:.2f} ->{} Q{}'.format(z_med, the_uvb, q_val)
@@ -479,11 +484,11 @@ def make_normal_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true
     add_num0 = 0.42
     ax1.set_xlim(np.log10(den)-add_num0, np.log10(den)+add_num0 + 0.22)
     add_num  = 0.15
-    ax1.set_ylim(-1.09, -0.88)
+    ax1.set_ylim(-1.065, -0.885)
     ax2.set_xlim(np.log10(den)-add_num0, np.log10(den)+add_num0 +0.22)
-    ax3.set_xlim(-1.05, -0.92)
-    #ax2.set_ylim(0, 174)
-    #ax3.set_ylim(0, 174)
+    ax3.set_xlim(-1.05, -0.93)
+    ax2.set_ylim(0, 174)
+    ax3.set_ylim(0, 174)
 
     ax2.set_xlabel(r'log n$_{\rm H}$ (cm $^{-3}$)')
     ax3.set_xlabel(r'log Z(Z$_{\odot}$)')
