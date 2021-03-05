@@ -195,6 +195,8 @@ def find_med_all_hybrid( true_nH = 1e-4, true_logZ = -1,
 
     del_n_array = []
     del_z_array = []
+    del_nks_array = []
+    del_zks_array = []
 
     for true_uvb, true_Q in zip(uvb_models, the_Q_values):
         #data_sort = tab.Table()
@@ -233,11 +235,13 @@ def find_med_all_hybrid( true_nH = 1e-4, true_logZ = -1,
             del_z_all = np.max(all_Z) - np.min((all_Z))
             del_n_array.append(del_n_all)
             del_z_array.append(del_z_all)
+            del_zks_array.append(del_z_ks)
+            del_nks_array.append(del_n_ks)
 
             #print('for true', true_uvb, true_Q, 'KS', del_n_ks, del_z_ks, 'nion:', nion)
             #print('for true', true_uvb, true_Q, 'AL', del_n_all, del_z_all, 'nion:', nion)
 
-    return full_n, full_z, del_n_array, del_z_array
+    return full_n, full_z, del_n_array, del_z_array, del_nks_array, del_zks_array
 
 
 
@@ -262,7 +266,9 @@ def make_plot_photoionized(figname, outpath = '/home/vikram/cgm_uvb/cgm_uvb/pape
             x = np.median((np.array(dn) / 2))
             y = np.median((np.array(dz) / 2))
 
-            statement = '{:.2f} & {:.2f} & {:.2f} & {:.2f} & {:.2f} & {:.2f}'.format(nn, zz, dn, dz, dnks, dzks)
+            statement = '{:.0f} & {:.0f} & {:.2f} & {:.2f} & {:.2f} & {:.2f}'.format(
+                np.log10(nn), zz, np.median((np.array(dn))), np.median((np.array(dz))),np.median((np.array(dnks))),np.median((np.array(dzks))))
+
             print(statement)
 
             ax.errorbar([np.log10(nn)], [zz], xerr= x, yerr= y, marker ='.', markersize= 12, capsize = 5,  elinewidth = 2,
@@ -325,7 +331,7 @@ def make_plot_hybrid(figname, outpath = '/home/vikram/cgm_uvb/cgm_uvb/paper_plot
 
             #----------------------------without ne8
             colr = 'cyan'
-            n, z, dn, dz = find_med_all_hybrid(true_nH=nn, true_logZ=zz, with_Ne8= False)
+            n, z, dn, dz, dnks, dzks= find_med_all_hybrid(true_nH=nn, true_logZ=zz, with_Ne8= False)
 
             x = np.median((np.array(dn) / 2))
             y = np.median((np.array(dz) / 2))
@@ -343,14 +349,17 @@ def make_plot_hybrid(figname, outpath = '/home/vikram/cgm_uvb/cgm_uvb/paper_plot
             ax.annotate(txt, (np.log10(nn)+0.1, zz-0.2), fontsize=10, color= colr)
 
             #---------------------------- with Ne8
-            n, z, dn, dz = find_med_all_hybrid(true_nH=nn, true_logZ=zz)
+            n, z, dn, dz, dnks, dzks = find_med_all_hybrid(true_nH=nn, true_logZ=zz)
+
+            statement = '{:.0f} & {:.0f} & {:.2f} & {:.2f} & {:.2f} & {:.2f}'.format(
+                np.log10(nn), zz, np.median((np.array(dn))), np.median((np.array(dz))), np.median((np.array(dnks))),
+                np.median((np.array(dzks))))
+
+            print(statement)
 
             x = np.median((np.array(dn) / 2))
             y = np.median((np.array(dz) / 2))
-            print(x, y)
-            x1 = np.mean((np.array(dn) / 2))
-            y1 = np.mean((np.array(dz) / 2))
-            print('<>:', x1, y1)
+
             if dummy == 0:
                 label = 'with Ne VIII'
                 ax.errorbar([np.log10(nn)], [zz], xerr= x, yerr= y, marker ='.', markersize= 12, capsize = 5,  elinewidth = 2,
@@ -423,5 +432,5 @@ plt.show()
 """
 
 
-make_plot_photoionized(figname='res_final_phot.pdf')
-#make_plot_hybrid(figname='res_final_hybrid.pdf')
+#make_plot_photoionized(figname='res_final_phot.pdf')
+make_plot_hybrid(figname='res_final_hybrid.pdf')
