@@ -95,6 +95,8 @@ def find_med_all( true_nH = 1e-4, true_logZ = -1,
 
     del_n_array = []
     del_z_array = []
+    del_nks_array = []
+    del_zks_array = []
 
     for true_uvb, true_Q in zip(uvb_models, the_Q_values):
         #data_sort = tab.Table()
@@ -133,11 +135,13 @@ def find_med_all( true_nH = 1e-4, true_logZ = -1,
             del_z_all = np.max(all_Z) - np.min((all_Z))
             del_n_array.append(del_n_all)
             del_z_array.append(del_z_all)
+            del_zks_array.append(del_z_ks)
+            del_nks_array.append(del_n_ks)
 
             #print('for true', true_uvb, true_Q, 'KS', del_n_ks, del_z_ks, 'nion:', nion)
             #print('for true', true_uvb, true_Q, 'AL', del_n_all, del_z_all, 'nion:', nion)
 
-    return full_n, full_z, del_n_array, del_z_array
+    return full_n, full_z, del_n_array, del_z_array, del_nks_array, del_zks_array
 
 
 
@@ -253,14 +257,13 @@ def make_plot_photoionized(figname, outpath = '/home/vikram/cgm_uvb/cgm_uvb/pape
 
     for nn in nH:
         for zz in lgZ:
-            n, z, dn, dz = find_med_all(true_nH=nn, true_logZ=zz)
+            n, z, dn, dz, dnks, dzks = find_med_all(true_nH=nn, true_logZ=zz)
 
             x = np.median((np.array(dn) / 2))
             y = np.median((np.array(dz) / 2))
-            print(x, y)
-            x1 = np.mean((np.array(dn) / 2))
-            y1 = np.mean((np.array(dz) / 2))
-            print('<>:', x1, y1)
+
+            statement = '{:.2f} & {:.2f} & {:.2f} & {:.2f} & {:.2f} & {:.2f}'.format(nn, zz, dn, dz, dnks, dzks)
+            print(statement)
 
             ax.errorbar([np.log10(nn)], [zz], xerr= x, yerr= y, marker ='.', markersize= 12, capsize = 5,  elinewidth = 2,
                         markeredgewidth=2, color = 'b')
@@ -421,4 +424,4 @@ plt.show()
 
 
 make_plot_photoionized(figname='res_final_phot.pdf')
-make_plot_hybrid(figname='res_final_hybrid.pdf')
+#make_plot_hybrid(figname='res_final_hybrid.pdf')
