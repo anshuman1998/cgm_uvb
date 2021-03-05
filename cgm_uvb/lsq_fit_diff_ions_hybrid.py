@@ -210,7 +210,7 @@ def get_a_set_of_ions_for_inference(list_of_qualified_ions, num_ions =8, total_u
 def inference_for_hybrid_cloud(model_uvb = 'KS18', model_Q = 18, true_uvb_model = 'all',
                                      true_nH_array= [1e-5, 1e-4, 1e-3],
                                      true_logZ_array = [-2,-1, 0],
-                                     number_of_ions_array = [2, 3, 4, 5, 6, 7, 8],
+                                     number_of_ions_array = [8],
                                      model_path='/home/vikram/cloudy_run/hybrid_NH15',
                                      outpath  = '/home/vikram/tmp/new', logT = 5.5,
                                      total_ion_comb = 165):
