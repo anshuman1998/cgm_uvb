@@ -1,6 +1,7 @@
 import astropy.table as tab
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 
 """
                                                   Gas Phase Chemical Composition
@@ -11,6 +12,7 @@ import matplotlib.pyplot as plt
 """
 
 def get_gass10_abundances(element_name):
+    print(element_name)
     abd = None
     if element_name == 'O':
         abd = 10 **(-3.3098)
@@ -29,7 +31,7 @@ def get_gass10_abundances(element_name):
 
 def get_the_factions(filename, ion, metallicity):
 
-    element_name = ion.split('+')[-1]
+    element_name = ion.split('+')[0]
     abd= get_gass10_abundances(element_name)
 
     data  = tab.Table.read(filename)
@@ -70,11 +72,12 @@ def plot_ion_fractions_photoionized(path, ion, metallicity = 0.1, legend_txt = N
 
     for uvb_name, q_name in zip(uvb_models, the_Q_values):
         filename = path + '/try_{}_Q{}_Z{:.0f}.fits'.format(uvb_name, q_name, fname)
+        print(filename)
         x, y = get_the_factions(filename = filename, ion= ion, metallicity= metallicity)
 
-        q_name = 'Q{}'.format(Q)
+        q_name_leg = 'Q{}'.format(q_name)
         if uvb_name == 'KS18':
-            label = 'KS19 ({})'.format(q_name)
+            label = 'KS19 ({})'.format(q_name_leg)
         else:
             label = uvb_name
 
@@ -91,9 +94,9 @@ def plot_ion_fractions_photoionized(path, ion, metallicity = 0.1, legend_txt = N
     ax.set_ylabel('frac of {}'.format(ion))
     ax.set_xlabel(r'log n$_{\rm H}$')
     #ax.set_xlim(1, 100000)
-    #ax.set_ylim(4e-8, 3e-4)
+    ax.set_ylim(1e-4, 0.3)
     #ax.set_xscale('log')
-    #ax.set_yscale('log')
+    ax.set_yscale('log')
 
     # deco
     ax.tick_params(direction='in', length=7, width=1.7)
