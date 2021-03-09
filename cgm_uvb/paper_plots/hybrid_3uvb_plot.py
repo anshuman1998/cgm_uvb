@@ -113,9 +113,6 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
         n_max_array_none= sort_d_no_ne[col_name_nH]
         z_max_array_none = sort_d_no_ne[col_name_Z]
 
-        orig_n = sort_d[col_name_nH]
-        orig_z = sort_d[col_name_Z]
-
 
         print(len(n_max_array), ': num', len(n_max_array_none))
 
@@ -138,11 +135,11 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
 
         ax1.scatter(n_max_array_none, z_max_array_none, alpha=0.3, facecolor = 'None', s=13, edgecolor  = new_colr_alp,
                     linewidth = 0.3, zorder = -1, marker = 'D')
-        ax2.hist(n_max_array_none, bins=np.arange(min(orig_n)-0.5*binwidth, max(orig_n) + 1.5*binwidth, binwidth),
+        ax2.hist(n_max_array_none, bins=np.arange(min(n_max_array_none)-0.5*binwidth, max(n_max_array_none) + 1.5*binwidth, binwidth),
                  alpha=0.75,
                  histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor= 'cyan', hatch = '/')
 
-        ax3.hist(z_max_array_none, bins=np.arange(min(orig_z)-0.5*binwidth, max(orig_z) + 1.5*binwidth_met, binwidth_met),
+        ax3.hist(z_max_array_none, bins=np.arange(min(z_max_array_none)-0.5*binwidth, max(z_max_array_none) + 1.5*binwidth_met, binwidth_met),
                  alpha=0.75,
                  histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor = 'cyan', hatch = '/')
 
@@ -150,11 +147,11 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
 
         ax1.scatter(n_max_array, z_max_array, alpha=0.3, facecolor = 'None', s=13, edgecolor  = new_colr_alp, linewidth = 0.6, zorder = -1)
 
-        ax2.hist(n_max_array, bins=np.arange(min(orig_n)-0.5*binwidth, max(orig_n) + 1.5*binwidth, binwidth),
+        ax2.hist(n_max_array, bins=np.arange(min(n_max_array)-0.5*binwidth, max(n_max_array) + 1.5*binwidth, binwidth),
                  alpha=0.75,
                  histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor = new_colr_alp)
 
-        ax3.hist(z_max_array, bins=np.arange(min(orig_z)-0.5*binwidth, max(orig_z) + 1.5*binwidth_met, binwidth_met),
+        ax3.hist(z_max_array, bins=np.arange(min(z_max_array)-0.5*binwidth, max(z_max_array) + 1.5*binwidth_met, binwidth_met),
                  alpha=0.75,
                  histtype='stepfilled', linewidth=1.2, edgecolor = new_colr_alp, facecolor =new_colr_alp)
 
@@ -260,8 +257,8 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
 
     ax2.set_xlim(np.log10(den)-add_num0, np.log10(den)+add_num0 +0.22)
     ax3.set_xlim(-1.05, -0.93)
-    ax2.set_ylim(0, 174)
-    ax3.set_ylim(0, 174)
+    #ax2.set_ylim(0, 174)
+    #ax3.set_ylim(0, 174)
 
     ax2.set_xlabel(r'log n$_{\rm H}$ (cm $^{-3}$)')
     ax3.set_xlabel(r'log Z(Z$_{\odot}$)')
@@ -487,8 +484,8 @@ def make_normal_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true
     ax1.set_ylim(-1.065, -0.885)
     ax2.set_xlim(np.log10(den)-add_num0, np.log10(den)+add_num0 +0.22)
     ax3.set_xlim(-1.05, -0.93)
-    ax2.set_ylim(0, 174)
-    ax3.set_ylim(0, 174)
+    #ax2.set_ylim(0, 174)
+    #ax3.set_ylim(0, 174)
 
     ax2.set_xlabel(r'log n$_{\rm H}$ (cm $^{-3}$)')
     ax3.set_xlabel(r'log Z(Z$_{\odot}$)')
