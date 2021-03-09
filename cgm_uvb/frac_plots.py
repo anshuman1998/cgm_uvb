@@ -94,7 +94,7 @@ def plot_ion_fractions_photoionized(path, ion, metallicity = 0.1, legend_txt = N
     ax.set_ylabel('frac of {}'.format(ion))
     ax.set_xlabel(r'log n$_{\rm H}$')
     #ax.set_xlim(1, 100000)
-    ax.set_ylim(1e-4, 0.3)
+    #ax.set_ylim(1e-4, 0.3)
     #ax.set_xscale('log')
     ax.set_yscale('log')
 
@@ -115,7 +115,7 @@ def plot_ion_fractions_photoionized(path, ion, metallicity = 0.1, legend_txt = N
 
 
 path = '/home/vikram/cloudy_run/metal_NH15_new'
-plot_ion_fractions_photoionized( path = path, ion= 'O+5')
+plot_ion_fractions_photoionized( path = path, ion= 'Si+3')
 
 """
 
