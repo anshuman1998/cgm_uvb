@@ -1,3 +1,6 @@
 import numpy as np
+a=10
+print(a)
 
-print(10)
+
+print(20)
