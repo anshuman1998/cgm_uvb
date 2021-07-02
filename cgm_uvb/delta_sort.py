@@ -285,8 +285,8 @@ def make_plot_photoionized(figname, outpath = '/home/vikram/cgm_uvb/cgm_uvb/pape
     ax.annotate(r'Photoionized absorbers ( $\Delta_{\rm max}$(log n$_{\rm H}$)/2,  $\Delta_{\rm max}$(log Z)/2 )',
                 xy=(-5.3, 0.466), fontsize=12)
 
-    ax.set_xlabel(r'log n$_{\rm H}$ (cm $^{-3}$)')
-    ax.set_ylabel(r'log Z(Z$_{\odot}$)')
+    ax.set_xlabel(r'true log n$_{\rm H}$ (cm $^{-3}$)')
+    ax.set_ylabel(r'true log Z(Z$_{\odot}$)')
 
     ax.set_xlim(-5.5, -2.3)
     ax.set_ylim(-2.5, 0.7)
@@ -381,11 +381,11 @@ def make_plot_hybrid(figname, outpath = '/home/vikram/cgm_uvb/cgm_uvb/paper_plot
 
     ax.legend(loc=4, fontsize=12, ncol=2, handlelength=1)
     #n_level1 = 'z = {:0.1f}'.format(z)
-    ax.annotate(r'Hybrid (10$^{5.5}$ K) absorbers ( $\Delta_{\rm max}$(log n$_{\rm H}$)/2,  $\Delta_{\rm max}$(log Z)/2 )',
+    ax.annotate(r'10$^{5.5}$ K absorbers ( $\Delta_{\rm max}$(log n$_{\rm H}$)/2,  $\Delta_{\rm max}$(log Z)/2 )',
                 xy=(-5.4, 0.466), fontsize=12)
 
-    ax.set_xlabel(r'log n$_{\rm H}$ (cm $^{-3}$)')
-    ax.set_ylabel(r'log Z(Z$_{\odot}$)')
+    ax.set_xlabel(r'true log n$_{\rm H}$ (cm $^{-3}$)')
+    ax.set_ylabel(r'true log Z(Z$_{\odot}$)')
 
     ax.set_xlim(-5.55, -2.3)
     ax.set_ylim(-2.7, 0.7)
@@ -432,5 +432,5 @@ plt.show()
 """
 
 
-#make_plot_photoionized(figname='res_final_phot.pdf')
+make_plot_photoionized(figname='res_final_phot.pdf')
 make_plot_hybrid(figname='res_final_hybrid.pdf')
