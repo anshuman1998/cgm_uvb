@@ -124,7 +124,7 @@ for num, colr, in zip(ion_num, color_list):
 
     print(np.median(n2_all_new), np.median(z2_all_new), 'for ions', num)
 
-ax1.annotate ('Hybrid \n' + r'absorber (10$^{5.5}$ K) ' , xy=(0.06, 0.75), xycoords='axes fraction', fontsize=12)
+ax1.annotate ('warm-hot \n' + r'absorber (10$^{5.5}$ K) ' , xy=(0.06, 0.75), xycoords='axes fraction', fontsize=12)
 ax1.annotate (r'True (log Z, log n$_{\rm H}$) = (-1, '+'{:.0f})'.format(np.log10(den)) , xy=(0.06, 0.67), xycoords='axes fraction', fontsize=12)
 
 
