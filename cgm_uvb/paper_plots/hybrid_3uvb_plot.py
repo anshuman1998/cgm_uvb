@@ -211,7 +211,7 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
 
 
 
-    ax1.annotate(r'Hybrid absorber 10$^{5.5}$K' +'\nTrue UVB KS19 (Q18)', xy=(0.11, 0.83), xycoords='axes fraction', fontsize=11)
+    ax1.annotate(r'Warm-hot absorber 10$^{5.5}$ K' +'\nTrue UVB KS19 (Q18)', xy=(0.11, 0.83), xycoords='axes fraction', fontsize=11)
 
     ax1.annotate(r'True (log Z, log n$_{\rm H}$) = ' + '({:.0f}, {:.0f})'.format(met, np.log10(den)),
                  xy=(0.11, 0.76), xycoords='axes fraction', fontsize=11)
@@ -257,8 +257,8 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
 
     ax2.set_xlim(np.log10(den)-add_num0, np.log10(den)+add_num0 +0.22)
     ax3.set_xlim(-1.05, -0.93)
-    #ax2.set_ylim(0, 174)
-    #ax3.set_ylim(0, 174)
+    ax2.set_ylim(0, 174)
+    ax3.set_ylim(0, 174)
 
     ax2.set_xlabel(r'log n$_{\rm H}$ (cm $^{-3}$)')
     ax3.set_xlabel(r'log Z(Z$_{\odot}$)')
@@ -441,7 +441,7 @@ def make_normal_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true
 
 
 
-    ax1.annotate(r'Hybrid absorber 10$^{5.5}$K' +'\nTrue UVB KS19 (Q18)', xy=(0.11, 0.83), xycoords='axes fraction', fontsize=11)
+    ax1.annotate(r'Warm-hot absorber 10$^{5.5}$ K' +'\nTrue UVB KS19 (Q18)', xy=(0.11, 0.83), xycoords='axes fraction', fontsize=11)
 
     ax1.annotate(r'True (log Z, log n$_{\rm H}$) = ' + '({:.0f}, {:.0f})'.format(met, np.log10(den)),
                  xy=(0.11, 0.76), xycoords='axes fraction', fontsize=11)
@@ -484,8 +484,8 @@ def make_normal_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true
     ax1.set_ylim(-1.065, -0.885)
     ax2.set_xlim(np.log10(den)-add_num0, np.log10(den)+add_num0 +0.22)
     ax3.set_xlim(-1.05, -0.93)
-    #ax2.set_ylim(0, 174)
-    #ax3.set_ylim(0, 174)
+    ax2.set_ylim(0, 174)
+    ax3.set_ylim(0, 174)
 
     ax2.set_xlabel(r'log n$_{\rm H}$ (cm $^{-3}$)')
     ax3.set_xlabel(r'log Z(Z$_{\odot}$)')

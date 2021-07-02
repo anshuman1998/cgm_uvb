@@ -183,7 +183,7 @@ def make_plot_with_neon_1(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
 
 
 
-    ax1.annotate(r'Hybrid absorber 10$^{5.5}$K' +'\nTrue UVB KS19 (Q18)', xy=(0.11, 0.83), xycoords='axes fraction', fontsize=11)
+    ax1.annotate(r'Warm-hot absorber 10$^{5.5}$ K' +'\nTrue UVB KS19 (Q18)', xy=(0.11, 0.83), xycoords='axes fraction', fontsize=11)
 
     ax1.annotate(r'True (log Z, log n$_{\rm H}$) = ' + '({:.0f}, {:.0f})'.format(met, np.log10(den)),
                  xy=(0.11, 0.76), xycoords='axes fraction', fontsize=11)
@@ -442,7 +442,7 @@ def make_plot_with_neon_2(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
 
 
 
-    ax1.annotate(r'Hybrid absorber 10$^{5.5}$K' +'\nTrue UVB KS19 (Q18)', xy=(0.11, 0.83), xycoords='axes fraction', fontsize=11)
+    ax1.annotate(r'Warm-hot absorber 10$^{5.5}$ K' +'\nTrue UVB KS19 (Q18)', xy=(0.11, 0.83), xycoords='axes fraction', fontsize=11)
 
     ax1.annotate(r'True (log Z, log n$_{\rm H}$) = ' + '({:.0f}, {:.0f})'.format(met, np.log10(den)),
                  xy=(0.11, 0.76), xycoords='axes fraction', fontsize=11)
