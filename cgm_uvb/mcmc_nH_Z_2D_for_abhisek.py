@@ -11,10 +11,10 @@ import corner
 
 #----model interpolation
 def get_interp_func(model_path, ions_to_use, Q_uvb, uvb = 'KS18'):
-    logZ = np.around(np.arange(-3, 1, 0.05), decimals = 2) # hardcoded
+    logZ = np.around(np.arange(-2.5, -1.2, 0.05), decimals = 2) # hardcoded
     #get nH array
-    logZ_try = -1
-    model_try = model_path + '/try_{}_Q{}_Z{:.0f}.fits'.format(uvb, Q_uvb, (logZ_try+4)*100)
+    logZ_try = -1.2
+    model_try = model_path + '/try_{}_Q{}_Z{:.0f}_NHI1504.fits'.format(uvb, Q_uvb, (logZ_try+4)*100)
     model = tab.Table.read(model_try)
     lognH = np.log10(np.array(model['hden']))
 
@@ -22,7 +22,7 @@ def get_interp_func(model_path, ions_to_use, Q_uvb, uvb = 'KS18'):
     for ion in ions_to_use:
         z = np.zeros((len(lognH), len(logZ)))
         for i in range(len(logZ)):
-            model = model_path + '/try_{}_Q{}_Z{:.0f}.fits'.format(uvb, Q_uvb, (logZ[i]+4)*100)
+            model = model_path + '/try_{}_Q{}_Z{:.0f}_NHI1504.fits'.format(uvb, Q_uvb, (logZ[i]+4)*100)
             d = tab.Table.read(model)
             d[ion][d[ion] == 0 ] = 1e-15 # for avoiding log10 (0) error
             z [:, i] = np.log10(d[ion]) #--- for log - log interpolation
@@ -136,7 +136,7 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, data_col, sigma_col, uvb = 'KS18', 
 #ions_to_use= ['Ne+7', 'O+5', 'N+4', 'C+3']
 #ions_to_use= ['Ne+7', 'O+5', 'N+4', 'C+3', 'Si+3']
 
-"""
+
 ions_to_use= ['C+','C+2','N+','N+2','N+4','O+5','Si+','Si+2','Si+3']
 data_col =[9.64, 10.6, 9.39, 12, 13.68,  14.53, 7.4, 9.33, 10.78]
 sigma_col=[1.18, 2.8, 0.41, 0.48, 0.07, 0.03, 0.27, 0.39, 0.21]
@@ -144,9 +144,9 @@ sigma_col=[1.18, 2.8, 0.41, 0.48, 0.07, 0.03, 0.27, 0.39, 0.21]
 uvb = 'HM12'
 Q_uvb = 18
 
-model_path  = '/home/vikram/cloudy_run/metal_NH15_new'
+model_path  = '/home/vikram/Dropbox/uvb_const/Cloudy_run_simulated'
 outpath = '/home/vikram/cloudy_run/figures/abhisek'
-name = uvb + '_Q{}_1504'.format(Q_uvb)
+name = uvb + '_Q{}_1504_abhisek'.format(Q_uvb)
 figname = outpath + '/' + name + '.pdf'
 
 flat_samples, ndim = run_mcmc(model_path=model_path, data_col=data_col, sigma_col=sigma_col, Q_uvb=Q_uvb, ions_to_use=ions_to_use,
@@ -156,14 +156,17 @@ flat_samples, ndim = run_mcmc(model_path=model_path, data_col=data_col, sigma_co
 uvb = 'KS18'
 Q_uvb = 18
 
-model_path  = '/home/vikram/cloudy_run/metal_NH15_new'
+model_path  = '/home/vikram/Dropbox/uvb_const/Cloudy_run_simulated'
 outpath = '/home/vikram/cloudy_run/figures/abhisek'
-name = uvb + '_Q{}_1504'.format(Q_uvb)
+name = uvb + '_Q{}_1504_ahisek'.format(Q_uvb)
 figname = outpath + '/' + name + '.pdf'
 
 flat_samples, ndim = run_mcmc(model_path=model_path, data_col=data_col, sigma_col=sigma_col, Q_uvb=Q_uvb, ions_to_use=ions_to_use,
     figname=figname, uvb=uvb)
+
+
 """
+
 #============1508
 ions_to_use= ['C+','C+2','N+','N+2','N+4','O+5','Si+','Si+2','Si+3']
 data_col =[14.81,15.71,14.17,15.12,13.62,14.92,11.88,13.54,13.23]
@@ -191,3 +194,5 @@ figname = outpath + '/' + name + '.pdf'
 
 flat_samples, ndim = run_mcmc(model_path=model_path, data_col=data_col, sigma_col=sigma_col, Q_uvb=Q_uvb, ions_to_use=ions_to_use,
     figname=figname, uvb=uvb)
+    
+"""
