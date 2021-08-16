@@ -314,8 +314,9 @@ def inference_for_hybrid_cloud(model_uvb = 'KS18', model_Q = 18, true_uvb_model 
 #inference_for_photoionized_cloud(model_path='/home/vikram/cloudy_run/metal_NH15_new', total_ion_comb=10)
 
 def run_parallel(model_uvb, model_Q):
+    logT = 5.75
     outpath  = '/home/vikram/cloudy_run/diff_op/hybrid_NH15'
-    inference_for_hybrid_cloud(model_uvb= model_uvb, model_Q= model_Q, outpath= outpath)
+    inference_for_hybrid_cloud(model_uvb= model_uvb, model_Q= model_Q, outpath= outpath, logT=logT)
     return
 
 # runnning in parallel
@@ -338,7 +339,7 @@ for background in uvb:
 print(uvb_models, '==== models all')
 print(the_Q_values, '===Q val')
 
-pool = mp.Pool(processes=5)
+pool = mp.Pool(processes=6)
 results = [pool.apply_async(run_parallel, args=(for_uvb_model, for_Q,)) for for_uvb_model, for_Q
            in zip(uvb_models, the_Q_values)]
 output = [p.get() for p in results]
