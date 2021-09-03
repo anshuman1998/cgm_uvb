@@ -245,7 +245,7 @@ def find_med_all_hybrid( true_nH = 1e-4, true_logZ = -1,
 
 
 
-def make_plot_photoionized(figname, outpath = '/home/vikram/cgm_uvb/cgm_uvb/paper_plots'):
+def make_plot_photoionized(figname, table_file = '', outpath = '/home/vikram/cgm_uvb/cgm_uvb/paper_plots'):
 
     # setting the figure
     font = {'family': 'serif', 'weight': 'normal', 'size': 14}
@@ -261,7 +261,7 @@ def make_plot_photoionized(figname, outpath = '/home/vikram/cgm_uvb/cgm_uvb/pape
 
     for nn in nH:
         for zz in lgZ:
-            n, z, dn, dz, dnks, dzks = find_med_all(true_nH=nn, true_logZ=zz)
+            n, z, dn, dz, dnks, dzks = find_med_all(true_nH=nn, true_logZ=zz, table_file= table_file)
 
             x = np.median((np.array(dn) / 2))
             y = np.median((np.array(dz) / 2))
@@ -310,7 +310,7 @@ def make_plot_photoionized(figname, outpath = '/home/vikram/cgm_uvb/cgm_uvb/pape
 
 
 
-def make_plot_hybrid(figname, outpath = '/home/vikram/cgm_uvb/cgm_uvb/paper_plots'):
+def make_plot_hybrid(figname, table_file = '', outpath = '/home/vikram/cgm_uvb/cgm_uvb/paper_plots'):
 
     # setting the figure
     font = {'family': 'serif', 'weight': 'normal', 'size': 14}
@@ -331,7 +331,7 @@ def make_plot_hybrid(figname, outpath = '/home/vikram/cgm_uvb/cgm_uvb/paper_plot
 
             #----------------------------without ne8
             colr = 'cyan'
-            n, z, dn, dz, dnks, dzks= find_med_all_hybrid(true_nH=nn, true_logZ=zz, with_Ne8= False)
+            n, z, dn, dz, dnks, dzks= find_med_all_hybrid(true_nH=nn, true_logZ=zz, with_Ne8= False, table_file=table_file)
 
             x = np.median((np.array(dn) / 2))
             y = np.median((np.array(dz) / 2))
@@ -432,5 +432,5 @@ plt.show()
 """
 
 
-make_plot_photoionized(figname='res_final_phot.pdf')
-make_plot_hybrid(figname='res_final_hybrid.pdf')
+make_plot_photoionized(figname='res_final_phot_NH19.pdf', table_file= '/home/vikram/cloudy_run/diff_op/photo_NH19/all_combined.fits')
+#make_plot_hybrid(figname='res_final_hybrid.pdf')
