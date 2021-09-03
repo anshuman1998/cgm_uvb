@@ -314,7 +314,7 @@ def inference_for_hybrid_cloud(model_uvb = 'KS18', model_Q = 18, true_uvb_model 
 #inference_for_photoionized_cloud(model_path='/home/vikram/cloudy_run/metal_NH15_new', total_ion_comb=10)
 
 def run_parallel(model_uvb, model_Q):
-    logT = 5.75
+    logT = 5.25
     outpath  = '/home/vikram/cloudy_run/diff_op/hybrid_NH15'
     inference_for_hybrid_cloud(model_uvb= model_uvb, model_Q= model_Q, outpath= outpath, logT=logT)
     return
