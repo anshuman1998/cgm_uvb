@@ -14,9 +14,14 @@ import multiprocessing as mp
 
 def run_parallel(x):
     time.sleep(2)
+    f = open("vikram{}.txt".format(x+1), "a")
+    f.write("Now the file has more content!")
+    f.close()
     print('process = ', x+ 1 )
 
     return
+
+
 
 
 num_proc= 56
