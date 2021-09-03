@@ -3,13 +3,13 @@
 #SBATCH --export=ALL
 
 # set the number of nodes and processes per node
-#SBATCH --nodes=2
+#SBATCH --nodes=1
 
 # set the number of tasks (processes) per node.
 #SBATCH --ntasks-per-node=28
 
 # set name of job
-#SBATCH --job-name=vikram_test
+#SBATCH --job-name=vikram_NHI16
 
 # mail alert at start, end and abortion of execution
 #SBATCH --mail-type=ALL
@@ -24,5 +24,5 @@ echo $SLURM_NPROCS
 
 export PATH="/home/vikram/anaconda3/bin:$PATH"
 
-python test.py
+python vikram_cloudy_run_metal_grid.py
 
