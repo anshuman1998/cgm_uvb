@@ -94,7 +94,8 @@ for background in uvb:
             logZ.append(metal)
 
 #-----write uvb fg and hm in cloudy format first
-path = '/mnt/quasar2/vikram/cloudy_run/metal_NH17_new'
+#path = '/mnt/quasar2/vikram/cloudy_run/metal_NH17_new'
+path  = '/scratch/vikram/cloudy_run/metal_NH16'
 
 kwagrs = {'uvb' : 'P19', 'z' : 0.2}
 uvb_files(path, **kwagrs)
