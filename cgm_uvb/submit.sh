@@ -22,7 +22,7 @@ echo $SLURM_JOB_ID
 echo $SLURM_NPROCS
 
 
-export PATH="/home/anupama/anaconda3/bin:$PATH"
+export PATH="/home/vikram/anaconda3/bin:$PATH"
 
 python test.py
 
