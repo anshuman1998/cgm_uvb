@@ -10,7 +10,7 @@ import scipy.optimize as sciopt
 import astropy.table as tab
 import os
 
-def make_plot_with_neon_1(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true = 18):
+def make_plot_with_neon_1(den, met, outpath, logT= 5.5, ion_num = [8], uvb_true ='KS18', q_true = 18):
     # setting the figure
     font = {'family': 'serif', 'weight': 'normal', 'size': 14}
     plt.rc('font', **font)
@@ -21,7 +21,8 @@ def make_plot_with_neon_1(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
     if not os.path.isdir(final_path):
         os.mkdir(final_path)
 
-    out_fig_name = outpath + '/hybrid_3plot.pdf'.format(uvb_true, q_true, ion_num[0], met, np.log10(den))
+    #out_fig_name = outpath + '/hybrid_3plot.pdf'.format(uvb_true, q_true, ion_num[0], met, np.log10(den))
+    out_fig_name = outpath +'/hybrid_3plot_logT{:0.0f}.pdf'.format(logT * 100)
     #figure_size = [14, 4]
     #fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(figure_size[0], figure_size[1]))
 
@@ -72,7 +73,7 @@ def make_plot_with_neon_1(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
     binwidth = 0.006
     binwidth_met = 0.0035
 
-    d = tab.Table.read(path + '/all_combined_logT550.fits')
+    d = tab.Table.read(path + '/all_combined_logT{:.0f}.fits'.format(logT *100))
     d = d [d['true_uvb'] == uvb_true]
     d = d [d['true_Q'] == q_true]
 
@@ -183,7 +184,7 @@ def make_plot_with_neon_1(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
 
 
 
-    ax1.annotate(r'Warm-hot absorber 10$^{5.5}$ K' +'\nTrue UVB KS19 (Q18)', xy=(0.11, 0.83), xycoords='axes fraction', fontsize=11)
+    ax1.annotate('Warm-hot absorber log T (K) ={:0.1f}'.format(logT) +'\nTrue UVB KS19 (Q18)', xy=(0.11, 0.83), xycoords='axes fraction', fontsize=11)
 
     ax1.annotate(r'True (log Z, log n$_{\rm H}$) = ' + '({:.0f}, {:.0f})'.format(met, np.log10(den)),
                  xy=(0.11, 0.76), xycoords='axes fraction', fontsize=11)
@@ -259,7 +260,7 @@ def make_plot_with_neon_1(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
     return
 
 #--------------------------for n = 1e-3
-def make_plot_with_neon_2(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true = 18):
+def make_plot_with_neon_2(den, met, outpath, logT= 5.5, ion_num = [8], uvb_true ='KS18', q_true = 18):
     # setting the figure
     font = {'family': 'serif', 'weight': 'normal', 'size': 14}
     plt.rc('font', **font)
@@ -270,7 +271,9 @@ def make_plot_with_neon_2(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
     if not os.path.isdir(final_path):
         os.mkdir(final_path)
 
-    out_fig_name = outpath + '/hybrid_4plot.pdf'.format(uvb_true, q_true, ion_num[0], met, np.log10(den))
+    #out_fig_name = outpath + '/hybrid_4plot.pdf'.format(uvb_true, q_true, ion_num[0], met, np.log10(den))
+    out_fig_name = outpath + '/hybrid_4plot_logT{:0.0f}.pdf'.format(logT*100)
+
     #figure_size = [14, 4]
     #fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(figure_size[0], figure_size[1]))
 
@@ -321,7 +324,7 @@ def make_plot_with_neon_2(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
     binwidth = 0.003
     binwidth_met = 0.001
 
-    d = tab.Table.read(path + '/all_combined_logT550.fits')
+    d = tab.Table.read(path + '/all_combined_logT{:.0f}.fits'.format(logT *100))
     d = d [d['true_uvb'] == uvb_true]
     d = d [d['true_Q'] == q_true]
 
@@ -442,7 +445,8 @@ def make_plot_with_neon_2(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_
 
 
 
-    ax1.annotate(r'Warm-hot absorber 10$^{5.5}$ K' +'\nTrue UVB KS19 (Q18)', xy=(0.11, 0.83), xycoords='axes fraction', fontsize=11)
+
+    ax1.annotate('Warm-hot absorber log T (K) = {:.1f}'.format(logT) +'\nTrue UVB KS19 (Q18)', xy=(0.11, 0.83), xycoords='axes fraction', fontsize=11)
 
     ax1.annotate(r'True (log Z, log n$_{\rm H}$) = ' + '({:.0f}, {:.0f})'.format(met, np.log10(den)),
                  xy=(0.11, 0.76), xycoords='axes fraction', fontsize=11)
@@ -520,11 +524,11 @@ Zarray = [-1]
 Narray = [1e-5]
 for n in Narray:
     for z in Zarray:
-        make_plot_with_neon_1(den=n, met=z, outpath= '/home/vikram/cloudy_run/more_fig/hybrid')
+        make_plot_with_neon_1(den=n, met=z, logT=5.75, outpath= '/home/vikram/cloudy_run/diff_op/fig')
 
 
 Zarray = [-1]
 Narray = [1e-3]
 for n in Narray:
     for z in Zarray:
-        make_plot_with_neon_2(den=n, met=z, outpath= '/home/vikram/cloudy_run/more_fig/hybrid')
+        make_plot_with_neon_2(den=n, met=z, logT= 5.75, outpath= '/home/vikram/cloudy_run/diff_op/fig')

@@ -10,7 +10,7 @@ import scipy.optimize as sciopt
 import astropy.table as tab
 import os
 
-def make_many_plots(den, met, outpath, ion_num = [3, 8], uvb_true ='KS18', q_true = 18):
+def make_many_plots(den, met, outpath, path = '/home/vikram/cloudy_run/diff_op/photo_NH19', ion_num = [3, 8], uvb_true ='KS18', q_true = 18):
     # setting the figure
     font = {'family': 'serif', 'weight': 'normal', 'size': 14}
     plt.rc('font', **font)
@@ -21,7 +21,7 @@ def make_many_plots(den, met, outpath, ion_num = [3, 8], uvb_true ='KS18', q_tru
     if not os.path.isdir(final_path):
         os.mkdir(final_path)
 
-    out_fig_name = outpath + '/true_UVB_{}_Q{}_{:.0f}ions_logZ{}_logN{}_3_8combined.pdf'.format(uvb_true, q_true, ion_num[0], met, np.log10(den))
+    out_fig_name = outpath + '/true_UVB_{}_Q{}_{:.0f}ions_logZ{}_logN{}_3_8combined_NH19.pdf'.format(uvb_true, q_true, ion_num[0], met, np.log10(den))
     print('creating file ', out_fig_name)
     #figure_size = [14, 4]
     #fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(figure_size[0], figure_size[1]))
@@ -32,7 +32,7 @@ def make_many_plots(den, met, outpath, ion_num = [3, 8], uvb_true ='KS18', q_tru
 
     plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0.2, wspace=0.0)
 
-    path = '/home/vikram/cloudy_run/diff_op/photo_NH15'
+    
 
     #uvb = ['KS18', 'HM12', 'P19', 'FG20']
     uvb = ['KS18',  'P19', 'FG20']
@@ -219,10 +219,10 @@ def make_many_plots(den, met, outpath, ion_num = [3, 8], uvb_true ='KS18', q_tru
     ax1.set_ylabel(r'log Z(Z$_{\odot}$)')
 
     add_num = 0.49
-    ax1.set_xlim(-4.4, np.log10(den)+add_num)
-    ax1.set_ylim(-1.4, met+add_num)
-    ax2.set_xlim(-4.4, np.log10(den)+add_num)
-    ax3.set_xlim(-1.4, met+add_num)
+    ax1.set_xlim(-4.6, np.log10(den)+add_num)
+    ax1.set_ylim(-2.0, met+add_num)
+    ax2.set_xlim(-4.6, np.log10(den)+add_num)
+    ax3.set_xlim(-1.6, met+add_num)
     ax2.set_ylim(0, 174)
     ax3.set_ylim(0, 174)
 
@@ -269,4 +269,4 @@ Narray = [1e-4]
 
 for n in Narray:
     for z in Zarray:
-        make_many_plots(den=n, met=z, outpath= '/home/vikram/cloudy_run/more_fig/photo')
+        make_many_plots(den=n, met=z, outpath= '/home/vikram/cloudy_run/diff_op/fig')

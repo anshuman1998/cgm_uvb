@@ -10,7 +10,7 @@ import scipy.optimize as sciopt
 import astropy.table as tab
 import os
 
-def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true = 18):
+def make_neon_plots(den, met, outpath, logT = 5.5, ion_num = [8], uvb_true ='KS18', q_true = 18):
     # setting the figure
     font = {'family': 'serif', 'weight': 'normal', 'size': 14}
     plt.rc('font', **font)
@@ -21,7 +21,7 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
     if not os.path.isdir(final_path):
         os.mkdir(final_path)
 
-    out_fig_name = outpath + '/paper_separate_true_UVB_{}_Q{}_{:.0f}ions_logZ{}_logN{}_hybrid_T550.pdf'.format(uvb_true, q_true, ion_num[0], met, np.log10(den))
+    out_fig_name = outpath + '/paper_separate_true_UVB_{}_Q{}_{:.0f}ions_logZ{}_logN{}_hybrid_T{:0.0f}.pdf'.format(uvb_true, q_true, ion_num[0], met, np.log10(den), logT*100)
     #figure_size = [14, 4]
     #fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(figure_size[0], figure_size[1]))
 
@@ -71,7 +71,7 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
     binwidth = 0.02
     binwidth_met = 0.004
 
-    d = tab.Table.read(path + '/all_combined_logT550.fits')
+    d = tab.Table.read(path + '/all_combined_logT{:.0f}.fits'.format(logT*100))
     d = d [d['true_uvb'] == uvb_true]
     d = d [d['true_Q'] == q_true]
 
@@ -289,7 +289,7 @@ def make_neon_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true =
     return
 
 
-def make_normal_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true = 18):
+def make_normal_plots(den, met, outpath, logT=5.5, ion_num = [8], uvb_true ='KS18', q_true = 18):
     # setting the figure
     font = {'family': 'serif', 'weight': 'normal', 'size': 14}
     plt.rc('font', **font)
@@ -300,7 +300,7 @@ def make_normal_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true
     if not os.path.isdir(final_path):
         os.mkdir(final_path)
 
-    out_fig_name = outpath + '/paper_normal_true_UVB_{}_Q{}_{:.0f}ions_logZ{}_logN{}_hybrid_T550.pdf'.format(uvb_true, q_true, ion_num[0], met, np.log10(den))
+    out_fig_name = outpath + '/paper_normal_true_UVB_{}_Q{}_{:.0f}ions_logZ{}_logN{}_hybrid_T{:0.0f}.pdf'.format(uvb_true, q_true, ion_num[0], met, np.log10(den),logT*100)
     #figure_size = [14, 4]
     #fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(figure_size[0], figure_size[1]))
 
@@ -350,7 +350,7 @@ def make_normal_plots(den, met, outpath, ion_num = [8], uvb_true ='KS18', q_true
     binwidth = 0.02
     binwidth_met = 0.004
 
-    d = tab.Table.read(path + '/all_combined_logT550.fits')
+    d = tab.Table.read(path + '/all_combined_logT{:0.0f}.fits'.format(logT*100))
     d = d [d['true_uvb'] == uvb_true]
     d = d [d['true_Q'] == q_true]
 
@@ -521,7 +521,7 @@ Narray = [1e-5, 1e-4, 1e-3]
 for n in Narray:
     for z in Zarray:
         make_many_plots(den=n, met=z, outpath= '/home/vikram/cloudy_run/more_fig/photo')
-"""
+
 
 Zarray = [-1]
 Narray = [1e-4]
@@ -529,3 +529,13 @@ for n in Narray:
     for z in Zarray:
         make_neon_plots(den=n, met=z, outpath= '/home/vikram/cloudy_run/more_fig/hybrid')
         make_normal_plots(den=n, met=z, outpath= '/home/vikram/cloudy_run/more_fig/hybrid')
+
+"""
+
+Zarray = [-1]
+Narray = [1e-4]
+logT= 5.75
+for n in Narray:
+    for z in Zarray:
+        make_neon_plots(den=n, met=z, logT=logT, outpath= '/home/vikram/cloudy_run/diff_op/fig')
+        make_normal_plots(den=n, met=z, logT=logT, outpath= '/home/vikram/cloudy_run/diff_op/fig')
