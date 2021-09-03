@@ -50,15 +50,15 @@ def uvb_files(file_path, **kwargs):
 
     return
 
-def run_parallel(logZ, uvb_Q, uvb):
+def run_parallel(logZ, stop_NHI, uvb_Q, uvb):
     # for vikram
     cloudy_path = '/home/vikram/c17.02'
     fname = (logZ+4)*100
-    input_File = '/scratch/vikram/cloudy_run/metal_NH14/try_{}_Q{}_Z{:.0f}.in'.format(uvb, uvb_Q, fname)
+    input_File = '/scratch/vikram/cloudy_run/metal_NH{:0.0f}/try_{}_Q{}_Z{:.0f}.in'.format(stop_NHI, uvb, uvb_Q, fname)
     print(uvb, 'Q=', uvb_Q, 'Z=', logZ)
 
     # write input file and run cloudy
-    ions, params = cloudy_params_defaults(uvb = uvb, uvb_Q=uvb_Q, log_hden=[-6, -2, 0.02], stop_NHI = 14, T = None, metal = logZ,
+    ions, params = cloudy_params_defaults(uvb = uvb, uvb_Q=uvb_Q, log_hden=[-6, -2, 0.02], stop_NHI = stop_NHI, T = None, metal = logZ,
                                           sequential = True)
     write_input(input_File, *ions, **params)
     run(cloudy_path=cloudy_path, input_file=input_File)
@@ -75,23 +75,28 @@ def run_parallel(logZ, uvb_Q, uvb):
 logZ_array = np.around(np.arange(-3, 1, 0.05), decimals = 2)
 uvb = ['KS18', 'HM12',  'P19', 'FG20']
 uvb_Q = [14, 15, 16, 17, 18, 19, 20]
+NHI = [14, 18]
 
 logZ = []
+log_NHI = []
 uvb_models =[]
 the_Q_values = []
-for background in uvb:
-    if background == 'KS18':
-        for q in uvb_Q:
+for column in NHI:
+    for background in uvb:
+        if background=='KS18':
+            for q in uvb_Q:
+                for metal in logZ_array:
+                    uvb_models.append(background)
+                    the_Q_values.append(q)
+                    logZ.append(metal)
+                    log_NHI.append(column)
+        else:
+            q = 18
             for metal in logZ_array:
                 uvb_models.append(background)
                 the_Q_values.append(q)
                 logZ.append(metal)
-    else:
-        q = 18
-        for metal in logZ_array:
-            uvb_models.append(background)
-            the_Q_values.append(q)
-            logZ.append(metal)
+                log_NHI.append(column)
 
 #-----write uvb fg and hm in cloudy format first
 #path = '/mnt/quasar2/vikram/cloudy_run/metal_NH17_new'
@@ -103,8 +108,11 @@ uvb_files(path, **kwagrs)
 kwagrs = {'uvb' : 'FG20', 'z' : 0.2}
 uvb_files(path, **kwagrs)
 
+#print(len(logZ))
 
-pool = mp.Pool(processes=80)
-results = [pool.apply_async(run_parallel, args=(Z, Q, mod,)) for  Z, Q, mod in zip(logZ, the_Q_values, uvb_models)]
+pool = mp.Pool(processes=168)
+results = [pool.apply_async(run_parallel, args=(Z, stop_column, Q, mod,)) for  Z, stop_column, Q, mod in zip(logZ, log_NHI, the_Q_values, uvb_models)]
 output = [p.get() for p in results]
+
+
 
