@@ -213,8 +213,8 @@ def get_a_set_of_ions_for_inference(list_of_qualified_ions, num_ions =8, total_u
 def inference_for_photoionized_cloud(model_uvb = 'KS18', model_Q = 18, true_uvb_model = 'all',
                                      true_nH_array= [1e-5, 1e-4, 1e-3],
                                      true_logZ_array = [-2,-1, 0],
-                                     number_of_ions_array = [2, 3, 4, 5, 6, 7, 8],
-                                     model_path='/home/vikram/cloudy_run/metal_NH15_new',
+                                     number_of_ions_array = [2, 3, 4, 5, 6, 7,8],
+                                     model_path='/home/vikram/cloudy_run/metal_NH17_new',
                                      outpath  = '/home/vikram/tmp/new',
                                      total_ion_comb = 165):
 
@@ -317,8 +317,14 @@ def inference_for_photoionized_cloud(model_uvb = 'KS18', model_Q = 18, true_uvb_
 #inference_for_photoionized_cloud(model_path='/home/vikram/cloudy_run/metal_NH15_new', total_ion_comb=10)
 
 def run_parallel(model_uvb, model_Q):
-    outpath  = '/home/vikram/cloudy_run/diff_op/photo_NH15'
-    inference_for_photoionized_cloud(model_uvb= model_uvb, model_Q= model_Q, outpath= outpath)
+    outpath  = '/home/vikram/cloudy_run/diff_op/photo_NH19'
+    model_path = '/home/vikram/cloudy_run/metal_NH19_new'
+
+    if not os.path.isdir(outpath):
+        os.mkdir(outpath)
+        print('creating', outpath)
+
+    inference_for_photoionized_cloud(model_uvb= model_uvb,  model_Q= model_Q, outpath= outpath, model_path= model_path)
     return
 
 # runnning in parallel
@@ -341,7 +347,7 @@ for background in uvb:
 print(uvb_models, '==== models all')
 print(the_Q_values, '===Q val')
 
-pool = mp.Pool(processes=5)
+pool = mp.Pool(processes=6)
 results = [pool.apply_async(run_parallel, args=(for_uvb_model, for_Q,)) for for_uvb_model, for_Q
            in zip(uvb_models, the_Q_values)]
 output = [p.get() for p in results]
