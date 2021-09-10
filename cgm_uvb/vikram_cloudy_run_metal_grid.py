@@ -54,11 +54,11 @@ def run_parallel(logZ, uvb_Q, uvb):
     # for vikram
     cloudy_path = '/home/vikram/c17.02'
     fname = (logZ+4)*100
-    input_File = '/scratch/vikram/cloudy_run/metal_NH16/try_{}_Q{}_Z{:.0f}.in'.format(uvb, uvb_Q, fname)
+    input_File = '/scratch/vikram/cloudy_run/metal_NH17/try_{}_Q{}_Z{:.0f}.in'.format(uvb, uvb_Q, fname)
     print(uvb, 'Q=', uvb_Q, 'Z=', logZ)
 
     # write input file and run cloudy
-    ions, params = cloudy_params_defaults(uvb = uvb, uvb_Q=uvb_Q, log_hden=[-6, -2, 0.02], stop_NHI = 16, T = None, metal = logZ,
+    ions, params = cloudy_params_defaults(uvb = uvb, uvb_Q=uvb_Q, log_hden=[-6, -2, 0.02], stop_NHI = 17, T = None, metal = logZ,
                                           sequential = True)
     write_input(input_File, *ions, **params)
     run(cloudy_path=cloudy_path, input_file=input_File)
@@ -95,7 +95,7 @@ for background in uvb:
 
 #-----write uvb fg and hm in cloudy format first
 #path = '/mnt/quasar2/vikram/cloudy_run/metal_NH17_new'
-path  = '/scratch/vikram/cloudy_run/metal_NH16'
+path  = '/scratch/vikram/cloudy_run/metal_NH17'
 
 kwagrs = {'uvb' : 'P19', 'z' : 0.2}
 uvb_files(path, **kwagrs)
@@ -104,7 +104,7 @@ kwagrs = {'uvb' : 'FG20', 'z' : 0.2}
 uvb_files(path, **kwagrs)
 
 
-pool = mp.Pool(processes=28)
+pool = mp.Pool(processes=int(28*5))
 results = [pool.apply_async(run_parallel, args=(Z, Q, mod,)) for  Z, Q, mod in zip(logZ, the_Q_values, uvb_models)]
 output = [p.get() for p in results]
 

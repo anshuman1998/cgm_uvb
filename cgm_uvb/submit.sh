@@ -3,13 +3,13 @@
 #SBATCH --export=ALL
 
 # set the number of nodes and processes per node
-#SBATCH --nodes=1
+#SBATCH --nodes=5
 
 # set the number of tasks (processes) per node.
 #SBATCH --ntasks-per-node=28
 
 # set name of job
-#SBATCH --job-name=vikram_NHI16
+#SBATCH --job-name=vikram_NHI17
 
 # mail alert at start, end and abortion of execution
 #SBATCH --mail-type=ALL
