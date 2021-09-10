@@ -432,5 +432,5 @@ plt.show()
 """
 
 
-make_plot_photoionized(figname='res_final_phot_NH19.pdf', table_file= '/home/vikram/cloudy_run/diff_op/photo_NH19/all_combined.fits')
+make_plot_photoionized(figname='res_final_phot_NH18.pdf', table_file= '/home/vikram/cloudy_run/diff_op/photo_NH18/all_combined.fits')
 #make_plot_hybrid(figname='res_final_hybrid.pdf')

@@ -317,8 +317,8 @@ def inference_for_photoionized_cloud(model_uvb = 'KS18', model_Q = 18, true_uvb_
 #inference_for_photoionized_cloud(model_path='/home/vikram/cloudy_run/metal_NH15_new', total_ion_comb=10)
 
 def run_parallel(model_uvb, model_Q):
-    outpath  = '/home/vikram/cloudy_run/diff_op/photo_NH19'
-    model_path = '/home/vikram/cloudy_run/metal_NH19_new'
+    outpath  = '/home/vikram/cloudy_run/diff_op/photo_NH18'
+    model_path = '/home/vikram/cloudy_run/metal_NH18_new'
 
     if not os.path.isdir(outpath):
         os.mkdir(outpath)
@@ -347,7 +347,7 @@ for background in uvb:
 print(uvb_models, '==== models all')
 print(the_Q_values, '===Q val')
 
-pool = mp.Pool(processes=6)
+pool = mp.Pool(processes=7)
 results = [pool.apply_async(run_parallel, args=(for_uvb_model, for_Q,)) for for_uvb_model, for_Q
            in zip(uvb_models, the_Q_values)]
 output = [p.get() for p in results]

@@ -9,7 +9,7 @@ import corner
 
 
 #----data
-def get_true_model(model_path, Q= 18, logT = 4):
+def get_true_model(model_path, Q= 18, logT = 4.4):
     """
     :param model: The data where Q18 model is stored
     :return: a row of ion column densities at n_H = 1e-4 cm^-2
@@ -83,10 +83,10 @@ def log_posterior(theta, interp_func, data_col, sigma_col):
     return log_p
 
 
-def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, figname = 'testT.pdf', same_error = False):
+def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, figname = 'testT4.4.pdf', same_error = False):
     # run_mcmc(model_Q= model, ions_to_use= ions)
     # ------------------ here is a way to run code
-    truths = [-4, -1, 4]  # (lognH, logZ, logT) true values
+    truths = [-4, -1, 4.4]  # (lognH, logZ, logT) true values
     number_of_ions = len(ions_to_use)
 
     data_col_all = get_true_model(model_path, Q=true_Q)
@@ -111,7 +111,7 @@ def run_mcmc(model_path, Q_uvb, ions_to_use, true_Q =18, figname = 'testT.pdf', 
 
     ndim = 3  # number of parameters in the model
     nwalkers = 50  # number of MCMC walkers
-    nsteps = 5000  # number of MCMC steps to take
+    nsteps = 10000  # number of MCMC steps to take
 
     # set theta near the maximum likelihood, with
     n_guess = np.random.uniform(-5, -2, nwalkers)
