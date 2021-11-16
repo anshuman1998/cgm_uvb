@@ -1,7 +1,7 @@
 import numpy as np
 import astropy.table as tab
 
-path  = '/home/vikram/cloudy_run/diff_op/photo_NH18'
+path  = '/home/vikram/cloudy_run/diff_op/photo_NH175'
 
 uvb = ['KS18', 'HM12',  'P19', 'FG20']
 uvb_Q = [14, 15, 16, 17, 18, 19, 20]

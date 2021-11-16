@@ -84,7 +84,7 @@ def find_med_all( true_nH = 1e-4, true_logZ = -1,
             uvb_models.append(background)
             the_Q_values.append(q)
 
-    nion_array = [ 8]
+    nion_array = [8]
 
     data = tab.Table.read(table_file)
     data = data [data['true_logZ'] == true_logZ]
@@ -112,21 +112,22 @@ def find_med_all( true_nH = 1e-4, true_logZ = -1,
             all_Z = []
 
 
-            #print(len(data_sort), ': number of points')
+            print(len(data_sort), ': number of points')
 
             for uvb, q_val in zip(uvb_models, the_Q_values):
                 col_name_nH = 'nH_' + uvb + '_Q{}'.format(q_val)
                 col_name_Z = 'Z_' + uvb + '_Q{}'.format(q_val)
 
-                full_n.append(np.median(data_sort[col_name_nH]))
-                full_z.append(np.median(data_sort[col_name_Z]))
+                full_n.append(np.median(data_sort[col_name_nH][data_sort[col_name_nH] >2e-5]))
+                full_z.append(np.median(data_sort[col_name_Z][data_sort[col_name_Z] < -2.9]))
 
                 all_nH.append(np.median(data_sort[col_name_nH]))
                 all_Z.append(np.median(data_sort[col_name_Z]))
 
                 if uvb == 'KS18':
-                    ks_nH.append(np.median(data_sort[col_name_nH]))
-                    ks_Z.append(np.median(data_sort[col_name_Z]))
+                    ks_nH.append(np.median(data_sort[col_name_nH][data_sort[col_name_nH] >2e-5]))
+                    print((data_sort[col_name_nH][data_sort[col_name_nH] >9e-5]))
+                    ks_Z.append(np.median(data_sort[col_name_Z][data_sort[col_name_Z] < -2.9]))
 
 
             del_n_ks = np.max(ks_nH) - np.min(ks_nH)
@@ -282,8 +283,8 @@ def make_plot_photoionized(figname, table_file = '', outpath = '/home/vikram/cgm
 
     #ax.legend(loc='best', fontsize=12, ncol=2, handlelength=2.6)
     #n_level1 = 'z = {:0.1f}'.format(z)
-    ax.annotate(r'Photoionized absorbers ( $\Delta_{\rm max}$(log n$_{\rm H}$)/2,  $\Delta_{\rm max}$(log Z)/2 )',
-                xy=(-5.3, 0.466), fontsize=12)
+    ax.annotate(r'Photoionized absorbers ($\Delta_{\rm max}$(log n$_{\rm H}$)/2,  $\Delta_{\rm max}$(log Z)/2) for log N$_{\rm HI}$=17.5',
+                xy=(-5.4, 0.466), fontsize=10)
 
     ax.set_xlabel(r'true log n$_{\rm H}$ (cm $^{-3}$)')
     ax.set_ylabel(r'true log Z(Z$_{\odot}$)')
@@ -432,5 +433,5 @@ plt.show()
 """
 
 
-make_plot_photoionized(figname='res_final_phot_NH18.pdf', table_file= '/home/vikram/cloudy_run/diff_op/photo_NH18/all_combined.fits')
+make_plot_photoionized(figname='res_final_phot_NH175_new.pdf', table_file= '/home/vikram/cloudy_run/diff_op/photo_NH175/all_combined.fits')
 #make_plot_hybrid(figname='res_final_hybrid.pdf')

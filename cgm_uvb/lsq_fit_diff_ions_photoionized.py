@@ -163,7 +163,7 @@ def get_LSF_phot(ions_to_use, model_path, Q_uvb, model_uvb, true_Q, true_uvb, in
 
 
 
-def get_list_of_qualified_ions(true_uvb, true_Q = 18, model_path = '', threshold_col = 11,
+def get_list_of_qualified_ions(true_uvb, true_Q = 18, model_path = '', threshold_col = 12,
                                logZ = None, logT= None, true_nH = 1e-4 ):
 
     ions = ["C+", "C+2", "C+3",
@@ -185,6 +185,8 @@ def get_list_of_qualified_ions(true_uvb, true_Q = 18, model_path = '', threshold
     for i in ions:
         if np.log10(column_densities[i]) > threshold_col:
             list_of_qualified_ions.append(i)
+
+    print('Number of qualified ions', len(list_of_qualified_ions), ' for log N >', threshold_col )
 
     return list_of_qualified_ions
 
@@ -317,8 +319,8 @@ def inference_for_photoionized_cloud(model_uvb = 'KS18', model_Q = 18, true_uvb_
 #inference_for_photoionized_cloud(model_path='/home/vikram/cloudy_run/metal_NH15_new', total_ion_comb=10)
 
 def run_parallel(model_uvb, model_Q):
-    outpath  = '/home/vikram/cloudy_run/diff_op/photo_NH18'
-    model_path = '/home/vikram/cloudy_run/metal_NH18_new'
+    outpath  = '/home/vikram/cloudy_run/diff_op/photo_NH175'
+    model_path = '/home/vikram/cloudy_run/metal_NH175'
 
     if not os.path.isdir(outpath):
         os.mkdir(outpath)
