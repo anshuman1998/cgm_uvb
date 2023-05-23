@@ -28,8 +28,6 @@ for ax in [axes[0, 0], axes[1, 0], axes[1,1 ]]:
 
 fig.savefig('inference_Q18.pdf', bbox_inches='tight')
 
-
-
 # for "Hybrid model"
 
 path = '/home/vikram/cloudy_run/figures/hybrid'
