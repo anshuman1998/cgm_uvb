@@ -16,8 +16,8 @@ fig.set_size_inches(6.5, 6.5)
 
 ndim = 2
 axes = np.array(fig.axes).reshape((ndim, ndim))
-axes[1,0].annotate (r'$\alpha$ = -1.7', xy=(0.6, 0.04), xycoords='axes fraction', fontsize=11)
-axes[0,1].annotate ('Photoionized absorber\n'+ 'with ' + r' $\alpha = -1.7$' + '\nUV Background' , xy=(0.08, 0.5), xycoords='axes fraction', fontsize=12)
+axes[1,0].annotate ('using KS19 Q18 model', xy=(0.327, 0.04), xycoords='axes fraction', fontsize=9)
+axes[0,1].annotate ('Photoionized absorber\n'+ 'with KS19 Q18'  + '\nUV Background\n' + r'True (log n$_{\rm H}$, log Z)' + ' \n = (-4, -1)', xy=(0.08, 0.5), xycoords='axes fraction', fontsize=12)
 
 for ax in [axes[0, 0], axes[1, 0], axes[1,1 ]]:
     ax.tick_params(direction='out', length=5, width=1.1)
