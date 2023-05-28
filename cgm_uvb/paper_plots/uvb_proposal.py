@@ -26,8 +26,8 @@ uvb_array= [14, 15, 16, 17, 18, 19, 20]
 file_names = tab.Table()
 for Q in uvb_array:
     q_name = 'Q{}'.format(Q)
-    label= r'$\alpha$ = {:.1f}'.format(Q*-0.1)
-    if Q ==17:
+    label='KS19 (Q{})'.format(Q)
+    if Q ==18:
         ax.plot(12398/uvb['Wave'], uvb[q_name]*4*np.pi*c/(uvb['Wave']*1e-10), label = label, linewidth = 2.5,
                 alpha = alpha )
     else:
@@ -36,12 +36,12 @@ for Q in uvb_array:
 
     # 1 angstrom = 12398 eV
 
-#fg20_path = os.getcwd() + '/fg20_fits_files'
-#file_name  =  fg20_path + '/FG20_EBL_z_{:.2f}.fits'.format(z)
-#uvb =  tab.Table.read(file_name)
-#label= 'FG20'
-#ax.plot(12398/uvb['Wave'], uvb['Jnu'] * 4 * np.pi * c / (uvb['Wave'] * 1e-10), label=label, linewidth=3,
-#        linestyle  = '--',alpha = alpha, c= 'grey')
+fg20_path = os.getcwd() + '/fg20_fits_files'
+file_name  =  fg20_path + '/FG20_EBL_z_{:.2f}.fits'.format(z)
+uvb =  tab.Table.read(file_name)
+label= 'FG20'
+ax.plot(12398/uvb['Wave'], uvb['Jnu'] * 4 * np.pi * c / (uvb['Wave'] * 1e-10), label=label, linewidth=2,
+        linestyle  = '-.',alpha = alpha, c= 'grey')
 
 #fg20_path = os.getcwd() + '/p19_ebl'
 #file_name  =  fg20_path + '/P19_EBL_z_{:.2f}.fits'.format(z)
@@ -52,14 +52,37 @@ for Q in uvb_array:
 
 # 1 ryd = 13.6057 eV
 
+
+#for ionization potentials
+ax.vlines(x =  23.383143, ymin = 1.5e-06, ymax = 2.5e-06,colors = 'grey',linestyles ="solid", lw= 1.0)
+ax.text(21.08,2.8e-06 , "C II", fontsize=8)
+ax.vlines(x =  64.49352, ymin = 1.5e-06, ymax = 2.5e-06,colors = 'grey',linestyles ="solid",lw= 1.0)
+ax.text(59.2,2.8e-06 , "C IV", fontsize=8)
+ax.vlines(x =  29.60125, ymin = 1.5e-06, ymax = 3.0e-06,colors = 'grey',linestyles ="solid",  lw= 1.0)
+ax.text(26.20125,3.3e-06 , "N II", fontsize=8)
+ax.vlines(x =  97.8901, ymin = 1.5e-06, ymax = 2.5e-06,colors = 'grey',linestyles ="solid",lw= 1.0)
+ax.text(91.1901,2.8e-06 , "N V", fontsize=8)
+ax.vlines(x =  138.1189,ymin = 1.5e-06, ymax = 3.0e-06,colors = 'grey',linestyles ="solid", lw= 1.0)
+ax.text(126.7189,3.3e-06 , "O VI", fontsize=8)
+ax.vlines(x =  16.34585, ymin = 1.5e-06, ymax = 3.0e-06,colors = 'grey',linestyles ="solid",lw= 1.0)
+ax.text(14.84585,3.3e-06 , "Si II", fontsize=8)
+ax.vlines(x =   33.49300, ymin = 1.5e-06, ymax = 2.5e-06,colors = 'grey',linestyles ="solid",lw= 1.0)
+ax.text(30.49300,2.8e-06 , "Si III", fontsize=8)
+ax.vlines(x =   45.14179, ymin = 1.5e-06, ymax = 3.0e-06,colors = 'grey',linestyles ="solid",lw= 1.0)
+ax.text(41.14179,3.3e-06 , "Si IV", fontsize=8)
+ax.vlines(x =   239.0970, ymin = 1.5e-06, ymax = 2.5e-06,colors = 'grey',linestyles ="solid",lw= 1.0)
+ax.text(201.0970,2.8e-06 , "Ne VIII", fontsize=8)
+ax.vlines(x =   367.489, ymin = 1.5e-06, ymax = 3.0e-06,colors = 'grey',linestyles ="solid",lw= 1.0)
+ax.text(332.489,3.3e-06 , "Mg X", fontsize=8)
+
 ax.legend( loc = 'best', fontsize = 12, ncol=2, handlelength=2.6)
 n_level1 = 'z = {:0.1f} UV Background'.format(z)
-ax.annotate (n_level1, xy=(3e2, 0.8e-5), fontsize=12)
+ax.annotate (n_level1, xy=(0.7e2, 0.8e-5), fontsize=12)
 
 ax.set_ylabel(r'4$\pi$$\nu$J$_{\nu}$ (ergs s$^{-1}$ cm $^{-2}$)')
 ax.set_xlabel(r'Energy (eV)')
-ax.set_xlim (4, 20000)
-ax.set_ylim (6e-8, 8e-5)
+ax.set_xlim (4, 3000)
+ax.set_ylim (4e-8, 8e-5)
 ax.set_xscale('log')
 ax.set_yscale('log')
 
